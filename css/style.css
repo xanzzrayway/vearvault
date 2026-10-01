@@ -1,0 +1,202 @@
+:root{
+  --text:#0f172a; --muted:#5b6b86;
+  --blue:#1d4ed8; --blue-h:#1e40af;
+  --glass:rgba(255,255,255,.52);
+  --r:22px;
+  --shadow:0 10px 36px rgba(37,70,160,.12),0 2px 6px rgba(37,70,160,.06);
+  --inner:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35),inset 0 0 22px rgba(255,255,255,.28);
+  --bluegrad:linear-gradient(180deg,rgba(255,255,255,.38) 0,rgba(255,255,255,0) 52%),linear-gradient(180deg,#4f8cff 0%,#1d4ed8 100%);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:#f1f6ff}
+body{font-family:'Figtree',system-ui,sans-serif;background:transparent;color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3,.brand{font-family:'Bricolage Grotesque',system-ui,sans-serif}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+:focus-visible{outline:3px solid #93b4ff;outline-offset:2px}
+
+/* Latar berwarna lembut yang ditembus kaca */
+.orbs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.orbs span{position:absolute;border-radius:50%;filter:blur(64px);animation:drift 28s ease-in-out infinite alternate}
+.orbs span:nth-child(1){width:48vmax;height:48vmax;background:#60a5fa;opacity:.7;top:-14%;left:-10%}
+.orbs span:nth-child(2){width:38vmax;height:38vmax;background:#67e8f9;opacity:.6;top:6%;right:-12%;animation-delay:-7s}
+.orbs span:nth-child(3){width:44vmax;height:44vmax;background:#c4b5fd;opacity:.6;bottom:-18%;left:20%;animation-delay:-13s}
+.orbs span:nth-child(4){width:30vmax;height:30vmax;background:#fbcfe8;opacity:.55;bottom:8%;right:4%;animation-delay:-19s}
+@keyframes drift{to{transform:translate(7vw,5vh) scale(1.14)}}
+
+/* Material kaca */
+.bar,.gbtn,.search input,.seg,.chip,.card,.menu,dialog{
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,.8);
+  box-shadow:var(--shadow),var(--inner);
+  -webkit-backdrop-filter:blur(18px) saturate(180%);
+  backdrop-filter:blur(18px) saturate(180%);
+}
+.refract .bar,.refract dialog{
+  backdrop-filter:blur(10px) url(#lg) saturate(180%);
+}
+
+/* Header */
+header{position:sticky;top:12px;z-index:20;padding:0 14px;margin-top:12px}
+.bar{max-width:1120px;margin:0 auto;padding:8px 10px 8px 16px;border-radius:999px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.02em}
+.brand{text-decoration:none;color:var(--text)}
+.brand img{width:34px;height:34px;object-fit:contain;mix-blend-mode:multiply;display:block}
+
+/* Tombol Google */
+.gbtn{display:flex;align-items:center;gap:10px;height:42px;padding:0 18px 0 12px;border-radius:999px;font-weight:600;font-size:14px;transition:transform .15s,box-shadow .2s}
+.gbtn:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(37,70,160,.18),var(--inner)}
+.gico{position:relative;width:22px;height:22px;flex:none}
+.gico svg{width:22px;height:22px}
+.gico b{position:absolute;right:-8px;bottom:-7px;width:14px;height:14px;border-radius:50%;background:var(--bluegrad);color:#fff;font-size:11px;line-height:14px;text-align:center;font-weight:700;border:2px solid #fff;box-sizing:content-box}
+.user{position:relative}
+.avatar{width:42px;height:42px;border-radius:50%;border:2px solid rgba(255,255,255,.9);box-shadow:0 4px 14px rgba(37,70,160,.2);object-fit:cover;display:block}
+.menu{position:absolute;right:0;top:54px;min-width:210px;border-radius:18px;padding:6px;display:none}
+.menu.open{display:block}
+.menu p{padding:8px 12px;font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.menu button{width:100%;text-align:left;padding:10px 12px;border-radius:12px;font-size:14px;font-weight:600}
+.menu button:hover{background:rgba(255,255,255,.7)}
+
+/* Tombol biru kaca */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border-radius:15px;background:var(--bluegrad);color:#fff;font-weight:600;font-size:14px;border:1px solid rgba(255,255,255,.4);
+  box-shadow:0 8px 22px rgba(29,78,216,.38),inset 0 1px 0 rgba(255,255,255,.6),inset 0 -3px 8px rgba(10,30,120,.25);
+  transition:transform .15s,box-shadow .2s,filter .2s}
+.btn:hover{filter:brightness(1.07);box-shadow:0 12px 28px rgba(29,78,216,.45),inset 0 1px 0 rgba(255,255,255,.65),inset 0 -3px 8px rgba(10,30,120,.25)}
+.btn:active{transform:scale(.97)}
+.btn.sm{height:36px;padding:0 14px;font-size:13px;border-radius:12px}
+.btn.line{background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(214,229,255,.6));color:var(--blue);border:1px solid rgba(255,255,255,.95);
+  box-shadow:0 4px 14px rgba(37,99,235,.15),var(--inner);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.btn.line:hover{filter:none;background:linear-gradient(180deg,#fff,rgba(200,220,255,.75))}
+.btn svg{width:16px;height:16px}
+.btn:disabled{opacity:.6}
+
+/* Hero */
+.hero{max-width:1120px;margin:0 auto;padding:56px 20px 8px}
+.hero h1{font-size:clamp(34px,6.4vw,60px);line-height:1.04;letter-spacing:-.035em;font-weight:800;max-width:14ch}
+.tools{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.search{flex:1;min-width:220px;position:relative}
+.search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted);z-index:1}
+.search input{width:100%;height:48px;border-radius:16px;padding:0 16px 0 46px;font:inherit;font-size:15px;color:var(--text)}
+.search input:focus{outline:none;border-color:#fff;box-shadow:0 0 0 4px rgba(79,140,255,.3),var(--shadow),var(--inner)}
+.tools .btn{height:48px}
+
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.mark{width:clamp(92px,17vw,190px);height:auto;mix-blend-mode:multiply;flex:none}
+.empty img{width:72px;height:72px;object-fit:contain;mix-blend-mode:multiply;opacity:.14;margin-bottom:14px}
+
+/* Filter */
+.filters{max-width:1120px;margin:0 auto;padding:22px 20px 0}
+.seg{display:inline-flex;border-radius:16px;padding:4px;margin-bottom:14px}
+.seg button{padding:8px 18px;border-radius:12px;font-size:14px;font-weight:600;color:var(--muted);transition:all .2s}
+.seg button.on{background:var(--bluegrad);color:#fff;box-shadow:0 6px 16px rgba(29,78,216,.35),inset 0 1px 0 rgba(255,255,255,.55)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:999px;font-size:14px;font-weight:500;transition:transform .15s}
+.chip:hover{transform:translateY(-1px)}
+.chip i{width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 3px rgba(255,255,255,.7)}
+.chip.on{background:var(--bluegrad);border-color:rgba(255,255,255,.4);color:#fff;box-shadow:0 8px 20px rgba(29,78,216,.35),inset 0 1px 0 rgba(255,255,255,.55)}
+.chip.on i{background:#fff!important;box-shadow:none}
+
+/* Kartu kaca */
+main{max-width:1120px;margin:0 auto;padding:22px 20px 80px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px}
+.card{position:relative;overflow:hidden;border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:12px;transition:transform .25s,box-shadow .25s}
+.card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,0) 40%);pointer-events:none;z-index:0}
+.card::after{content:"";position:absolute;inset:0;background:radial-gradient(240px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.85),rgba(255,255,255,0) 65%);opacity:0;transition:opacity .25s;pointer-events:none;z-index:0}
+.card:hover{transform:translateY(-4px);box-shadow:0 22px 50px rgba(37,70,160,.18),var(--inner)}
+.card:hover::after{opacity:1}
+.card>*{position:relative;z-index:1}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tag{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--muted)}
+.tag i{width:8px;height:8px;border-radius:50%;box-shadow:0 0 0 3px rgba(255,255,255,.7)}
+.lock{font-size:12px;font-weight:600;color:var(--muted);background:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.9);padding:3px 10px;border-radius:999px}
+.card h3{font-size:18px;line-height:1.25;letter-spacing:-.01em}
+.body{background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 4px rgba(37,70,160,.08);border-radius:14px;padding:12px 14px;font-size:14px;color:#334155;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap;flex:1;min-height:110px}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.by{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);min-width:0}
+.by img,.by span.ph{width:26px;height:26px;border-radius:50%;flex:none;background:rgba(37,99,235,.12);color:var(--blue);display:grid;place-items:center;font-size:12px;font-weight:700;object-fit:cover;border:1.5px solid #fff}
+.by em{font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acts{display:flex;gap:6px;flex:none}
+.del{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;color:var(--muted)}
+.del:hover{background:rgba(254,202,202,.7);color:#b91c1c}
+.del svg{width:16px;height:16px}
+.empty{grid-column:1/-1;text-align:center;padding:64px 20px;color:var(--muted)}
+.empty h3{color:var(--text);font-size:20px;margin-bottom:6px}
+.skel{height:250px;border-radius:var(--r);background:linear-gradient(90deg,rgba(255,255,255,.35) 25%,rgba(255,255,255,.7) 50%,rgba(255,255,255,.35) 75%);background-size:200% 100%;animation:sh 1.3s infinite;border:1px solid rgba(255,255,255,.7)}
+@keyframes sh{to{background-position:-200% 0}}
+
+/* Modal kaca */
+dialog{border-radius:30px;padding:0;width:min(560px,calc(100% - 24px));margin:auto;background:rgba(255,255,255,.6);-webkit-backdrop-filter:blur(30px) saturate(190%);backdrop-filter:blur(30px) saturate(190%);box-shadow:0 40px 100px rgba(30,60,150,.3),var(--inner)}
+dialog::backdrop{background:rgba(120,150,220,.22);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.mh{display:flex;justify-content:space-between;align-items:center;padding:22px 24px 0}
+.mh h2{font-size:22px;letter-spacing:-.02em}
+.x{width:36px;height:36px;border-radius:12px;font-size:22px;color:var(--muted)}
+.x:hover{background:rgba(255,255,255,.7)}
+form{padding:16px 24px 24px;display:grid;gap:14px}
+label{display:grid;gap:6px;font-size:14px;font-weight:600}
+input[type=text],select,textarea{width:100%;border:1px solid rgba(255,255,255,.95);border-radius:14px;padding:11px 14px;font:inherit;font-size:15px;font-weight:400;background:rgba(255,255,255,.65);box-shadow:inset 0 1px 4px rgba(37,70,160,.1);color:var(--text)}
+textarea{min-height:170px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 4px rgba(79,140,255,.3),inset 0 1px 4px rgba(37,70,160,.1)}
+.pub{display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.9);padding:12px 14px;border-radius:16px;font-size:14px;font-weight:600}
+.sw{position:relative;width:48px;height:28px;flex:none}
+.sw input{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:1}
+.sw span{position:absolute;inset:0;border-radius:999px;background:rgba(148,163,184,.45);box-shadow:inset 0 1px 3px rgba(15,23,42,.2);transition:background .25s}
+.sw span::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:linear-gradient(180deg,#fff,#eaf0ff);box-shadow:0 2px 6px rgba(15,23,42,.3);transition:transform .25s cubic-bezier(.3,1.4,.5,1)}
+.sw input:checked+span{background:linear-gradient(180deg,#4f8cff,#1d4ed8)}
+.sw input:checked+span::after{transform:translateX(20px)}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);background:rgba(15,23,42,.72);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);border:1px solid rgba(255,255,255,.25);box-shadow:0 12px 34px rgba(15,23,42,.3),inset 0 1px 0 rgba(255,255,255,.25);color:#fff;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:all .3s;z-index:60}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:560px){
+  .gbtn span.t{display:none}
+  .gbtn{padding:0 14px 0 12px}
+  .hero{padding-top:36px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* Logo header: sudut agak bulat */
+.brand img{width:36px;height:36px;border-radius:11px;background:#fff;object-fit:contain;mix-blend-mode:normal;border:1px solid rgba(15,23,42,.08);box-shadow:0 4px 14px rgba(37,70,160,.18)}
+
+/* Avatar & menu akun */
+.avatar.init{display:grid;place-items:center;background:rgba(37,99,235,.12);color:var(--blue);font-weight:700}
+.avatar.sm{width:42px;height:42px;box-shadow:none}
+.avatar.lg{width:52px;height:52px;flex:none}
+.menu{min-width:250px;padding:8px}
+.menu hr{border:0;border-top:1px solid rgba(255,255,255,.85);margin:6px 6px}
+.mid{display:flex;align-items:center;gap:12px;padding:8px 8px 4px}
+.mid>div{min-width:0}
+.mid b{display:block;font-size:14px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mid small{display:block;font-size:12px;color:var(--muted);max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{display:inline-block;margin-top:6px;font-size:12px;font-weight:600;color:var(--blue);background:rgba(37,99,235,.1);padding:2px 10px;border-radius:999px}
+
+/* Pengaturan akun */
+#onb{width:min(440px,calc(100% - 24px))}
+.onb-x{position:absolute;right:14px;top:14px;z-index:2}
+.steps{display:flex;gap:6px;padding:24px 62px 0 24px}
+.steps i{flex:1;height:5px;border-radius:99px;background:rgba(148,163,184,.35);transition:background .25s}
+.steps i.on{background:linear-gradient(90deg,#4f8cff,#1d4ed8)}
+.pane{display:none;padding:18px 24px 24px;gap:16px}
+.pane.on{display:grid}
+.pane h2{font-size:24px;letter-spacing:-.02em}
+.ph2{display:flex;align-items:center;gap:6px;margin-left:-8px}
+.back{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;color:var(--muted)}
+.back:hover{background:rgba(255,255,255,.7)}
+.back svg{width:20px;height:20px}
+.pickwrap{position:relative;width:132px;height:132px;margin:4px auto;cursor:pointer;border-radius:50%}
+.pick{width:100%;height:100%;border-radius:50%;overflow:hidden;border:3px solid #fff;box-shadow:0 10px 28px rgba(37,70,160,.22);background:rgba(37,99,235,.12);color:var(--blue);display:grid;place-items:center;font-size:48px;font-weight:700;font-family:'Bricolage Grotesque',system-ui,sans-serif}
+.pick img{width:100%;height:100%;object-fit:cover;display:block}
+.cam{position:absolute;right:2px;bottom:2px;width:38px;height:38px;border-radius:50%;background:var(--bluegrad);border:3px solid #fff;display:grid;place-items:center;box-shadow:0 6px 16px rgba(29,78,216,.4)}
+.cam svg{width:17px;height:17px}
+.info{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.9);border-radius:18px;padding:12px 14px;box-shadow:inset 0 1px 4px rgba(37,70,160,.06)}
+.info>div{min-width:0}
+.info b{display:block;font-size:16px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.info small{display:block;font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rl{font-size:14px;font-weight:600;margin-bottom:-6px}
+.roles{display:grid;gap:8px}
+.role{display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 16px;border-radius:16px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 4px rgba(37,70,160,.06);font-weight:600;font-size:15px;text-align:left;transition:transform .15s}
+.role.on{border-color:#4f8cff;background:rgba(255,255,255,.85);box-shadow:0 0 0 3px rgba(79,140,255,.28)}
+.role.locked{color:#8896ad;background:rgba(255,255,255,.3);cursor:not-allowed}
+.role.locked:hover{transform:translateX(-2px)}
+.role svg{width:18px;height:18px}
+.tick{width:24px;height:24px;border-radius:50%;background:var(--bluegrad);display:grid;place-items:center;box-shadow:0 4px 10px rgba(29,78,216,.35)}
+.tick svg{width:13px;height:13px}

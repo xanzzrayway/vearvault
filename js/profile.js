@@ -1,5 +1,5 @@
-/* ---------- Profil: ganti nama, ganti PP ---------- */
-let edPhoto = null, edPicked = false;
+/* ---------- Profil (layar penuh): milik sendiri dan orang lain ---------- */
+let edPhoto = null, edPicked = false, viewing = null, pfShown = PAGE;
 
 async function updateProfile(part){
   const { error } = await sb.from("profiles").update(part).eq("id", user.id);
@@ -8,13 +8,46 @@ async function updateProfile(part){
   if(r.error) throw r.error;
   profile = r.data;
 }
+
+const isOwn = v => !!(user && v && v.id === user.id);
+
+function paintProfile(){
+  const v = viewing; if(!v) return;
+  const own = isOwn(v);
+  const img = v.avatar_url || (own ? googleAvatar() : null);
+  $("#pfHero").innerHTML = `${avatarTag(img, v.display_name, "avatar xxl")}
+    <div class="pf-id"><h2>${esc(v.display_name)}</h2><span class="pill">${esc(roleName(v.role))}</span>${own ? `<small>${esc(user.email||"")}</small>` : ""}</div>`;
+  const list = rows.filter(r => r.user_id===v.id && (r.is_public || own));
+  const joined = v.created_at ? new Date(v.created_at).toLocaleDateString("id-ID", { month:"long", year:"numeric" }) : "-";
+  $("#pfStats").innerHTML = `<div><b>${fmt(list.length)}</b><span>Prompt</span></div><div><b>${esc(joined)}</b><span>Bergabung</span></div>`;
+  $("#profActs").hidden = !own;
+  $("#profGrid").innerHTML = list.length
+    ? list.slice(0, pfShown).map(cardHTML).join("")
+    : `<div class="empty"><img src="assets/logo-sm.png" width="72" height="72" alt=""><h3>Belum ada prompt</h3></div>`;
+  $("#pfMore").hidden = list.length <= pfShown;
+}
+const refreshProfileList = () => { if($("#prof").open) paintProfile(); };
+function syncProfileView(){
+  if(viewing && user && viewing.id===user.id) viewing = profile;
+  refreshProfileList();
+}
+function showProfile(v){
+  viewing = v; pfShown = PAGE; paintProfile();
+  if(!$("#prof").open) $("#prof").showModal();
+  $("#prof").scrollTop = 0;
+}
 function openProfile(){
   if(!profile){ openOnb("first"); return; }
-  const name = profile.display_name;
-  const img = profile.avatar_url || googleAvatar();
-  $("#profInfo").innerHTML = `${avatarTag(img, name, "avatar xl")}<div><b>${esc(name)}</b><small>${esc(user.email||"")}</small><span class="pill">${esc(roleName(profile.role))}</span></div>`;
-  $("#prof").showModal();
+  showProfile(profile);
 }
+async function openUser(uid){
+  if(user && uid===user.id){ openProfile(); return; }
+  const { data, error } = await sb.from("profiles").select("id,display_name,avatar_url,role,created_at").eq("id", uid).maybeSingle();
+  if(error || !data) return toast("Profil tidak ditemukan");
+  showProfile(data);
+}
+
+/* ---------- Ganti nama / ganti PP ---------- */
 function showEd(which){
   $("#edName").classList.toggle("on", which==="name");
   $("#edPhoto").classList.toggle("on", which==="photo");
@@ -31,13 +64,17 @@ async function saveEdit(part, msg, btn){
   try{ await updateProfile(part); }
   catch(err){ btn.disabled = false; return toast("Gagal menyimpan"); }
   btn.disabled = false;
-  $("#ed").close(); renderAuth(); load(); toast(msg);
+  $("#ed").close(); renderAuth(); syncProfileView(); load().then(refreshProfileList); toast(msg);
 }
 
-$("#pName").onclick = () => { $("#prof").close(); $("#edNameIn").value = profile.display_name; showEd("name"); setTimeout(() => $("#edNameIn").focus(), 60); };
-$("#pPhoto").onclick = () => { $("#prof").close(); edPhoto = profile.avatar_url || googleAvatar(); edPicked = false; paintEdPick(); showEd("photo"); };
-$("#pRole").onclick = () => { $("#prof").close(); openRole(); };
-$("#pMission").onclick = () => { $("#prof").close(); openMission(); };
+$("#profX").onclick = () => $("#prof").close();
+$("#prof").addEventListener("close", () => { viewing = null; });
+$("#pfMoreBtn").onclick = () => { pfShown += PAGE; paintProfile(); };
+
+$("#pName").onclick = () => { $("#edNameIn").value = profile.display_name; showEd("name"); setTimeout(() => $("#edNameIn").focus(), 60); };
+$("#pPhoto").onclick = () => { edPhoto = profile.avatar_url || googleAvatar(); edPicked = false; paintEdPick(); showEd("photo"); };
+$("#pRole").onclick = () => openRole();
+$("#pMission").onclick = () => openMission();
 $("#pOut").onclick = () => { $("#prof").close(); logout(); };
 
 $("#edNameSave").onclick = () => {
@@ -56,7 +93,7 @@ $("#edFile").onchange = async e => {
 };
 $("#edPhotoSave").onclick = () => saveEdit({ avatar_url: edPhoto }, "PP diganti", $("#edPhotoSave"));
 
-[["prof","profX"],["ed","edX"],["rol","rolX"],["mis","misX"]].forEach(([d,x]) => {
+[["ed","edX"],["rol","rolX"],["mis","misX"]].forEach(([d,x]) => {
   $("#"+d).addEventListener("click", e => { if(e.target===$("#"+d)) $("#"+d).close(); });
   $("#"+x).onclick = () => $("#"+d).close();
 });

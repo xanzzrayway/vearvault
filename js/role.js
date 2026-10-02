@@ -17,7 +17,7 @@ $("#rolList").onclick = async e => {
   const { error } = await sb.rpc("set_role", { new_role: id });
   if(error) return toast("Gagal ganti role");
   const p = await loadProfile(); if(p) profile = p;
-  renderAuth(); paintRoleList(); toast("Role diganti");
+  renderAuth(); syncProfileView(); paintRoleList(); toast("Role diganti");
 };
 
 /* Hanya prompt publik dengan isi lebih dari MISSION.chars karakter yang dihitung */

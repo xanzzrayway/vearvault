@@ -25,28 +25,13 @@ function render(){
       : `<div class="empty"><img src="assets/logo-sm.png" width="72" height="72" alt=""><h3>Belum ada prompt</h3><p>Tambahkan prompt pertama untuk kategori ini.</p></div>`;
     return;
   }
-  g.innerHTML = list.slice(0, shown).map(r => {
-    const mine = user && r.user_id===user.id;
-    const p = r.profiles || {};
-    const name = p.display_name || "Anonim";
-    return `<article class="card">
-      <div class="top"><span class="tag"><i style="background:${color(r.category)}"></i>${esc(r.category)}</span>${r.is_public?"":'<span class="lock">Pribadi</span>'}</div>
-      <h3>${esc(r.title)}</h3>
-      <div class="body">${esc(r.content)}</div>
-      <div class="foot">
-        <div class="by">${p.avatar_url?`<img src="${esc(p.avatar_url)}" alt="" referrerpolicy="no-referrer">`:`<span class="ph">${esc(initial(name))}</span>`}<em>${esc(name)}</em></div>
-        <div class="acts">
-          ${mine?`<button class="del" data-del="${r.id}" aria-label="Hapus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>`:""}
-          <button class="btn sm line" data-dl="${r.id}" aria-label="Unduh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg></button>
-          <button class="btn sm" data-copy="${r.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg>Salin</button>
-        </div>
-      </div></article>`;
-  }).join("");
+  g.innerHTML = list.slice(0, shown).map(cardHTML).join("");
   $("#more").hidden = list.length <= shown;
 }
 
-$("#grid").addEventListener("click", async e => {
+const onCardClick = async e => {
   const b = e.target.closest("button"); if(!b) return;
+  if(b.dataset.user){ openUser(b.dataset.user); return; }
   const find = id => rows.find(r => String(r.id)===String(id));
   if(b.dataset.copy){
     const r = find(b.dataset.copy);
@@ -65,9 +50,11 @@ $("#grid").addEventListener("click", async e => {
     if(!confirm("Hapus prompt ini?")) return;
     const { error } = await sb.from("prompts").delete().eq("id", b.dataset.del);
     if(error) return toast("Gagal menghapus");
-    rows = rows.filter(r => String(r.id)!==String(b.dataset.del)); render(); toast("Prompt dihapus");
+    rows = rows.filter(r => String(r.id)!==String(b.dataset.del)); render(); toast("Prompt dihapus"); refreshProfileList();
   }
-});
+};
+$("#grid").addEventListener("click", onCardClick);
+$("#profGrid").addEventListener("click", onCardClick);
 
 /* ---------- Filter ---------- */
 function renderChips(){
@@ -109,10 +96,10 @@ $("#form").onsubmit = async e => {
   if(res.error){ btn.disabled = false; return toast("Gagal menyimpan prompt"); }
   const data = { ...res.data, profiles: { display_name: profile.display_name, avatar_url: profile.avatar_url } };
   btn.disabled = false;
-  rows.unshift(data); $("#form").reset(); $("#fPub").checked = true; updCnt(); $("#dlg").close(); render(); toast("Prompt disimpan");
+  rows.unshift(data); $("#form").reset(); $("#fPub").checked = true; updCnt(); $("#dlg").close(); render(); refreshProfileList(); toast("Prompt disimpan");
   if(row.is_public && charLen(row.content) > MISSION.chars && !hasRole(MISSION.role)){
     const p = await loadProfile();
-    if(p){ profile = p; renderAuth(); if(hasRole(MISSION.role)) toast("Role Gear Vault terbuka"); }
+    if(p){ profile = p; renderAuth(); syncProfileView(); if(hasRole(MISSION.role)) toast("Role Gear Vault terbuka"); }
   }
 };
 
@@ -124,3 +111,22 @@ function updCnt(){
 }
 $("#fBody").addEventListener("input", updCnt);
 $("#fPub").addEventListener("change", updCnt);
+
+/* ---------- Kartu prompt (dipakai di beranda dan halaman profil) ---------- */
+function cardHTML(r){
+    const mine = user && r.user_id===user.id;
+    const p = r.profiles || {};
+    const name = p.display_name || "Anonim";
+    return `<article class="card">
+      <div class="top"><span class="tag"><i style="background:${color(r.category)}"></i>${esc(r.category)}</span>${r.is_public?"":'<span class="lock">Pribadi</span>'}</div>
+      <h3>${esc(r.title)}</h3>
+      <div class="body">${esc(r.content)}</div>
+      <div class="foot">
+        <button class="by" type="button" data-user="${esc(r.user_id)}" aria-label="Lihat profil">${p.avatar_url?`<img src="${esc(p.avatar_url)}" alt="" referrerpolicy="no-referrer">`:`<span class="ph">${esc(initial(name))}</span>`}<em>${esc(name)}</em></button>
+        <div class="acts">
+          ${mine?`<button class="del" data-del="${r.id}" aria-label="Hapus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>`:""}
+          <button class="btn sm line" data-dl="${r.id}" aria-label="Unduh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></svg></button>
+          <button class="btn sm" data-copy="${r.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 012-2h9"/></svg>Salin</button>
+        </div>
+      </div></article>`;
+}

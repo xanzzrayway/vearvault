@@ -93,13 +93,21 @@
 </dialog>
 
 <dialog id="prof">
-  <button class="x onb-x" id="profX" type="button" aria-label="Tutup">&times;</button>
-  <div class="pane on">
-    <h2>Profil</h2>
-    <div class="profhead" id="profInfo"></div>
-    <div class="row2"><button class="btn line" id="pName" type="button">Ganti nama</button><button class="btn line" id="pPhoto" type="button">Ganti PP</button></div>
-    <div class="row2"><button class="btn" id="pRole" type="button">Ganti Role</button><button class="btn" id="pMission" type="button">Misi Role</button></div>
-    <button class="out" id="pOut" type="button">Keluar</button>
+  <div class="pf-bar">
+    <button class="back" id="profX" type="button" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <span>Profil</span>
+  </div>
+  <div class="pf-wrap">
+    <section class="pf-hero" id="pfHero"></section>
+    <div class="pf-stats" id="pfStats"></div>
+    <div class="pf-acts" id="profActs" hidden>
+      <div class="row2"><button class="btn line" id="pName" type="button">Ganti nama</button><button class="btn line" id="pPhoto" type="button">Ganti PP</button></div>
+      <div class="row2"><button class="btn" id="pRole" type="button">Ganti Role</button><button class="btn" id="pMission" type="button">Misi Role</button></div>
+      <button class="out" id="pOut" type="button">Keluar</button>
+    </div>
+    <h3 class="pf-h">Prompt</h3>
+    <div class="grid" id="profGrid"></div>
+    <div class="more" id="pfMore" hidden><button class="btn" id="pfMoreBtn" type="button">Tampilkan lebih banyak</button></div>
   </div>
 </dialog>
 

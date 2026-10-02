@@ -2,8 +2,12 @@
 async function load(){
   if(!configured){ render(); return; }
   $("#grid").innerHTML = '<div class="skel"></div><div class="skel"></div><div class="skel"></div>';
-  const { data, error } = await sb.from("prompts").select("*, profiles(display_name, avatar_url)").order("created_at",{ascending:false});
-  if(error){ toast("Gagal memuat prompt"); rows = []; } else rows = data;
+  const { data, error } = await sb.from("prompts").select("id,user_id,title,content,category,is_public,created_at").order("created_at",{ascending:false});
+  if(error){ toast("Gagal memuat prompt"); rows = []; render(); return; }
+  const map = {};
+  const ps = await sb.from("profiles").select("id,display_name,avatar_url");
+  (ps.data || []).forEach(p => map[p.id] = p);
+  rows = data.map(r => ({ ...r, profiles: map[r.user_id] || null }));
   render();
 }
 
@@ -15,12 +19,13 @@ function render(){
   );
   const g = $("#grid");
   if(!list.length){
+    $("#more").hidden = true;
     g.innerHTML = view==="mine" && !user
-      ? `<div class="empty"><img src="assets/logo.png" alt=""><h3>Masuk untuk melihat prompt kamu</h3><p>Prompt yang kamu simpan akan muncul di sini.</p></div>`
-      : `<div class="empty"><img src="assets/logo.png" alt=""><h3>Belum ada prompt</h3><p>Tambahkan prompt pertama untuk kategori ini.</p></div>`;
+      ? `<div class="empty"><img src="assets/logo-sm.png" width="72" height="72" alt=""><h3>Masuk untuk melihat prompt kamu</h3><p>Prompt yang kamu simpan akan muncul di sini.</p></div>`
+      : `<div class="empty"><img src="assets/logo-sm.png" width="72" height="72" alt=""><h3>Belum ada prompt</h3><p>Tambahkan prompt pertama untuk kategori ini.</p></div>`;
     return;
   }
-  g.innerHTML = list.map(r => {
+  g.innerHTML = list.slice(0, shown).map(r => {
     const mine = user && r.user_id===user.id;
     const p = r.profiles || {};
     const name = p.display_name || "Anonim";
@@ -37,6 +42,7 @@ function render(){
         </div>
       </div></article>`;
   }).join("");
+  $("#more").hidden = list.length <= shown;
 }
 
 $("#grid").addEventListener("click", async e => {
@@ -68,13 +74,15 @@ function renderChips(){
   $("#chips").innerHTML = [["Semua","#1d4ed8"],...CATS].map(([n,c]) =>
     `<button class="chip ${n===cat?"on":""}" data-c="${esc(n)}">${n==="Semua"?"":`<i style="background:${c}"></i>`}${esc(n)}</button>`).join("");
 }
-$("#chips").onclick = e => { const b=e.target.closest(".chip"); if(!b) return; cat=b.dataset.c; renderChips(); render(); };
+$("#chips").onclick = e => { const b=e.target.closest(".chip"); if(!b) return; cat=b.dataset.c; shown=PAGE; renderChips(); render(); };
 $("#seg").onclick = e => {
   const b = e.target.closest("button"); if(!b) return;
   if(b.dataset.v==="mine" && !user){ login(); return; }
-  view = b.dataset.v; syncSeg(); render();
+  view = b.dataset.v; shown = PAGE; syncSeg(); render();
 };
-$("#q").oninput = e => { term = e.target.value.trim().toLowerCase(); render(); };
+let qT;
+$("#q").oninput = e => { clearTimeout(qT); const v = e.target.value; qT = setTimeout(() => { term = v.trim().toLowerCase(); shown = PAGE; render(); }, 150); };
+$("#moreBtn").onclick = () => { shown += PAGE; render(); };
 
 /* ---------- Tambah prompt ---------- */
 $("#fCat").innerHTML = CATS.map(([n]) => `<option>${esc(n)}</option>`).join("");
@@ -97,9 +105,9 @@ $("#form").onsubmit = async e => {
     content: $("#fBody").value.trim(),
     is_public: $("#fPub").checked
   };
-  const res = await sb.from("prompts").insert(row).select("*, profiles(display_name, avatar_url)").single();
+  const res = await sb.from("prompts").insert(row).select("id,user_id,title,content,category,is_public,created_at").single();
   if(res.error){ btn.disabled = false; return toast("Gagal menyimpan prompt"); }
-  const data = res.data;
+  const data = { ...res.data, profiles: { display_name: profile.display_name, avatar_url: profile.avatar_url } };
   btn.disabled = false;
   rows.unshift(data); $("#form").reset(); $("#fPub").checked = true; $("#dlg").close(); render(); toast("Prompt disimpan");
 };

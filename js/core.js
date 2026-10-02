@@ -17,7 +17,8 @@ const $ = s => document.querySelector(s);
 const configured = !!(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase);
 const sb = configured ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-let user = null, profile = null, rows = [], cat = "Semua", view = "all", term = "";
+const PAGE = 12;
+let user = null, profile = null, rows = [], cat = "Semua", view = "all", term = "", shown = PAGE;
 let draft = {name:"",avatar:null}, step = 1, onbMode = "first", picked = false;
 
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));

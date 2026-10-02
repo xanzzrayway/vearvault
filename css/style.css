@@ -3,8 +3,8 @@
   --blue:#1d4ed8; --blue-h:#1e40af;
   --glass:rgba(255,255,255,.52);
   --r:22px;
-  --shadow:0 10px 36px rgba(37,70,160,.12),0 2px 6px rgba(37,70,160,.06);
-  --inner:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35),inset 0 0 22px rgba(255,255,255,.28);
+  --shadow:0 4px 16px rgba(37,70,160,.1);
+  --inner:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35);
   --bluegrad:linear-gradient(180deg,rgba(255,255,255,.38) 0,rgba(255,255,255,0) 52%),linear-gradient(180deg,#4f8cff 0%,#1d4ed8 100%);
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -15,32 +15,27 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 :focus-visible{outline:3px solid #93b4ff;outline-offset:2px}
 
 /* Latar berwarna lembut yang ditembus kaca */
-.orbs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
-.orbs span{position:absolute;border-radius:50%;filter:blur(64px);animation:drift 28s ease-in-out infinite alternate}
-.orbs span:nth-child(1){width:48vmax;height:48vmax;background:#60a5fa;opacity:.7;top:-14%;left:-10%}
-.orbs span:nth-child(2){width:38vmax;height:38vmax;background:#67e8f9;opacity:.6;top:6%;right:-12%;animation-delay:-7s}
-.orbs span:nth-child(3){width:44vmax;height:44vmax;background:#c4b5fd;opacity:.6;bottom:-18%;left:20%;animation-delay:-13s}
-.orbs span:nth-child(4){width:30vmax;height:30vmax;background:#fbcfe8;opacity:.55;bottom:8%;right:4%;animation-delay:-19s}
-@keyframes drift{to{transform:translate(7vw,5vh) scale(1.14)}}
+.orbs{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  radial-gradient(48vmax 48vmax at 4% -4%,rgba(96,165,250,.55),transparent 70%),
+  radial-gradient(38vmax 38vmax at 104% 12%,rgba(103,232,249,.45),transparent 70%),
+  radial-gradient(44vmax 44vmax at 30% 106%,rgba(196,181,253,.45),transparent 70%),
+  radial-gradient(30vmax 30vmax at 96% 92%,rgba(251,207,232,.45),transparent 70%)}
 
-/* Material kaca */
+/* Material kaca (ringan: blur hanya di header, menu, dan jendela) */
 .bar,.gbtn,.search input,.seg,.chip,.card,.menu,dialog{
   background:var(--glass);
   border:1px solid rgba(255,255,255,.8);
   box-shadow:var(--shadow),var(--inner);
-  -webkit-backdrop-filter:blur(18px) saturate(180%);
-  backdrop-filter:blur(18px) saturate(180%);
 }
-.refract .bar,.refract dialog{
-  backdrop-filter:blur(10px) url(#lg) saturate(180%);
-}
+.gbtn,.search input,.seg,.chip,.card{background:rgba(255,255,255,.74)}
+.bar,.menu{-webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%)}
 
 /* Header */
 header{position:sticky;top:12px;z-index:20;padding:0 14px;margin-top:12px}
 .bar{max-width:1120px;margin:0 auto;padding:8px 10px 8px 16px;border-radius:999px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;letter-spacing:-.02em}
 .brand{text-decoration:none;color:var(--text)}
-.brand img{width:34px;height:34px;object-fit:contain;mix-blend-mode:multiply;display:block}
+.brand img{width:34px;height:34px;object-fit:contain;display:block}
 
 /* Tombol Google */
 .gbtn{display:flex;align-items:center;gap:10px;height:42px;padding:0 18px 0 12px;border-radius:999px;font-weight:600;font-size:14px;transition:transform .15s,box-shadow .2s}
@@ -64,7 +59,7 @@ header{position:sticky;top:12px;z-index:20;padding:0 14px;margin-top:12px}
 .btn:active{transform:scale(.97)}
 .btn.sm{height:36px;padding:0 14px;font-size:13px;border-radius:12px}
 .btn.line{background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(214,229,255,.6));color:var(--blue);border:1px solid rgba(255,255,255,.95);
-  box-shadow:0 4px 14px rgba(37,99,235,.15),var(--inner);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+  box-shadow:0 4px 14px rgba(37,99,235,.15),var(--inner)}
 .btn.line:hover{filter:none;background:linear-gradient(180deg,#fff,rgba(200,220,255,.75))}
 .btn svg{width:16px;height:16px}
 .btn:disabled{opacity:.6}
@@ -80,8 +75,8 @@ header{position:sticky;top:12px;z-index:20;padding:0 14px;margin-top:12px}
 .tools .btn{height:48px}
 
 .hero-top{display:flex;align-items:center;justify-content:space-between;gap:24px}
-.mark{width:clamp(92px,17vw,190px);height:auto;mix-blend-mode:multiply;flex:none}
-.empty img{width:72px;height:72px;object-fit:contain;mix-blend-mode:multiply;opacity:.14;margin-bottom:14px}
+.mark{width:clamp(92px,17vw,190px);height:auto;flex:none}
+.empty img{width:72px;height:72px;object-fit:contain;opacity:.14;margin-bottom:14px}
 
 /* Filter */
 .filters{max-width:1120px;margin:0 auto;padding:22px 20px 0}
@@ -99,11 +94,9 @@ header{position:sticky;top:12px;z-index:20;padding:0 14px;margin-top:12px}
 /* Kartu kaca */
 main{max-width:1120px;margin:0 auto;padding:22px 20px 80px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px}
-.card{position:relative;overflow:hidden;border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:12px;transition:transform .25s,box-shadow .25s}
+.card{position:relative;overflow:hidden;border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:12px;transition:transform .2s;content-visibility:auto;contain-intrinsic-size:auto 270px}
 .card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.7) 0%,rgba(255,255,255,0) 40%);pointer-events:none;z-index:0}
-.card::after{content:"";position:absolute;inset:0;background:radial-gradient(240px circle at var(--mx,50%) var(--my,0%),rgba(255,255,255,.85),rgba(255,255,255,0) 65%);opacity:0;transition:opacity .25s;pointer-events:none;z-index:0}
-.card:hover{transform:translateY(-4px);box-shadow:0 22px 50px rgba(37,70,160,.18),var(--inner)}
-.card:hover::after{opacity:1}
+@media(hover:hover){.card:hover{transform:translateY(-3px)}}
 .card>*{position:relative;z-index:1}
 .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .tag{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--muted)}
@@ -121,12 +114,12 @@ main{max-width:1120px;margin:0 auto;padding:22px 20px 80px}
 .del svg{width:16px;height:16px}
 .empty{grid-column:1/-1;text-align:center;padding:64px 20px;color:var(--muted)}
 .empty h3{color:var(--text);font-size:20px;margin-bottom:6px}
-.skel{height:250px;border-radius:var(--r);background:linear-gradient(90deg,rgba(255,255,255,.35) 25%,rgba(255,255,255,.7) 50%,rgba(255,255,255,.35) 75%);background-size:200% 100%;animation:sh 1.3s infinite;border:1px solid rgba(255,255,255,.7)}
-@keyframes sh{to{background-position:-200% 0}}
+.skel{height:250px;border-radius:var(--r);background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.45}}
 
 /* Modal kaca */
-dialog{border-radius:30px;padding:0;width:min(560px,calc(100% - 24px));margin:auto;background:rgba(255,255,255,.6);-webkit-backdrop-filter:blur(30px) saturate(190%);backdrop-filter:blur(30px) saturate(190%);box-shadow:0 40px 100px rgba(30,60,150,.3),var(--inner)}
-dialog::backdrop{background:rgba(120,150,220,.22);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+dialog{border-radius:30px;padding:0;width:min(560px,calc(100% - 24px));margin:auto;background:rgba(255,255,255,.6);-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);box-shadow:0 24px 60px rgba(30,60,150,.25),var(--inner)}
+dialog::backdrop{background:rgba(110,140,210,.3)}
 .mh{display:flex;justify-content:space-between;align-items:center;padding:22px 24px 0}
 .mh h2{font-size:22px;letter-spacing:-.02em}
 .x{width:36px;height:36px;border-radius:12px;font-size:22px;color:var(--muted)}
@@ -144,7 +137,7 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 4px rgba(7
 .sw input:checked+span{background:linear-gradient(180deg,#4f8cff,#1d4ed8)}
 .sw input:checked+span::after{transform:translateX(20px)}
 
-.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);background:rgba(15,23,42,.72);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);border:1px solid rgba(255,255,255,.25);box-shadow:0 12px 34px rgba(15,23,42,.3),inset 0 1px 0 rgba(255,255,255,.25);color:#fff;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:all .3s;z-index:60}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);background:rgba(15,23,42,.9);border:1px solid rgba(255,255,255,.25);box-shadow:0 12px 34px rgba(15,23,42,.3),inset 0 1px 0 rgba(255,255,255,.25);color:#fff;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:60}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
 @media(max-width:560px){
@@ -155,7 +148,7 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 4px rgba(7
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 /* Logo header: sudut agak bulat */
-.brand img{width:36px;height:36px;border-radius:11px;background:#fff;object-fit:contain;mix-blend-mode:normal;border:1px solid rgba(15,23,42,.08);box-shadow:0 4px 14px rgba(37,70,160,.18)}
+.brand img{width:36px;height:36px;border-radius:11px;background:#fff;object-fit:contain;border:1px solid rgba(15,23,42,.08);box-shadow:0 4px 14px rgba(37,70,160,.18)}
 
 /* Avatar & menu akun */
 .avatar.init{display:grid;place-items:center;background:rgba(37,99,235,.12);color:var(--blue);font-weight:700}
@@ -200,3 +193,6 @@ input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 4px rgba(7
 .role svg{width:18px;height:18px}
 .tick{width:24px;height:24px;border-radius:50%;background:var(--bluegrad);display:grid;place-items:center;box-shadow:0 4px 10px rgba(29,78,216,.35)}
 .tick svg{width:13px;height:13px}
+
+.more{display:flex;justify-content:center;margin-top:24px}
+.more[hidden]{display:none}

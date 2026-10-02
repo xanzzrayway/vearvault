@@ -12,6 +12,9 @@ const ROLES = [
 ];
 const color = c => (CATS.find(x=>x[0]===c)||[0,"#94a3b8"])[1];
 const roleName = id => (ROLES.find(r=>r.id===id)||ROLES[0]).name;
+const MISSION = { role:"gearvault", count:100, chars:5000 };
+const charLen = s => [...String(s || "")].length;
+const hasRole = id => ((profile && profile.unlocked) || ["newbie"]).includes(id);
 
 const $ = s => document.querySelector(s);
 const configured = !!(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase);

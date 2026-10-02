@@ -8,21 +8,9 @@ function renderAuth(){
   }
   const name = (profile && profile.display_name) || "";
   const img = (profile && profile.avatar_url) || googleAvatar();
-  a.innerHTML = `<div class="user">
-    <button id="avBtn" aria-label="Akun">${avatarTag(img, name||user.email, "avatar")}</button>
-    <div class="menu" id="menu">
-      <div class="mid">${avatarTag(img, name||user.email, "avatar sm")}
-        <div><b>${esc(name||"Akun baru")}</b><small>${esc(user.email||"")}</small><span class="pill">${esc(roleName(profile && profile.role))}</span></div>
-      </div>
-      <hr>
-      <button id="setBtn">Pengaturan akun</button>
-      <button id="outBtn">Keluar</button>
-    </div></div>`;
-  $("#avBtn").onclick = e => { e.stopPropagation(); $("#menu").classList.toggle("open"); };
-  $("#setBtn").onclick = () => openOnb("edit");
-  $("#outBtn").onclick = logout;
+  a.innerHTML = `<button class="user" id="avBtn" aria-label="Profil">${avatarTag(img, name||user.email, "avatar")}</button>`;
+  $("#avBtn").onclick = openProfile;
 }
-document.addEventListener("click", () => $("#menu")?.classList.remove("open"));
 
 async function login(){
   if(!configured){ toast("Isi SUPABASE_URL dan SUPABASE_ANON_KEY dulu"); return; }

@@ -89,7 +89,7 @@ $("#fCat").innerHTML = CATS.map(([n]) => `<option>${esc(n)}</option>`).join("");
 $("#addBtn").onclick = () => {
   if(!user){ login(); return; }
   if(!profile){ openOnb("first"); return; }
-  $("#dlg").showModal();
+  $("#dlg").showModal(); updCnt();
 };
 $("#closeBtn").onclick = () => $("#dlg").close();
 $("#dlg").addEventListener("click", e => { if(e.target===$("#dlg")) $("#dlg").close(); });
@@ -109,5 +109,18 @@ $("#form").onsubmit = async e => {
   if(res.error){ btn.disabled = false; return toast("Gagal menyimpan prompt"); }
   const data = { ...res.data, profiles: { display_name: profile.display_name, avatar_url: profile.avatar_url } };
   btn.disabled = false;
-  rows.unshift(data); $("#form").reset(); $("#fPub").checked = true; $("#dlg").close(); render(); toast("Prompt disimpan");
+  rows.unshift(data); $("#form").reset(); $("#fPub").checked = true; updCnt(); $("#dlg").close(); render(); toast("Prompt disimpan");
+  if(row.is_public && charLen(row.content) > MISSION.chars && !hasRole(MISSION.role)){
+    const p = await loadProfile();
+    if(p){ profile = p; renderAuth(); if(hasRole(MISSION.role)) toast("Role Gear Vault terbuka"); }
+  }
 };
+
+/* ---------- Deteksi panjang prompt ---------- */
+function updCnt(){
+  const n = charLen($("#fBody").value);
+  $("#cntN").textContent = fmt(n) + " karakter";
+  $("#cntOk").hidden = !($("#fPub").checked && n > MISSION.chars && !hasRole(MISSION.role));
+}
+$("#fBody").addEventListener("input", updCnt);
+$("#fPub").addEventListener("change", updCnt);

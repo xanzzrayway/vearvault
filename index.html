@@ -49,7 +49,8 @@
   <div class="mh"><h2>Tambah prompt</h2><button class="x" id="closeBtn" aria-label="Tutup">&times;</button></div>
   <form id="form">
     <label>Judul<input type="text" id="fTitle" maxlength="80" required></label>
-    <label>Kategori<select id="fCat"></select></label>
+    <label>Deskripsi<textarea id="fDesc" maxlength="300"></textarea></label>
+    <div class="fld"><span>AI</span><button type="button" class="pickbtn" id="catBtn"></button><input type="hidden" id="fCat" value="ChatGPT"></div>
     <label>Prompt<textarea id="fBody" required></textarea></label>
     <div class="cnt"><span id="cntN">0 karakter</span><span class="ok" id="cntOk" hidden>Masuk Misi Role</span></div>
     <div class="pub"><span>Jadikan publik</span><label class="sw"><input type="checkbox" id="fPub" checked><span></span></label></div>
@@ -139,6 +140,22 @@
   <div class="pane on"><h2>Misi Role</h2><div id="misBody"></div></div>
 </dialog>
 
+<dialog id="cp">
+  <button class="x onb-x" id="cpX" type="button" aria-label="Tutup">&times;</button>
+  <div class="pane on"><h2>Pilih AI</h2><div class="aigrid" id="cpList"></div></div>
+</dialog>
+
+<dialog id="pv">
+  <div class="pv-head">
+    <div class="pv-top"><span class="tag" id="pvTag"></span><button class="x" id="pvX" type="button" aria-label="Tutup">&times;</button></div>
+    <h2 id="pvTitle"></h2>
+    <p class="pv-desc" id="pvDesc" hidden></p>
+    <button class="by" id="pvBy" type="button" aria-label="Lihat profil"></button>
+  </div>
+  <div class="pv-body" id="pvBody"></div>
+  <div class="pv-foot"><span class="pv-n" id="pvN"></span><div class="acts" id="pvActs"></div></div>
+</dialog>
+
 <div class="toast" id="toast"></div>
 
 <script defer src="js/config.js"></script>
@@ -148,6 +165,8 @@
 <script defer src="js/account.js"></script>
 <script defer src="js/profile.js"></script>
 <script defer src="js/role.js"></script>
+<script defer src="js/picker.js"></script>
+<script defer src="js/viewer.js"></script>
 <script defer src="js/main.js"></script>
 </body>
 </html>

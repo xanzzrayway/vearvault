@@ -26,7 +26,7 @@ function paintAvatar(){
 function paintInfo(){
   $("#info").innerHTML = `${avatarTag(draft.avatar, draft.name, "avatar lg")}<div><b>${esc(draft.name)}</b><small>${esc(user.email||"")}</small></div>`;
   const cur = (profile && profile.role) || "newbie";
-  $("#roles").innerHTML = ROLES.map(r => r.open
+  $("#roles").innerHTML = ROLES.filter(r => !r.hidden).map(r => r.open
     ? `<button type="button" class="role ${r.id===cur?"on":""}" data-r="${r.id}"><span>${r.name}</span>${r.id===cur?TICK:""}</button>`
     : `<button type="button" class="role locked" data-r="${r.id}" aria-disabled="true"><span>${r.name}</span>${LOCK}</button>`
   ).join("");
@@ -89,6 +89,6 @@ $("#finish").onclick = async () => {
   }
   btn.disabled = false;
   const first = onbMode==="first";
-  $("#onb").close(); renderAuth(); syncInbox(); load();
+  $("#onb").close(); renderAuth(); syncInbox(); syncModeration(); load();
   toast(first ? "Akun siap" : "Akun disimpan");
 };

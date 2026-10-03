@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-build="20261003150503">
+<html lang="id" data-build="20261003151307">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="stylesheet" href="css/style.css?v=20261003150503">
+<link rel="stylesheet" href="css/style.css?v=20261003151307">
 </head>
 <body>
 <div class="orbs" aria-hidden="true"></div>
@@ -102,6 +102,11 @@
     <section class="pf-hero" id="pfHero"></section>
     <div class="pf-stats" id="pfStats"></div>
     <div class="pf-acts" id="profSend" hidden><button class="btn" id="pSend" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>Kirim Prompt</button></div>
+    <div class="pf-adm" id="profAdmin" hidden>
+      <div class="pf-adm-t">Admin</div>
+      <div class="pf-adm-s" id="admInfo"></div>
+      <div class="row2"><button class="btn line" id="admWarn" type="button">Peringatkan</button><button class="btn danger" id="admBan" type="button">Ban akun</button></div>
+    </div>
     <div class="pf-acts" id="profActs" hidden>
       <div class="row2"><button class="btn line" id="pName" type="button">Ganti nama</button><button class="btn line" id="pPhoto" type="button">Ganti PP</button></div>
       <div class="row2"><button class="btn" id="pRole" type="button">Ganti Role</button><button class="btn" id="pMission" type="button">Misi Role</button></div>
@@ -202,23 +207,59 @@
 
 <dialog id="mv" class="lb"><img id="mvImg" alt=""></dialog>
 
+<dialog id="am">
+  <div class="mh"><h2>Admin</h2><button class="x" id="amX" type="button" aria-label="Tutup">&times;</button></div>
+  <div class="am-body">
+    <div class="am-msg" id="amMsg"></div>
+    <button class="am-i danger" id="amDel" type="button">Hapus pesan</button>
+    <button class="am-i" id="amWarn" type="button">Peringatkan akun</button>
+    <button class="am-i danger" id="amBan" type="button">Ban akun</button>
+  </div>
+</dialog>
+
+<dialog id="ad">
+  <div class="mh"><h2 id="adH">Peringatkan</h2><button class="x" id="adX" type="button" aria-label="Tutup">&times;</button></div>
+  <form id="adForm">
+    <label>Pesan<textarea id="adText" maxlength="300" required></textarea></label>
+    <button class="btn" type="submit" id="adSend">Kirim peringatan</button>
+  </form>
+</dialog>
+
+<dialog id="wn">
+  <div class="mh"><h2>Peringatan dari Admin</h2><span class="pill" id="wnCnt" hidden></span></div>
+  <div class="am-body">
+    <p class="wn-msg" id="wnMsg"></p>
+    <button class="btn" id="wnOk" type="button">Mengerti</button>
+  </div>
+</dialog>
+
+<dialog id="bn" class="page">
+  <div class="bn-box">
+    <h2>Akun diblokir</h2>
+    <p>Akun kamu diblokir oleh admin.</p>
+    <div class="bn-why" id="bnWhy"></div>
+    <button class="btn" id="bnOut" type="button">Keluar</button>
+  </div>
+</dialog>
+
 <div class="toast" id="toast"></div>
 
-<script defer src="js/update.js?v=20261003150503"></script>
-<script defer src="js/lock.js?v=20261003150503"></script>
-<script defer src="js/config.js?v=20261003150503"></script>
-<script defer src="js/core.js?v=20261003150503"></script>
-<script defer src="js/auth.js?v=20261003150503"></script>
-<script defer src="js/prompts.js?v=20261003150503"></script>
-<script defer src="js/account.js?v=20261003150503"></script>
-<script defer src="js/profile.js?v=20261003150503"></script>
-<script defer src="js/role.js?v=20261003150503"></script>
-<script defer src="js/picker.js?v=20261003150503"></script>
-<script defer src="js/viewer.js?v=20261003150503"></script>
-<script defer src="js/menu.js?v=20261003150503"></script>
-<script defer src="js/chat.js?v=20261003150503"></script>
-<script defer src="js/box.js?v=20261003150503"></script>
-<script defer src="js/find.js?v=20261003150503"></script>
-<script defer src="js/main.js?v=20261003150503"></script>
+<script defer src="js/update.js?v=20261003151307"></script>
+<script defer src="js/lock.js?v=20261003151307"></script>
+<script defer src="js/config.js?v=20261003151307"></script>
+<script defer src="js/core.js?v=20261003151307"></script>
+<script defer src="js/auth.js?v=20261003151307"></script>
+<script defer src="js/prompts.js?v=20261003151307"></script>
+<script defer src="js/account.js?v=20261003151307"></script>
+<script defer src="js/profile.js?v=20261003151307"></script>
+<script defer src="js/role.js?v=20261003151307"></script>
+<script defer src="js/picker.js?v=20261003151307"></script>
+<script defer src="js/viewer.js?v=20261003151307"></script>
+<script defer src="js/menu.js?v=20261003151307"></script>
+<script defer src="js/chat.js?v=20261003151307"></script>
+<script defer src="js/box.js?v=20261003151307"></script>
+<script defer src="js/find.js?v=20261003151307"></script>
+<script defer src="js/admin.js?v=20261003151307"></script>
+<script defer src="js/main.js?v=20261003151307"></script>
 </body>
 </html>

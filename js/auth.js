@@ -29,6 +29,7 @@ async function setUser(u){
   if(!u && view==="mine"){ view="all"; syncSeg(); }
   renderAuth();
   if(typeof syncInbox === "function") syncInbox();
+  if(typeof syncModeration === "function") syncModeration();
   if(u && !profile) openOnb("first");
   load();
 }

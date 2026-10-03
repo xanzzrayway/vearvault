@@ -3,7 +3,7 @@ const fmt = n => Number(n).toLocaleString("id-ID");
 
 function paintRoleList(){
   const cur = profile.role || "newbie";
-  $("#rolList").innerHTML = ROLES.map(r => hasRole(r.id)
+  $("#rolList").innerHTML = ROLES.filter(r => !r.hidden || r.id === cur).map(r => hasRole(r.id)
     ? `<button type="button" class="role ${r.id===cur?"on":""}" data-r="${r.id}"><span>${r.name}</span>${r.id===cur?TICK:""}</button>`
     : `<button type="button" class="role locked" data-r="${r.id}" aria-disabled="true"><span>${r.name}</span>${LOCK}</button>`
   ).join("");
@@ -12,6 +12,7 @@ function openRole(){ paintRoleList(); $("#rol").showModal(); }
 $("#rolList").onclick = async e => {
   const b = e.target.closest(".role"); if(!b) return;
   const id = b.dataset.r;
+  if(isAdmin()) return toast("Role admin diatur dari Supabase");
   if(!hasRole(id)) return toast(id===MISSION.role ? "Selesaikan Misi Role dulu" : "Role terkunci");
   if(id === (profile.role || "newbie")) return;
   const { error } = await sb.rpc("set_role", { new_role: id });

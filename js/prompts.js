@@ -5,7 +5,7 @@ async function load(){
   const { data, error } = await sb.from("prompts").select("id,user_id,title,description,content,category,is_public,created_at").order("created_at",{ascending:false});
   if(error){ toast("Gagal memuat prompt"); rows = []; render(); return; }
   const map = {};
-  const ps = await sb.from("profiles").select("id,display_name,avatar_url");
+  const ps = await sb.from("profiles").select("id,display_name,avatar_url,role");
   (ps.data || []).forEach(p => { map[p.id] = PROF[p.id] = p; });
   rows = data.map(r => ({ ...r, profiles: map[r.user_id] || null }));
   render();

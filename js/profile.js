@@ -33,7 +33,7 @@ function syncProfileView(){
   refreshProfileList();
 }
 function showProfile(v){
-  viewing = v; pfShown = PAGE; paintProfile();
+  viewing = v; pfShown = PAGE; paintProfile(); paintAdminInfo();
   if(!$("#prof").open) $("#prof").showModal();
   $("#prof").scrollTop = 0;
 }
@@ -43,7 +43,7 @@ function openProfile(){
 }
 async function openUser(uid){
   if(user && uid===user.id){ openProfile(); return; }
-  const { data, error } = await sb.from("profiles").select("id,display_name,avatar_url,role,created_at").eq("id", uid).maybeSingle();
+  const { data, error } = await sb.from("profiles").select("id,display_name,avatar_url,role,created_at,banned").eq("id", uid).maybeSingle();
   if(error || !data) return toast("Profil tidak ditemukan");
   showProfile(data);
 }

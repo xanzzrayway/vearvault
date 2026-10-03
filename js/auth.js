@@ -28,6 +28,7 @@ async function setUser(u){
   if(u) profile = await loadProfile();
   if(!u && view==="mine"){ view="all"; syncSeg(); }
   renderAuth();
+  if(typeof syncInbox === "function") syncInbox();
   if(u && !profile) openOnb("first");
   load();
 }

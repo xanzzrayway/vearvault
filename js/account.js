@@ -89,6 +89,6 @@ $("#finish").onclick = async () => {
   }
   btn.disabled = false;
   const first = onbMode==="first";
-  $("#onb").close(); renderAuth(); load();
+  $("#onb").close(); renderAuth(); syncInbox(); load();
   toast(first ? "Akun siap" : "Akun disimpan");
 };

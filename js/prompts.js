@@ -6,7 +6,7 @@ async function load(){
   if(error){ toast("Gagal memuat prompt"); rows = []; render(); return; }
   const map = {};
   const ps = await sb.from("profiles").select("id,display_name,avatar_url");
-  (ps.data || []).forEach(p => map[p.id] = p);
+  (ps.data || []).forEach(p => { map[p.id] = PROF[p.id] = p; });
   rows = data.map(r => ({ ...r, profiles: map[r.user_id] || null }));
   render();
 }

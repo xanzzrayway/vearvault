@@ -15,6 +15,23 @@ const roleName = id => (ROLES.find(r=>r.id===id)||ROLES[0]).name;
 const MISSION = { role:"gearvault", count:100, chars:5000 };
 const charLen = s => [...String(s || "")].length;
 const hasRole = id => ((profile && profile.unlocked) || ["newbie"]).includes(id);
+const PROF = {};   // cache profil: id -> { display_name, avatar_url, role }
+function ago(iso){
+  const sec = (Date.now() - new Date(iso)) / 1000;
+  if(sec < 60) return "baru saja";
+  if(sec < 3600) return Math.floor(sec/60) + " mnt";
+  if(sec < 86400) return Math.floor(sec/3600) + " jam";
+  if(sec < 604800) return Math.floor(sec/86400) + " hr";
+  return new Date(iso).toLocaleDateString("id-ID", { day:"numeric", month:"short" });
+}
+async function ensureProfiles(ids){
+  if(!configured) return;
+  const miss = [...new Set(ids)].filter(id => id && !PROF[id]);
+  for(let i = 0; i < miss.length; i += 50){
+    const { data } = await sb.from("profiles").select("id,display_name,avatar_url,role").in("id", miss.slice(i, i + 50));
+    (data || []).forEach(p => PROF[p.id] = p);
+  }
+}
 
 const $ = s => document.querySelector(s);
 const configured = !!(SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase);

@@ -21,6 +21,7 @@ function paintProfile(){
   const joined = v.created_at ? new Date(v.created_at).toLocaleDateString("id-ID", { month:"long", year:"numeric" }) : "-";
   $("#pfStats").innerHTML = `<div><b>${fmt(list.length)}</b><span>Prompt</span></div><div><b>${esc(joined)}</b><span>Bergabung</span></div>`;
   $("#profActs").hidden = !own;
+  $("#profSend").hidden = own;
   $("#profGrid").innerHTML = list.length
     ? list.slice(0, pfShown).map(cardHTML).join("")
     : `<div class="empty"><img src="assets/logo-sm.png" width="72" height="72" alt=""><h3>Belum ada prompt</h3></div>`;
@@ -97,3 +98,5 @@ $("#edPhotoSave").onclick = () => saveEdit({ avatar_url: edPhoto }, "PP diganti"
   $("#"+d).addEventListener("click", e => { if(e.target===$("#"+d)) $("#"+d).close(); });
   $("#"+x).onclick = () => $("#"+d).close();
 });
+
+$("#pSend").onclick = () => openSend(viewing);

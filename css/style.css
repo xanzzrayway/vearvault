@@ -70,7 +70,7 @@ header{position:sticky;top:12px;z-index:20;padding:0 14px;margin-top:12px}
 .tools{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
 .search{flex:1;min-width:220px;position:relative}
 .search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted);z-index:1}
-.search input{width:100%;height:48px;border-radius:16px;padding:0 16px 0 46px;font:inherit;font-size:15px;color:var(--text)}
+.search input{width:100%;height:48px;border-radius:16px;padding:0 16px 0 46px;font:inherit;font-size:16px;color:var(--text)}
 .search input:focus{outline:none;border-color:#fff;box-shadow:0 0 0 4px rgba(79,140,255,.3),var(--shadow),var(--inner)}
 .tools .btn{height:48px}
 
@@ -126,7 +126,7 @@ dialog::backdrop{background:rgba(110,140,210,.3)}
 .x:hover{background:rgba(255,255,255,.7)}
 form{padding:16px 24px 24px;display:grid;gap:14px}
 label{display:grid;gap:6px;font-size:14px;font-weight:600}
-input[type=text],select,textarea{width:100%;border:1px solid rgba(255,255,255,.95);border-radius:14px;padding:11px 14px;font:inherit;font-size:15px;font-weight:400;background:rgba(255,255,255,.65);box-shadow:inset 0 1px 4px rgba(37,70,160,.1);color:var(--text)}
+input[type=text],select,textarea{width:100%;border:1px solid rgba(255,255,255,.95);border-radius:14px;padding:11px 14px;font:inherit;font-size:16px;font-weight:400;background:rgba(255,255,255,.65);box-shadow:inset 0 1px 4px rgba(37,70,160,.1);color:var(--text)}
 textarea{min-height:170px;resize:vertical}
 input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 4px rgba(79,140,255,.3),inset 0 1px 4px rgba(37,70,160,.1)}
 .pub{display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.9);padding:12px 14px;border-radius:16px;font-size:14px;font-weight:600}
@@ -344,3 +344,50 @@ button.by:hover{background:rgba(255,255,255,.75)}
 #sDesc{min-height:76px}
 
 .fn-wrap .search{flex:none}
+
+/* ===== Perbaikan: zoom, geser, scroll ===== */
+html{overflow-x:hidden;touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{overflow-x:clip}
+html.lock body{position:fixed;left:0;right:0;width:100%;overflow:hidden}
+#prof,.page,#drawer,#pv,#ed,#rol,#mis,#cp,#sd,#dlg{overscroll-behavior:contain}
+#prof{height:100dvh}
+#profGrid .card{content-visibility:visible}
+
+/* ===== Liquid glass untuk semua halaman ===== */
+.pf-bar{background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(16px) saturate(165%);backdrop-filter:blur(16px) saturate(165%);border-bottom:1px solid rgba(255,255,255,.85);box-shadow:var(--inner),0 4px 18px rgba(37,70,160,.08)}
+.bx,.fr,.sdto,.pf-stats>div{background:rgba(255,255,255,.58);border:1px solid rgba(255,255,255,.92);box-shadow:var(--shadow),var(--inner)}
+.mcard,.info{box-shadow:var(--shadow),var(--inner)}
+
+/* ===== Chat: kaca cair, bar melayang ===== */
+.chatpage{--inh:76px}
+.chatpage[open]{display:block}
+.chatpage .pf-bar{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));left:0;right:0;z-index:3;margin:0 auto;width:calc(100% - 20px);max-width:740px;border-radius:999px;padding:6px 18px 6px 8px;border:1px solid rgba(255,255,255,.85);box-shadow:0 10px 30px rgba(37,70,160,.14),var(--inner);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
+.chatpage .ch-list{position:absolute;inset:0;z-index:1;max-width:none;width:100%;margin:0;overflow-y:auto;
+  padding:calc(78px + env(safe-area-inset-top,0px)) max(12px,calc((100% - 740px)/2)) calc(var(--inh) + 22px)}
+.chatpage .ch-in{position:absolute;z-index:3;left:0;right:0;bottom:calc(10px + env(safe-area-inset-bottom,0px));margin:0 auto;width:calc(100% - 20px);max-width:740px;
+  flex-direction:column;align-items:stretch;gap:8px;padding:8px;border-radius:28px;border:1px solid rgba(255,255,255,.88);
+  background:rgba(255,255,255,.5);box-shadow:0 12px 34px rgba(37,70,160,.16),var(--inner);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
+.ch-row{display:flex;align-items:flex-end;gap:8px}
+.ch-in textarea{flex:1;min-width:0;min-height:44px;max-height:160px;resize:none;border-radius:22px;padding:11px 16px;line-height:1.35;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.95);box-shadow:inset 0 1px 4px rgba(37,70,160,.08)}
+.ch-btn{width:44px;height:44px;border-radius:50%;flex:none;display:grid;place-items:center;color:var(--blue);background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.95);box-shadow:var(--inner),0 4px 12px rgba(37,70,160,.12)}
+.ch-btn svg{width:22px;height:22px}
+.ch-prev{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:18px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9)}
+.ch-prev[hidden]{display:none}
+.ch-prev.up{opacity:.6}
+.ch-prev img,.ch-prev video{width:52px;height:52px;object-fit:cover;border-radius:12px;flex:none}
+.ch-prev span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;color:var(--muted)}
+.ch-x{width:32px;height:32px;border-radius:50%;font-size:22px;line-height:1;color:var(--muted)}
+.ch-x:hover{background:rgba(255,255,255,.7)}
+
+/* gelembung chat kaca */
+.bub{background:rgba(255,255,255,.58);border:1px solid rgba(255,255,255,.92);box-shadow:0 4px 14px rgba(37,70,160,.1),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.35)}
+.msg.me .bub{background:linear-gradient(180deg,rgba(255,255,255,.3) 0,rgba(255,255,255,0) 48%),linear-gradient(180deg,#4f8cff,#1d4ed8);border-color:rgba(255,255,255,.4);box-shadow:0 8px 20px rgba(29,78,216,.3),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -3px 8px rgba(10,30,120,.2)}
+.bub.hasm{padding:5px 5px 6px}
+.bub.hasm .nm,.bub.hasm .tx,.bub.hasm .tm{padding:0 7px}
+.mm{display:block;width:240px;max-width:100%;max-height:300px;object-fit:cover;border-radius:13px;margin:3px 0 4px;background:rgba(15,23,42,.08);cursor:zoom-in}
+video.mm{cursor:default;background:#000;object-fit:contain}
+
+/* pratinjau foto layar penuh */
+.lb{width:100%;height:100%;height:100dvh;max-width:none;max-height:none;margin:0;border:0;border-radius:0;background:rgba(15,23,42,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:none;place-items:center;cursor:zoom-out}
+.lb[open]{display:grid}
+.lb img{max-width:96vw;max-height:92vh;border-radius:16px;object-fit:contain}

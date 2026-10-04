@@ -530,3 +530,31 @@ button:focus{outline:none}
 .sf-img.has svg{display:none}
 .link{font-size:13px;color:var(--muted);justify-self:start;text-decoration:underline;font-weight:500}
 .link[hidden]{display:none}
+
+/* ===== Bot AI, menu perintah "/", indikator mengetik ===== */
+.cmd-menu{position:absolute;z-index:4;left:0;right:0;margin:0 auto;width:calc(100% - 20px);max-width:740px;bottom:calc(var(--inh) + 20px + env(safe-area-inset-bottom,0px));padding:6px;border-radius:22px;display:grid;gap:4px;background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.9);box-shadow:0 14px 36px rgba(var(--sh-rgb),.18),var(--inner);-webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%)}
+.cmd-menu[hidden]{display:none}
+.cmd{display:flex;align-items:center;gap:12px;min-height:54px;padding:6px 12px;border-radius:16px;text-align:left;width:100%}
+.cmd:hover,.cmd:active{background:rgba(255,255,255,.78)}
+.cmd .ic2{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--bluegrad);color:var(--btxt,#fff);box-shadow:var(--inner)}
+.cmd .ic2 svg{width:19px;height:19px}
+.cmd .ct{flex:1;min-width:0;display:grid}
+.cmd .ct b{font-size:15px}
+.cmd .ct b i{font-style:normal;font-weight:500;color:var(--muted);margin-left:6px}
+.cmd .ct small{font-size:12.5px;color:var(--muted)}
+.msg.isbot .bub.botb{border-color:rgba(var(--acc1-rgb),.55);box-shadow:0 4px 14px rgba(var(--sh-rgb),.1),0 0 0 2px rgba(var(--acc1-rgb),.14),var(--inner)}
+.nm.bot{display:block;font-size:12px;font-weight:700;color:var(--blue);margin-bottom:1px}
+.botbadge{display:inline-block;font-size:10px;font-weight:700;color:#fff;background:#0f172a;padding:1px 7px;border-radius:999px;margin-left:6px;vertical-align:1px}
+.rp{display:block;font-size:11.5px;color:var(--muted);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.av.bot{background:#fff;cursor:default}
+.av.bot img{object-fit:contain;padding:3px}
+.dots{display:inline-flex;gap:4px;padding:6px 2px 4px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:dotb 1s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}
+.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dotb{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-4px);opacity:1}}
+#bt{width:min(460px,calc(100% - 24px));max-height:92vh;overflow-y:auto}
+.bt-top{display:flex;align-items:center;gap:16px}
+#btPrompt{min-height:150px}
+.pick img.lg{object-fit:contain;padding:18px;background:#fff}
+.st-card[hidden]{display:none}

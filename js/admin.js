@@ -66,9 +66,9 @@ function openAdminMsg(id){
   const m = chatData.get(Number(id));
   if(!m || !isAdmin()) return;
   amMsg = m;
-  const p = PROF[m.user_id] || {};
+  const p = m.is_bot ? { display_name: BOT.name } : (PROF[m.user_id] || {});
   const name = p.display_name || "Anonim";
-  const noTarget = p.role === "admin" || m.user_id === user.id;
+  const noTarget = !!m.is_bot || p.role === "admin" || m.user_id === user.id;
   $("#amMsg").innerHTML = `<b>${esc(name)}</b><span>${esc(m.content || (m.media_type==="video" ? "Video" : "Foto"))}</span>`;
   $("#amWarn").hidden = noTarget;
   $("#amBan").hidden = noTarget;

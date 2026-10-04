@@ -21,7 +21,7 @@ function setTheme(key, val, save){
   themeApply(t);
   if(save){ themeSave(t); paintSettings(); }
 }
-function openSettings(){ paintSettings(); $("#set").showModal(); }
+function openSettings(){ paintSettings(); $("#stBot").hidden = !isAdmin(); $("#set").showModal(); }
 
 [["#swBtn", "btn"], ["#swBg", "bg"]].forEach(([sel, key]) => {
   const box = $(sel);

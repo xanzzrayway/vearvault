@@ -29,7 +29,7 @@ function addChat(m, live){
   chatLast = { u: m.user_id, t };
   if(own) chStick = true;
   const head = (!own && !grouped) ? `<button class="nm" data-user="${esc(m.user_id)}" type="button">${esc(name)}${p.role==="admin" ? '<span class="adbadge">Admin</span>' : ""}</button>` : "";
-  const av = own ? "" : grouped ? '<span class="av sp"></span>'
+  const av = own ? "" : grouped ? '<span class="av gap"></span>'
     : `<button class="av" data-user="${esc(m.user_id)}" type="button" aria-label="Lihat profil">${p.avatar_url ? `<img src="${esc(p.avatar_url)}" alt="" referrerpolicy="no-referrer">` : esc(initial(name))}</button>`;
   const okMedia = m.media_url && /^https:\/\//.test(m.media_url);
   const media = !okMedia ? "" : m.media_type==="video"

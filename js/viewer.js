@@ -7,7 +7,7 @@ const I_DEL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 function openPrompt(id){
   const r = rows.find(x => String(x.id)===String(id)); if(!r) return;
   const mine = user && r.user_id===user.id;
-  showPromptView(r, mine ? () => deletePrompt(r.id) : null);
+  showPromptView(r, (mine || isAdmin()) ? () => deletePrompt(r.id) : null);
 }
 
 /* r: { user_id, title, description, content, category, is_public, profiles }

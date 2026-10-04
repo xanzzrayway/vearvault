@@ -315,7 +315,7 @@ button.by:hover{background:rgba(255,255,255,.75)}
 .msg.me{align-self:flex-end;flex-direction:row-reverse}
 .av{width:32px;height:32px;border-radius:50%;flex:none;overflow:hidden;background:rgba(var(--acc-rgb),.12);color:var(--blue);font-weight:700;font-size:13px;display:grid;place-items:center;border:1.5px solid #fff;align-self:flex-end}
 .av img{width:100%;height:100%;object-fit:cover;display:block}
-.av.sp{visibility:hidden;border:0}
+.av.gap{visibility:hidden;border:0}
 .bub{background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.95);border-radius:16px 16px 16px 6px;padding:7px 12px 6px;box-shadow:0 2px 8px rgba(var(--sh-rgb),.08);font-size:14.5px;min-width:0}
 .msg.me .bub{background:var(--bluegrad);color:#fff;border-color:rgba(255,255,255,.4);border-radius:16px 16px 6px 16px}
 .nm{display:block;font-size:12px;font-weight:700;color:var(--blue);margin-bottom:1px}
@@ -392,9 +392,9 @@ html.lock body{position:fixed;left:0;right:0;width:100%;overflow:hidden}
 video.mm{cursor:default;background:#000;object-fit:contain}
 
 /* pratinjau foto layar penuh */
-.lb{width:100%;height:100%;height:100dvh;max-width:none;max-height:none;margin:0;border:0;border-radius:0;background:rgba(15,23,42,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:none;place-items:center;cursor:zoom-out}
-.lb[open]{display:grid}
-.lb img{max-width:96vw;max-height:92vh;border-radius:16px;object-fit:contain}
+.imgbox{width:100%;height:100%;height:100dvh;max-width:none;max-height:none;margin:0;border:0;border-radius:0;background:rgba(15,23,42,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:none;place-items:center;cursor:zoom-out}
+.imgbox[open]{display:grid}
+.imgbox img{max-width:96vw;max-height:92vh;border-radius:16px;object-fit:contain}
 
 /* ===== Admin, ban, peringatan, jeda chat ===== */
 .btn.send .cd{font-weight:700;font-size:15px;font-variant-numeric:tabular-nums}

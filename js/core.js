@@ -17,6 +17,7 @@ const MISSION = { role:"gearvault", count:100, chars:5000 };
 const charLen = s => [...String(s || "")].length;
 const isAdmin = () => !!(profile && profile.role === "admin");
 const hasRole = id => (id === "admin" && isAdmin()) || ((profile && profile.unlocked) || ["newbie"]).includes(id);
+let dmUnread = 0;   // pesan privat belum dibaca
 const PROF = {};   // cache profil: id -> { display_name, avatar_url, role }
 function ago(iso){
   const sec = (Date.now() - new Date(iso)) / 1000;

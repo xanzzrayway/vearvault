@@ -30,6 +30,7 @@ async function setUser(u){
   renderAuth();
   if(typeof syncInbox === "function") syncInbox();
   if(typeof syncModeration === "function") syncModeration();
+  if(typeof syncDM === "function") syncDM();
   if(u && !profile) openOnb("first");
   load();
 }

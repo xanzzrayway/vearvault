@@ -100,3 +100,4 @@ $("#edPhotoSave").onclick = () => saveEdit({ avatar_url: edPhoto }, "PP diganti"
 });
 
 $("#pSend").onclick = () => openSend(viewing);
+$("#pChat").onclick = () => openDM(viewing);

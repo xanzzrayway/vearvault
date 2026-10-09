@@ -87,7 +87,11 @@ $("#form").onsubmit = async e => {
     is_public: $("#fPub").checked
   };
   const res = await sb.from("prompts").insert(row).select("id,user_id,title,description,content,category,is_public,created_at").single();
-  if(res.error){ btn.disabled = false; return toast("Gagal menyimpan prompt"); }
+  if(res.error){
+    btn.disabled = false;
+    const em = res.error.message || "";
+    return toast(/duplikat/.test(em) ? "Prompt yang sama sudah pernah kamu kirim" : /terlalu banyak/.test(em) ? "Terlalu banyak, tunggu sebentar" : "Gagal menyimpan prompt");
+  }
   const data = { ...res.data, profiles: { display_name: profile.display_name, avatar_url: profile.avatar_url } };
   btn.disabled = false;
   rows.unshift(data); $("#form").reset(); $("#fPub").checked = true; setCat(CATS[0][0]); updCnt(); $("#dlg").close(); render(); refreshProfileList(); toast("Prompt disimpan");

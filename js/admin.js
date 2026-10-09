@@ -113,7 +113,8 @@ $("#adForm").onsubmit = async e => {
   btn.disabled = false;
   if(error) return toast(adMode==="ban" ? "Gagal ban akun" : "Gagal mengirim peringatan");
   $("#ad").close();
-  toast(adMode==="ban" ? "Akun diban" : "Peringatan terkirim");
+  toast(adMode==="ban" ? "Akun diban, semua prompt-nya disembunyikan" : "Peringatan terkirim");
+  if(adMode==="ban") load();
   refreshViewing(adTarget);
 };
 
@@ -151,5 +152,12 @@ $("#admBan").onclick = async () => {
   const { error } = await sb.rpc("admin_unban", { target: v.id });
   if(error) return toast("Gagal membuka ban");
   toast("Ban dibuka");
+  load();
   refreshViewing(v.id);
 };
+
+/* Cek ulang status ban sendiri (dipakai setelah pesan ditolak karena spam) */
+async function recheckBan(){
+  const p = await loadProfile();
+  if(p){ profile = p; renderAuth(); checkBan(); }
+}

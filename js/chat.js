@@ -167,6 +167,7 @@ async function sendChat(){
     if(ai) askBot(data.id);
   } catch(err){
     if(path) sb.storage.from("chat-media").remove([path]);
+    if(err && err.code === "PGRST116"){ toast("Akun diblokir karena spam"); recheckBan(); return; }
     const msg = (err && err.message) || "";
     if(/terlalu cepat/.test(msg)) startCool(CH_COOL);
     toast(/terlalu cepat/.test(msg) ? "Terlalu cepat, tunggu sebentar" : /format|gambar/.test(msg) ? "Format file tidak didukung" : /ukuran/.test(msg) ? "Ukuran maksimal 20 MB" : "Gagal mengirim");

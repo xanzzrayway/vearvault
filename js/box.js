@@ -116,5 +116,5 @@ $("#sdForm").onsubmit = async e => {
   });
   btn.disabled = false;
   if(error) return toast(/terlalu banyak/.test(error.message || "") ? "Terlalu banyak kiriman, tunggu sebentar" : "Gagal mengirim prompt");
-  $("#sd").close(); toast("Prompt terkirim");
+  $("#sd").close(); toast("Prompt terkirim"); recheckBan();
 };

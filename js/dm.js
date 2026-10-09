@@ -128,7 +128,10 @@ async function sendDm(){
   const b = $("#dmSend"); b.disabled = true;
   const { data, error } = await sb.from("dm_messages").insert({ from_user:user.id, to_user:dmPeer.id, content:text }).select(DM_COLS).single();
   b.disabled = false;
-  if(error) return toast(/terlalu cepat/.test(error.message || "") ? "Terlalu cepat, tunggu sebentar" : "Gagal mengirim");
+  if(error){
+    if(error.code === "PGRST116"){ toast("Akun diblokir karena spam"); recheckBan(); return; }
+    return toast(/terlalu cepat/.test(error.message || "") ? "Terlalu cepat, tunggu sebentar" : "Gagal mengirim");
+  }
   t.value = ""; t.style.height = "auto";
   addDm(data, true);
 }

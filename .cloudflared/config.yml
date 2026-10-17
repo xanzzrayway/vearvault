@@ -1,0 +1,7 @@
+tunnel: b2a1da93-d160-483f-b339-044312e0d0f2
+credentials-file: /data/data/com.termux/files/home/.cloudflared/b2a1da93-d160-483f-b339-044312e0d0f2.json
+
+ingress:
+  - hostname: server.qwertychat.my.id
+    service: http://localhost:3000
+  - service: http_status:404

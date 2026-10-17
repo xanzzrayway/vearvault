@@ -1,0 +1,18 @@
+[user]
+	email = abidakilapranaja000@gmail.com
+	name = xanzzrayway
+[safe]
+	directory = /storage/emulated/0/Download/netlify-frontend
+	directory = /storage/emulated/0/Download/apk-compiler-split
+	directory = /storage/emulated/0/Download/apk-compiler-split
+	directory = /storage/emulated/0/Download/OxyChat
+	directory = /storage/emulated/0/Download/flows-compiler
+	directory = /storage/emulated/0/Download/Qwerty
+[credential]
+	helper = store
+[credential "https://github.com"]
+	helper = 
+	helper = !/data/data/com.termux/files/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/data/data/com.termux/files/usr/bin/gh auth git-credential

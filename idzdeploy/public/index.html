@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IdzDeploy</title>
+<style>
+  :root{
+    --bg:#060b18;
+    --bg2:#0b1428;
+    --card:#0e1830;
+    --card2:#101c38;
+    --border:#1c2b4d;
+    --accent:#3b82f6;
+    --accent2:#60a5fa;
+    --accent-glow:rgba(59,130,246,.35);
+    --text:#e6ecff;
+    --muted:#7d8bb0;
+    --ok:#34d399;
+    --err:#f87171;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:'Segoe UI',Roboto,sans-serif;
+    background:
+      radial-gradient(circle at 15% 0%, rgba(59,130,246,.12), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(96,165,250,.10), transparent 45%),
+      var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding:28px 16px 60px;
+  }
+  .wrap{max-width:520px;margin:0 auto}
+  header{text-align:center;margin-bottom:24px}
+  header h1{
+    font-size:26px;margin:0 0 4px;
+    background:linear-gradient(90deg,var(--accent2),#93c5fd);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    letter-spacing:.5px;
+  }
+  header p{color:var(--muted);font-size:13px;margin:0}
+
+  .card{
+    background:linear-gradient(180deg,var(--card),var(--card2));
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 8px 30px rgba(0,0,0,.35);
+  }
+  .card h2{font-size:14px;color:var(--accent2);margin:0 0 14px;text-transform:uppercase;letter-spacing:1px}
+
+  label{font-size:12px;color:var(--muted);display:block;margin:10px 0 6px}
+  input[type=text]{
+    width:100%;padding:12px 14px;border-radius:10px;
+    border:1px solid var(--border);background:var(--bg2);color:var(--text);
+    font-size:14px;outline:none;transition:.2s;
+  }
+  input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+
+  .domain-preview{
+    font-size:13px;color:var(--accent2);background:var(--bg2);
+    border:1px dashed var(--border);border-radius:10px;
+    padding:10px 12px;margin-top:8px;word-break:break-all;
+  }
+  .domain-preview b{color:#fff}
+
+  .dropzone{
+    margin-top:14px;border:2px dashed var(--border);border-radius:14px;
+    padding:26px 14px;text-align:center;cursor:pointer;
+    transition:.2s;background:var(--bg2);
+  }
+  .dropzone.drag{border-color:var(--accent);background:rgba(59,130,246,.08)}
+  .dropzone svg{width:34px;height:34px;stroke:var(--accent2);margin-bottom:8px}
+  .dropzone p{margin:0;font-size:13px;color:var(--muted)}
+  .dropzone .fname{color:#fff;font-size:13px;margin-top:6px;word-break:break-all}
+  input[type=file]{display:none}
+
+  button{
+    width:100%;margin-top:16px;padding:13px;border:none;border-radius:12px;
+    background:linear-gradient(90deg,var(--accent),#2563eb);
+    color:#fff;font-weight:600;font-size:14px;letter-spacing:.3px;
+    cursor:pointer;transition:.15s;
+  }
+  button:hover{filter:brightness(1.1)}
+  button:disabled{opacity:.5;cursor:not-allowed}
+
+  .status{margin-top:12px;font-size:13px;text-align:center;min-height:18px}
+  .status.ok{color:var(--ok)}
+  .status.err{color:var(--err)}
+
+  .history-item{
+    background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+    padding:12px 14px;margin-bottom:10px;
+  }
+  .history-item .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .history-item .domain{font-size:13.5px;color:#fff;font-weight:600;word-break:break-all}
+  .history-item .meta{font-size:11px;color:var(--muted);margin-top:4px}
+  .history-item .actions{display:flex;gap:6px;margin-top:10px}
+  .history-item .actions button, .history-item .actions a{
+    flex:1;margin:0;padding:8px;font-size:12px;border-radius:8px;
+    text-align:center;text-decoration:none;
+  }
+  .btn-visit{background:var(--card);border:1px solid var(--border);color:var(--accent2)}
+  .btn-update{background:linear-gradient(90deg,#1d4ed8,var(--accent));color:#fff}
+  .btn-del{background:transparent;border:1px solid rgba(248,113,113,.4);color:var(--err);flex:0 0 40px}
+
+  .empty{color:var(--muted);font-size:13px;text-align:center;padding:16px 0}
+  .badge{
+    display:inline-block;font-size:10px;background:rgba(59,130,246,.15);
+    color:var(--accent2);padding:2px 7px;border-radius:6px;margin-left:6px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>⚡ IdzDeploy</h1>
+    <p>Deploy instan ke *.project.idzwebghost.my.id</p>
+  </header>
+
+  <div class="card">
+    <h2>Deploy Baru</h2>
+    <form id="deployForm">
+      <label>Nama Project</label>
+      <input type="text" id="nama" placeholder="misal: portofolio" required>
+      <div class="domain-preview">https://<b><span id="namaPreview">nama</span></b>.project.idzwebghost.my.id</div>
+
+      <label>File (.zip atau .html)</label>
+      <div class="dropzone" id="dropzone">
+        <svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0L7 9m5-5l5 5M4 20h16"/></svg>
+        <p>Tap atau seret file ke sini</p>
+        <div class="fname" id="fname"></div>
+      </div>
+      <input type="file" id="fileInput" accept=".zip,.html">
+
+      <button type="submit" id="deployBtn">Deploy Sekarang</button>
+      <div class="status" id="status"></div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Riwayat Deploy <span class="badge" id="countBadge">0</span></h2>
+    <div id="historyList"><div class="empty">Belum ada deploy</div></div>
+  </div>
+</div>
+
+<script>
+const namaInput = document.getElementById('nama');
+const namaPreview = document.getElementById('namaPreview');
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const fname = document.getElementById('fname');
+const status = document.getElementById('status');
+const deployBtn = document.getElementById('deployBtn');
+const historyList = document.getElementById('historyList');
+const countBadge = document.getElementById('countBadge');
+
+namaInput.addEventListener('input', () => {
+  namaPreview.textContent = (namaInput.value || 'nama').toLowerCase().replace(/[^a-z0-9-]/g,'-');
+});
+
+dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('drag'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault(); dropzone.classList.remove('drag');
+  if (e.dataTransfer.files.length) {
+    fileInput.files = e.dataTransfer.files;
+    fname.textContent = fileInput.files[0].name;
+  }
+});
+fileInput.addEventListener('change', () => {
+  fname.textContent = fileInput.files[0]?.name || '';
+});
+
+function setStatus(msg, type) {
+  status.textContent = msg;
+  status.className = 'status' + (type ? ' ' + type : '');
+}
+
+function timeAgo(iso) {
+  const diff = Math.floor((Date.now() - new Date(iso)) / 1000);
+  if (diff < 60) return 'baru saja';
+  if (diff < 3600) return Math.floor(diff/60) + ' menit lalu';
+  if (diff < 86400) return Math.floor(diff/3600) + ' jam lalu';
+  return Math.floor(diff/86400) + ' hari lalu';
+}
+
+async function loadHistory() {
+  const r = await fetch('/api/history');
+  const j = await r.json();
+  const list = j.history || [];
+  countBadge.textContent = list.length;
+  if (!list.length) {
+    historyList.innerHTML = '<div class="empty">Belum ada deploy</div>';
+    return;
+  }
+  historyList.innerHTML = list.map(h => `
+    <div class="history-item" data-id="${h.id}">
+      <div class="row">
+        <div>
+          <div class="domain">${h.domain}</div>
+          <div class="meta">Update terakhir ${timeAgo(h.updatedAt)} · ${h.deployCount || 1}x deploy</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn-visit" href="${h.url}" target="_blank">Kunjungi</a>
+        <button class="btn-update" onclick="triggerUpdate('${h.id}')">Update</button>
+        <button class="btn-del" onclick="deleteHistory('${h.id}')">✕</button>
+      </div>
+      <input type="file" class="updateFile" data-id="${h.id}" accept=".zip,.html" style="display:none">
+    </div>
+  `).join('');
+}
+
+function triggerUpdate(id) {
+  const input = document.querySelector(`.updateFile[data-id="${id}"]`);
+  input.click();
+  input.onchange = async () => {
+    if (!input.files.length) return;
+    const fd = new FormData();
+    fd.append('file', input.files[0]);
+    setStatus('Mengupdate ' + id + '...', '');
+    try {
+      const r = await fetch('/api/update/' + id, { method: 'POST', body: fd });
+      const j = await r.json();
+      if (j.ok) {
+        setStatus('Berhasil diupdate: ' + j.entry.domain, 'ok');
+        loadHistory();
+      } else {
+        setStatus('Gagal update: ' + j.error, 'err');
+      }
+    } catch (e) {
+      setStatus('Gagal update: ' + e.message, 'err');
+    }
+  };
+}
+
+async function deleteHistory(id) {
+  await fetch('/api/history/' + id, { method: 'DELETE' });
+  loadHistory();
+}
+
+document.getElementById('deployForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!fileInput.files.length) { setStatus('Pilih file dulu', 'err'); return; }
+  deployBtn.disabled = true;
+  setStatus('Sedang deploy...', '');
+  const fd = new FormData();
+  fd.append('nama', namaInput.value);
+  fd.append('file', fileInput.files[0]);
+  try {
+    const r = await fetch('/api/deploy', { method: 'POST', body: fd });
+    const j = await r.json();
+    if (j.ok) {
+      setStatus('Sukses! ' + j.entry.url, 'ok');
+      fileInput.value = ''; fname.textContent = ''; namaInput.value = '';
+      namaPreview.textContent = 'nama';
+      loadHistory();
+    } else {
+      setStatus('Gagal: ' + j.error, 'err');
+    }
+  } catch (e) {
+    setStatus('Gagal: ' + e.message, 'err');
+  } finally {
+    deployBtn.disabled = false;
+  }
+});
+
+loadHistory();
+</script>
+</body>
+</html>

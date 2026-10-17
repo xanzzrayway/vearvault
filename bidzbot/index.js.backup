@@ -1,0 +1,1020 @@
+require('dotenv').config();
+const TelegramBot = require('node-telegram-bot-api');
+const axios = require('axios');
+const cheerio = require('cheerio');
+
+const TOKEN = process.env.BOT_TOKEN;
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const VERCEL_TOKEN = process.env.VERCEL_TOKEN;
+
+if (!TOKEN) {
+  console.error('❌ BOT_TOKEN belum diisi di file .env!');
+  process.exit(1);
+}
+
+const bot = new TelegramBot(TOKEN, { polling: true });
+console.log('✅ Bidz Bot jalan...');
+
+const gameState = new Map();
+const uploadedFiles = new Map();     // chatId -> {buffer, fileName, messageId} (file terakhir yg diupload)
+const filesByMessageId = new Map();  // messageId -> {buffer, fileName}
+const chatMembers = new Map();       // chatId -> Map<userId, {first_name}> (buat /tagall)
+const messageLog = new Map();        // chatId -> array of messageId (buat /clear)
+const userModels = new Map();        // chatId -> model id pilihan user
+const activeClocks = new Map();      // messageId -> { intervalId, chatId }
+
+const DEFAULT_MODEL = 'openai/gpt-oss-120b';
+
+const AVAILABLE_MODELS = [
+  { id: 'openai/gpt-oss-120b', label: 'GPT-OSS 120B (Rekomendasi)' },
+  { id: 'openai/gpt-oss-20b', label: 'GPT-OSS 20B (Cepat)' },
+  { id: 'qwen/qwen3.6-27b', label: 'Qwen 3.6 27B (Terpintar)' },
+  { id: 'qwen/qwen3-32b', label: 'Qwen 3 32B (Reasoning)' },
+  { id: 'meta-llama/llama-4-scout-17b-16e-instruct', label: 'Llama 4 Scout (Vision)' },
+  { id: 'moonshotai/kimi-k2-instruct-0905', label: 'Kimi K2 (Structured)' },
+];
+
+function getUserModel(chatId) {
+  return userModels.get(chatId) || DEFAULT_MODEL;
+}
+
+const ANIMAL_RIDDLES = [
+  { hint: 'Hewan ini punya belalai panjang dan telinga lebar, badan paling gede di darat.', answer: 'gajah' },
+  { hint: 'Suka tidur seharian di pohon, gerakannya lambat banget.', answer: 'kukang' },
+  { hint: 'Raja hutan, punya surai di leher (jantan).', answer: 'singa' },
+  { hint: 'Hewan laut, punya 8 tangan dan bisa nyemprot tinta.', answer: 'gurita' },
+  { hint: 'Burung yang gabisa terbang, jago berenang, tinggal di Antartika.', answer: 'penguin' },
+  { hint: 'Reptil, badan ijo, lidahnya panjang, bisa ganti warna kulit.', answer: 'bunglon' },
+  { hint: 'Hewan pengerat kecil, suka keju (di kartun), takut kucing.', answer: 'tikus' },
+  { hint: 'Punya sayap tapi mamalia, keluar malam, pake sonar buat terbang.', answer: 'kelelawar' },
+  { hint: 'Loncat-loncat pake kaki belakang, punya kantong di perut buat bayi.', answer: 'kanguru' },
+  { hint: 'Hewan berbisa, gapunya kaki, jalan dengan cara melata.', answer: 'ular' },
+];
+
+function menuText() {
+  return (
+`<b>『 𝗕𝗶𝗱𝘇 𝗠𝗲𝗻𝘂 』</b>
+
+<b>🤖 AI</b>
+/ai pertanyaan — tanya apa aja ke AI
+/prompt ide singkat — generate prompt yang lebih panjang & detail
+
+<b>🌐 WebSite</b>
+/view link — lihat source HTML/CSS/JS
+/search query — cari di web
+/info pertanyaan — cek fakta benar atau tidak
+/deploy namaweb — deploy file HTML (reply file-nya) ke Vercel
+
+<b>🎮 Game</b>
+/tebak angka — tebak angka 1-100
+/tebak hewan — tebak-tebakan hewan
+
+<b>🛠️ Utility</b>
+/short — Memendekkan URL.
+/qr — Membuat QR code dari teks/link.
+/translate — Menerjemahkan teks.
+/calc — Kalkulator.
+/time — Menampilkan waktu.
+/weather — Menampilkan cuaca suatu lokasi.
+/search — Mencari informasi.
+/encode — Encode teks.
+/decode — Decode teks.
+
+<b>⚙️ Operator</b>
+/clear — bersihkan semua obrolan (admin only)
+/tagall — tag semua anggota di grup
+/clock — lihat jam real-time
+
+<b>🛠️ Settings</b>
+Pencet tombol 🛠️ Settings Model di bawah buat ganti model AI
+
+<b>👤 Pembuat Bot</b>
+@bidzqwerty`
+  );
+}
+
+function safeFileName(url) {
+  try {
+    const u = new URL(url);
+    return u.hostname.replace(/[^a-z0-9.-]/gi, '_');
+  } catch {
+    return 'source';
+  }
+}
+
+function sanitizeProjectName(name) {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 52) || 'myweb';
+}
+
+bot.setMyCommands([
+  { command: 'start', description: 'Nampilin menu utama' },
+  { command: 'ai', description: 'Tanya apa aja ke AI' },
+  { command: 'prompt', description: 'Generate prompt yang lebih panjang' },
+  { command: 'view', description: 'Liat source html/css/js dari link' },
+  { command: 'search', description: 'Cari di web' },
+  { command: 'info', description: 'Cek fakta bener apa kaga' },
+  { command: 'deploy', description: 'Deploy file html ke Vercel' },
+  { command: 'tebak', description: 'Main tebak-tebakan (angka/hewan)' },
+  { command: 'clear', description: 'Bersihin obrolan' },
+  { command: 'tagall', description: 'Tag semua anggota grup' },
+  { command: 'clock', description: 'Liat jam real-time' },
+  { command: 'short', description: 'Memendekkan URL' },
+  { command: 'qr', description: 'Bikin QR code' },
+  { command: 'translate', description: 'Menerjemahkan teks' },
+  { command: 'calc', description: 'Kalkulator' },
+  { command: 'time', description: 'Menampilkan waktu' },
+  { command: 'weather', description: 'Cuaca suatu lokasi' },
+  { command: 'encode', description: 'Encode teks base64' },
+  { command: 'decode', description: 'Decode teks base64' },
+]).catch((err) => console.error('Gagal set commands:', err.message));
+
+function mainMenuKeyboard() {
+  return {
+    inline_keyboard: [
+      [{ text: '🤖 AI', callback_data: 'menu_ai' }],
+      [{ text: '🌐 Website', callback_data: 'menu_website' }],
+      [{ text: '🎮 Game', callback_data: 'menu_game' }],
+      [{ text: '🛠️ Utility', callback_data: 'menu_utility' }],
+      [{ text: '⚙️ Operator', callback_data: 'menu_operator' }],
+      [{ text: '🛠️ Settings Model', callback_data: 'menu_settings' }],
+    ],
+  };
+}
+
+function settingsMenuKeyboard(chatId) {
+  const current = getUserModel(chatId);
+  const rows = AVAILABLE_MODELS.map((m) => [
+    {
+      text: (m.id === current ? '✅ ' : '') + m.label,
+      callback_data: 'set_model_' + AVAILABLE_MODELS.indexOf(m),
+    },
+  ]);
+  rows.push([{ text: '⬅️ Kembali', callback_data: 'menu_main' }]);
+  return { inline_keyboard: rows };
+}
+
+function aiMenuKeyboard() {
+  return {
+    inline_keyboard: [
+      [{ text: '🤖 /ai', callback_data: 'cmd_ai' }],
+      [{ text: '📝 /prompt', callback_data: 'cmd_prompt' }],
+      [{ text: '⬅️ Kembali', callback_data: 'menu_main' }],
+    ],
+  };
+}
+
+function websiteMenuKeyboard() {
+  return {
+    inline_keyboard: [
+      [{ text: '🔍 /view', callback_data: 'cmd_view' }],
+      [{ text: '🔎 /search', callback_data: 'cmd_search' }],
+      [{ text: '📋 /info', callback_data: 'cmd_info' }],
+      [{ text: '🚀 /deploy', callback_data: 'cmd_deploy' }],
+      [{ text: '⬅️ Kembali', callback_data: 'menu_main' }],
+    ],
+  };
+}
+
+function gameMenuKeyboard() {
+  return {
+    inline_keyboard: [
+      [{ text: '🔢 Tebak Angka', callback_data: 'run_tebak_angka' }],
+      [{ text: '🐾 Tebak Hewan', callback_data: 'run_tebak_hewan' }],
+      [{ text: '⬅️ Kembali', callback_data: 'menu_main' }],
+    ],
+  };
+}
+
+function utilityMenuKeyboard() {
+  return {
+    inline_keyboard: [
+      [{ text: '🔗 /short', callback_data: 'cmd_short' }],
+      [{ text: '📱 /qr', callback_data: 'cmd_qr' }],
+      [{ text: '🌐 /translate', callback_data: 'cmd_translate' }],
+      [{ text: '🧮 /calc', callback_data: 'cmd_calc' }],
+      [{ text: '🕐 /time', callback_data: 'cmd_time' }],
+      [{ text: '☁️ /weather', callback_data: 'cmd_weather' }],
+      [{ text: '🔐 /encode', callback_data: 'cmd_encode' }],
+      [{ text: '🔓 /decode', callback_data: 'cmd_decode' }],
+      [{ text: '⬅️ Kembali', callback_data: 'menu_main' }],
+    ],
+  };
+}
+
+function operatorMenuKeyboard() {
+  return {
+    inline_keyboard: [
+      [{ text: '🧹 Clear Obrolan', callback_data: 'run_clear' }],
+      [{ text: '📢 Tag All', callback_data: 'run_tagall' }],
+      [{ text: '🕐 Lihat Jam', callback_data: 'run_clock' }],
+      [{ text: '⬅️ Kembali', callback_data: 'menu_main' }],
+    ],
+  };
+}
+
+function getRealtimeClockText() {
+  const now = new Date();
+  const formatter = new Intl.DateTimeFormat('id-ID', {
+    timeZone: 'Asia/Jakarta',
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  });
+  return `🕐 <b>${formatter.format(now)} WIB</b>`;
+}
+
+bot.onText(/^\/start$/, (msg) => {
+  bot.sendMessage(msg.chat.id, menuText(), { parse_mode: 'HTML', reply_markup: mainMenuKeyboard() });
+});
+
+bot.on('callback_query', async (query) => {
+  const chatId = query.message.chat.id;
+  const messageId = query.message.message_id;
+  const data = query.data;
+
+  const editTo = (text, keyboard) =>
+    bot.editMessageText(text, { chat_id: chatId, message_id: messageId, parse_mode: 'HTML', reply_markup: keyboard })
+      .catch((err) => {
+        if (!err.message || !err.message.includes('message is not modified')) {
+          throw err;
+        }
+      });
+
+  try {
+    if (data === 'menu_main') {
+      await editTo(menuText(), mainMenuKeyboard());
+    } else if (data === 'menu_settings') {
+      await editTo(
+        `<b>🛠️ Settings Model</b>\n\nModel aktif: <b>${getUserModel(chatId)}</b>\n\nPilih model buat /ai, /info, dan /prompt:`,
+        settingsMenuKeyboard(chatId)
+      );
+    } else if (data.startsWith('set_model_')) {
+      const idx = parseInt(data.replace('set_model_', ''), 10);
+      const model = AVAILABLE_MODELS[idx];
+      if (model) {
+        userModels.set(chatId, model.id);
+        await editTo(
+          `<b>🛠️ Settings Model</b>\n\nModel aktif: <b>${model.id}</b>\n\nPilih model buat /ai, /info, dan /prompt:`,
+          settingsMenuKeyboard(chatId)
+        );
+        await bot.answerCallbackQuery(query.id, { text: `✅ Model diganti ke ${model.label}` });
+        return;
+      }
+    } else if (data === 'menu_ai') {
+      await editTo('<b>『𝗔𝗜』</b>\n\nPilih command:', aiMenuKeyboard());
+    } else if (data === 'menu_utility') {
+      await editTo('<b>🛠️ Utility</b>\n\nPilih command:', utilityMenuKeyboard());
+    } else if (data === 'menu_website') {
+      await editTo('<b>『𝗪𝗲𝗯𝗦𝗶𝘁𝗲』</b>\n\nPilih command:', websiteMenuKeyboard());
+    } else if (data === 'menu_game') {
+      await editTo('<b>『𝗚𝗮𝗺𝗲』</b>\n\nPilih game:', gameMenuKeyboard());
+    } else if (data === 'menu_operator') {
+      await editTo('<b>『𝗢𝗽𝗲𝗿𝗮𝘁𝗼𝗿』</b>\n\nPilih command:', operatorMenuKeyboard());
+    } else if (data === 'cmd_ai') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/ai pertanyaan lo</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_prompt') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/prompt ide singkat lo</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_short') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/short https://link-panjang.com</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_qr') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/qr teks atau link</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_translate') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/translate en Halo dunia</code>\n(kode bahasa: en, id, ja, dst)', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_calc') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/calc 5*(3+2)</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_time') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/time</code> atau <code>/time Asia/Tokyo</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_weather') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/weather Jakarta</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_encode') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/encode teks lo</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_decode') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/decode base64string</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_view') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/view https://contoh.com</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_search') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/search kata kunci</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_info') {
+      await bot.sendMessage(chatId, 'Ketik: <code>/info pertanyaan lo</code>', { parse_mode: 'HTML' });
+    } else if (data === 'cmd_deploy') {
+      await bot.sendMessage(chatId, 'Kirim file .html dulu, terus reply file itu sambil ketik <code>/deploy namaweb</code>', { parse_mode: 'HTML' });
+    } else if (data === 'run_tebak_angka') {
+      const target = Math.floor(Math.random() * 100) + 1;
+      gameState.set(chatId, { type: 'angka', answer: target, tries: 0 });
+      await bot.sendMessage(chatId, '🔢 Gue udah mikirin angka 1-100. Coba tebak, ketik angkanya langsung di chat!');
+    } else if (data === 'run_tebak_hewan') {
+      const riddle = ANIMAL_RIDDLES[Math.floor(Math.random() * ANIMAL_RIDDLES.length)];
+      gameState.set(chatId, { type: 'hewan', answer: riddle.answer, tries: 0 });
+      await bot.sendMessage(chatId, `🐾 Tebak-tebakan hewan!\n\n"${riddle.hint}"\n\nKetik jawaban kamu langsung di chat!`);
+    } else if (data === 'run_clear') {
+      await bot.sendMessage(chatId, 'Ketik command <code>/clear</code> langsung di chat ya (perlu izin admin kalo di grup).', { parse_mode: 'HTML' });
+    } else if (data === 'run_tagall') {
+      await bot.sendMessage(chatId, 'Ketik command <code>/tagall</code> langsung di chat grup ya.', { parse_mode: 'HTML' });
+    } else if (data === 'run_clock') {
+      await startLiveClock(chatId);
+    } else if (data === 'stop_clock') {
+      stopClockClockIfRunning(messageId);
+      await bot.editMessageReplyMarkup(
+        { inline_keyboard: [[{ text: '⏹️ Dihentikan', callback_data: 'noop' }]] },
+        { chat_id: chatId, message_id: messageId }
+      ).catch(() => {});
+      await bot.answerCallbackQuery(query.id, { text: '⏹ Jam dihentikan' });
+      return;
+    } else if (data === 'noop') {
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    bot.answerCallbackQuery(query.id).catch(() => {});
+  } catch (err) {
+    bot.answerCallbackQuery(query.id, { text: 'Gagal load menu', show_alert: false }).catch(() => {});
+  }
+});
+
+bot.onText(/^\/view (.+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  let url = match[1].trim();
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+
+  const wait = await bot.sendMessage(chatId, '🔍 Lagi ngambil source, tunggu bentar...');
+
+  try {
+    const { data: html } = await axios.get(url, {
+      timeout: 15000,
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+    });
+
+    const $ = cheerio.load(html);
+    let output = `/* ===== HTML SOURCE (${url}) ===== */\n\n${html}\n\n`;
+
+    $('style').each((i, el) => {
+      output += `/* ===== INLINE <style> #${i + 1} ===== */\n${$(el).html()}\n\n`;
+    });
+
+    $('script:not([src])').each((i, el) => {
+      const content = $(el).html();
+      if (content && content.trim()) {
+        output += `/* ===== INLINE <script> #${i + 1} ===== */\n${content}\n\n`;
+      }
+    });
+
+    const cssLinks = $('link[rel="stylesheet"]').map((i, el) => $(el).attr('href')).get().slice(0, 5);
+    for (const href of cssLinks) {
+      try {
+        const fullUrl = new URL(href, url).href;
+        const res = await axios.get(fullUrl, { timeout: 10000 });
+        output += `/* ===== EXTERNAL CSS: ${fullUrl} ===== */\n${res.data}\n\n`;
+      } catch {
+        output += `/* ===== GAGAL AMBIL CSS: ${href} ===== */\n\n`;
+      }
+    }
+
+    const jsLinks = $('script[src]').map((i, el) => $(el).attr('src')).get().slice(0, 5);
+    for (const src of jsLinks) {
+      try {
+        const fullUrl = new URL(src, url).href;
+        const res = await axios.get(fullUrl, { timeout: 10000 });
+        output += `/* ===== EXTERNAL JS: ${fullUrl} ===== */\n${res.data}\n\n`;
+      } catch {
+        output += `/* ===== GAGAL AMBIL JS: ${src} ===== */\n\n`;
+      }
+    }
+
+    const buffer = Buffer.from(output, 'utf-8');
+    await bot.sendDocument(
+      chatId,
+      buffer,
+      { caption: `✅ Source dari ${url}` },
+      { filename: `${safeFileName(url)}_source.txt`, contentType: 'text/plain' }
+    );
+  } catch (err) {
+    bot.sendMessage(chatId, `❌ Gagal ambil source: ${err.message}`);
+  } finally {
+    bot.deleteMessage(chatId, wait.message_id).catch(() => {});
+  }
+});
+
+const https = require('https');
+const searchAgent = new https.Agent({ family: 4, keepAlive: false });
+
+async function fetchWithRetry(url, options, retries = 2) {
+  for (let i = 0; i <= retries; i++) {
+    try {
+      return await axios.get(url, options);
+    } catch (err) {
+      if (i === retries) throw err;
+      await new Promise((r) => setTimeout(r, 1500));
+    }
+  }
+}
+
+bot.onText(/^\/search (.+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const query = match[1].trim();
+
+  const wait = await bot.sendMessage(chatId, `🔎 Nyari "${query}"...`);
+
+  try {
+    const { data: html } = await axios.get('https://html.duckduckgo.com/html/', {
+      params: { q: query, kl: 'id-id' },
+      timeout: 15000,
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+    });
+
+    const $ = cheerio.load(html);
+    const results = [];
+    const seenLinks = new Set();
+
+    $('.result').each((i, el) => {
+      if (results.length >= 5) return;
+
+      const classes = $(el).attr('class') || '';
+      if (classes.includes('result--ad') || $(el).find('.badge--ad').length > 0) return;
+
+      const title = $(el).find('.result__title').text().trim();
+      let link = $(el).find('.result__title a').attr('href') || '';
+      const snippet = $(el).find('.result__snippet').text().replace(/\s+/g, ' ').trim();
+
+      const m = link.match(/uddg=([^&]+)/);
+      if (m) link = decodeURIComponent(m[1]);
+
+      if (!title || !link || !link.startsWith('http')) return;
+      if (seenLinks.has(link)) return;
+      seenLinks.add(link);
+
+      results.push({ title, link, snippet });
+    });
+
+    if (results.length === 0) {
+      bot.sendMessage(chatId, '❌ Gaada hasil ditemukan.');
+      return;
+    }
+
+    let text = `<b>🔎 Hasil pencarian: ${query}</b>\n\n`;
+    results.forEach((r, i) => {
+      text += `<b>${i + 1}. ${r.title}</b>\n${r.link}\n${r.snippet}\n\n`;
+    });
+
+    bot.sendMessage(chatId, text, { parse_mode: 'HTML', disable_web_page_preview: true });
+  } catch (err) {
+    bot.sendMessage(chatId, `❌ Gagal nyari: ${err.message}`);
+  } finally {
+    bot.deleteMessage(chatId, wait.message_id).catch(() => {});
+  }
+});
+
+bot.onText(/^\/info (.+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const claim = match[1].trim();
+
+  if (!GROQ_API_KEY) {
+    bot.sendMessage(chatId, '❌ GROQ_API_KEY belum diisi di .env, fitur /info butuh itu.');
+    return;
+  }
+
+  const wait = await bot.sendMessage(chatId, '🤔 Lagi ngecek fakta...');
+
+  try {
+    const res = await axios.post(
+      'https://api.groq.com/openai/v1/chat/completions',
+      {
+        model: getUserModel(chatId),
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Kamu adalah fact-checker. Jawab pake Bahasa Indonesia santai. Format jawaban: ' +
+              'Status (BENAR / SALAH / PERLU KONTEKS / TIDAK PASTI), lalu penjelasan singkat 2-4 kalimat. ' +
+              'Kalau kamu gak yakin atau infonya butuh data terbaru yang mungkin kamu gak tau, bilang jujur PERLU KONTEKS atau TIDAK PASTI.',
+          },
+          { role: 'user', content: claim },
+        ],
+        temperature: 0.3,
+        max_tokens: 500,
+      },
+      { headers: { Authorization: `Bearer ${GROQ_API_KEY}` }, timeout: 20000 }
+    );
+
+    const answer = res.data.choices[0].message.content;
+    bot.sendMessage(
+      chatId,
+      `<b>📋 Cek fakta:</b> "${claim}"\n\n${answer}\n\n<i>⚠️ AI bisa salah, cross-check lagi ya.</i>`,
+      { parse_mode: 'HTML' }
+    );
+  } catch (err) {
+    bot.sendMessage(chatId, `❌ Gagal cek fakta: ${err.response?.data?.error?.message || err.message}`);
+  } finally {
+    bot.deleteMessage(chatId, wait.message_id).catch(() => {});
+  }
+});
+
+// ================= /ai =================
+bot.onText(/^\/ai (.+)/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const question = match[1].trim();
+
+  if (!GROQ_API_KEY) {
+    bot.sendMessage(chatId, '❌ GROQ_API_KEY belum diisi di .env, fitur /ai butuh itu.');
+    return;
+  }
+
+  const wait = await bot.sendMessage(chatId, '🤖 Mikir dulu...');
+
+  try {
+    const res = await axios.post(
+      'https://api.groq.com/openai/v1/chat/completions',
+      {
+        model: getUserModel(chatId),
+        messages: [
+          {
+            role: 'system',
+            content: 'Kamu adalah asisten AI yang ramah dan santai, jawab pake Bahasa Indonesia gaul tapi tetep informatif dan jelas.',
+          },
+          { role: 'user', content: question },
+        ],
+        temperature: 0.7,
+        max_tokens: 800,
+      },
+      { headers: { Authorization: `Bearer ${GROQ_API_KEY}` }, timeout: 20000 }
+    );
+
+    const answer = res.data.choices[0].message.content;
+    bot.sendMessage(chatId, answer);
+  } catch (err) {
+    bot.sendMessage(chatId, `❌ Gagal tanya AI: ${err.response?.data?.error?.message || err.message}`);
+  } finally {
+    bot.deleteMessage(chatId, wait.message_id).catch(() => {});
+  }
+});
+
+// ================= /prompt =================
+bot.onText(/^\/prompt (.+)/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const idea = match[1].trim();
+
+  if (!GROQ_API_KEY) {
+    bot.sendMessage(chatId, '❌ GROQ_API_KEY belum diisi di .env, fitur /prompt butuh itu.');
+    return;
+  }
+
+  const wait = await bot.sendMessage(chatId, '📝 Lagi nyusun prompt...');
+
+  try {
+    const res = await axios.post(
+      'https://api.groq.com/openai/v1/chat/completions',
+      {
+        model: getUserModel(chatId),
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Kamu adalah prompt engineer expert. Tugas kamu: ambil ide singkat dari user, lalu kembangin jadi prompt yang panjang, detail, terstruktur, dan siap pake buat AI (bisa buat chatbot, image generation, atau coding, sesuaikan sama konteks idenya). ' +
+              'Tambahin detail konteks, gaya, format output yang diharapkan, dan batasan kalau perlu. Jawab langsung dengan prompt hasil akhirnya aja, tanpa basa-basi, tanpa tanda kutip pembuka/penutup.',
+          },
+          { role: 'user', content: idea },
+        ],
+        temperature: 0.8,
+        max_tokens: 1000,
+      },
+      { headers: { Authorization: `Bearer ${GROQ_API_KEY}` }, timeout: 20000 }
+    );
+
+    const generatedPrompt = res.data.choices[0].message.content;
+    bot.sendMessage(chatId, `<b>📝 Prompt hasil generate:</b>\n\n${generatedPrompt}`, { parse_mode: 'HTML' });
+  } catch (err) {
+    bot.sendMessage(chatId, `❌ Gagal generate prompt: ${err.response?.data?.error?.message || err.message}`);
+  } finally {
+    bot.deleteMessage(chatId, wait.message_id).catch(() => {});
+  }
+});
+
+// ================= /deploy ke Vercel =================
+bot.onText(/^\/deploy (\S+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+
+  if (!VERCEL_TOKEN) {
+    bot.sendMessage(chatId, '❌ VERCEL_TOKEN belum diisi di .env, fitur /deploy butuh itu.');
+    return;
+  }
+
+  const siteName = sanitizeProjectName(match[1]);
+
+  // Cari file: prioritas dari reply, kalau gaada pake file terakhir yg diupload di chat ini
+  let fileData = null;
+  if (msg.reply_to_message && msg.reply_to_message.document) {
+    fileData = filesByMessageId.get(msg.reply_to_message.message_id);
+  }
+  if (!fileData) {
+    fileData = uploadedFiles.get(chatId);
+  }
+
+  if (!fileData) {
+    bot.sendMessage(
+      chatId,
+      '❌ Gaada file HTML yang bisa di-deploy.\n\nKirim file .html dulu, terus reply file itu sambil ketik /deploy <namaweb>.'
+    );
+    return;
+  }
+
+  const wait = await bot.sendMessage(chatId, `🚀 Deploying "${fileData.fileName}" sebagai "${siteName}"...`);
+
+  try {
+    const htmlContent = fileData.buffer.toString('utf-8');
+
+    const res = await axios.post(
+      'https://api.vercel.com/v13/deployments?skipAutoDetectionConfirmation=1',
+      {
+        name: siteName,
+        project: siteName,
+        target: 'production',
+        projectSettings: {
+          framework: null,
+        },
+        files: [{ file: 'index.html', data: htmlContent }],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${VERCEL_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+        timeout: 30000,
+      }
+    );
+
+    bot.sendMessage(
+      chatId,
+      `✅ Deploy berhasil!\n\n🔗 https://${siteName}.vercel.app`,
+      { disable_web_page_preview: true }
+    );
+  } catch (err) {
+    const errMsg = err.response?.data?.error?.message || err.message;
+    bot.sendMessage(chatId, `❌ Gagal deploy: ${errMsg}`);
+  } finally {
+    bot.deleteMessage(chatId, wait.message_id).catch(() => {});
+  }
+});
+
+bot.onText(/^\/clear$/, async (msg) => {
+  const chatId = msg.chat.id;
+  const isGroup = msg.chat.type === 'group' || msg.chat.type === 'supergroup';
+
+  if (isGroup) {
+    const member = await bot.getChatMember(chatId, msg.from.id).catch(() => null);
+    if (!member || (member.status !== 'administrator' && member.status !== 'creator')) {
+      bot.sendMessage(chatId, '❌ Cuma admin yang bisa pake /clear di grup.');
+      return;
+    }
+  }
+
+  const log = messageLog.get(chatId) || [];
+  let deleted = 0;
+
+  for (const id of log) {
+    try {
+      await bot.deleteMessage(chatId, id);
+      deleted++;
+    } catch {
+      // skip: pesan lebih dari 48 jam atau bot bukan admin
+    }
+  }
+
+  messageLog.set(chatId, []);
+
+  const info = await bot.sendMessage(chatId, `🧹 Obrolan dibersihin! (${deleted} pesan kehapus)`);
+  setTimeout(() => bot.deleteMessage(chatId, info.message_id).catch(() => {}), 5000);
+});
+
+bot.onText(/^\/tagall$/, async (msg) => {
+  const chatId = msg.chat.id;
+
+  if (msg.chat.type !== 'group' && msg.chat.type !== 'supergroup') {
+    bot.sendMessage(chatId, '❌ Command ini cuma buat di grup.');
+    return;
+  }
+
+  const members = chatMembers.get(chatId);
+  if (!members || members.size === 0) {
+    bot.sendMessage(chatId, '❌ Belum ada anggota yang ketrack. Suruh anggota ngirim pesan dulu biar bot kenal mereka.');
+    return;
+  }
+
+  const mentions = Array.from(members.entries()).map(
+    ([id, u]) => `<a href="tg://user?id=${id}">${u.first_name}</a>`
+  );
+
+  const chunkSize = 5;
+  for (let i = 0; i < mentions.length; i += chunkSize) {
+    const chunk = mentions.slice(i, i + chunkSize).join(' ');
+    await bot.sendMessage(chatId, `📢 ${chunk}`, { parse_mode: 'HTML' });
+  }
+});
+
+function stopClockClockIfRunning(messageId) {
+  const running = activeClocks.get(messageId);
+  if (running) {
+    clearInterval(running.intervalId);
+    activeClocks.delete(messageId);
+  }
+}
+
+async function startLiveClock(chatId) {
+  const sent = await bot.sendMessage(chatId, getRealtimeClockText(), {
+    parse_mode: 'HTML',
+    reply_markup: { inline_keyboard: [[{ text: '⏹ Stop', callback_data: 'stop_clock' }]] },
+  });
+
+  const messageId = sent.message_id;
+
+  const intervalId = setInterval(async () => {
+    try {
+      await bot.editMessageText(getRealtimeClockText(), {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'HTML',
+        reply_markup: { inline_keyboard: [[{ text: '⏹ Stop', callback_data: 'stop_clock' }]] },
+      });
+    } catch (err) {
+      if (!err.message || !err.message.includes('message is not modified')) {
+        stopClockClockIfRunning(messageId);
+      }
+    }
+  }, 1000);
+
+  activeClocks.set(messageId, { intervalId, chatId });
+
+  // Auto-stop abis 5 menit biar gak nyangkut selamanya
+  setTimeout(() => {
+    stopClockClockIfRunning(messageId);
+    bot.editMessageReplyMarkup(
+      { inline_keyboard: [[{ text: '⏱️ Otomatis berhenti (5 menit)', callback_data: 'noop' }]] },
+      { chat_id: chatId, message_id: messageId }
+    ).catch(() => {});
+  }, 5 * 60 * 1000);
+}
+
+bot.onText(/^\/clock$/, (msg) => {
+  startLiveClock(msg.chat.id);
+});
+
+// ================= /short =================
+bot.onText(/^\/short (\S+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  let url = match[1].trim();
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+
+  try {
+    const res = await axios.get('https://tinyurl.com/api-create.php', {
+      params: { url },
+      timeout: 15000,
+    });
+    bot.sendMessage(chatId, `🔗 ${res.data}`);
+  } catch (err) {
+    bot.sendMessage(chatId, `❌ Gagal memendekkan URL: ${err.message}`);
+  }
+});
+
+// ================= /qr =================
+bot.onText(/^\/qr (.+)/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const text = match[1].trim();
+
+  try {
+    const res = await axios.get('https://api.qrserver.com/v1/create-qr-code/', {
+      params: { size: '300x300', data: text },
+      responseType: 'arraybuffer',
+      timeout: 15000,
+    });
+    const buffer = Buffer.from(res.data);
+    await bot.sendPhoto(chatId, buffer, { caption: `📱 QR Code: ${text}` });
+  } catch (err) {
+    bot.sendMessage(chatId, `❌ Gagal bikin QR code: ${err.message}`);
+  }
+});
+
+// ================= /translate =================
+bot.onText(/^\/translate (\S+) (.+)/s, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const targetLang = match[1].trim();
+  const text = match[2].trim();
+
+  try {
+    const res = await axios.get('https://translate.googleapis.com/translate_a/single', {
+      params: { client: 'gtx', sl: 'auto', tl: targetLang, dt: 't', q: text },
+      timeout: 15000,
+    });
+    const translated = res.data[0].map((seg) => seg[0]).join('');
+    bot.sendMessage(chatId, `🌐 <b>Terjemahan (${targetLang}):</b>\n\n${translated}`, { parse_mode: 'HTML' });
+  } catch (err) {
+    bot.sendMessage(chatId, `❌ Gagal nerjemahin: ${err.message}`);
+  }
+});
+
+// ================= /calc =================
+bot.onText(/^\/calc (.+)/, (msg, match) => {
+  const chatId = msg.chat.id;
+  const expr = match[1].trim();
+
+  if (!/^[0-9+\-*/().\s%^]+$/.test(expr)) {
+    bot.sendMessage(chatId, '❌ Ekspresi gaboleh ada huruf/karakter aneh, cuma angka & operator matematika (+ - * / % ^ ( )).');
+    return;
+  }
+
+  try {
+    const safeExpr = expr.replace(/\^/g, '**');
+    const result = Function(`"use strict"; return (${safeExpr})`)();
+    bot.sendMessage(chatId, `🧮 ${expr} = <b>${result}</b>`, { parse_mode: 'HTML' });
+  } catch (err) {
+    bot.sendMessage(chatId, '❌ Ekspresi gak valid.');
+  }
+});
+
+// ================= /time =================
+bot.onText(/^\/time(?:\s+(.+))?$/, (msg, match) => {
+  const chatId = msg.chat.id;
+  const tz = match[1] ? match[1].trim() : 'Asia/Jakarta';
+
+  try {
+    const formatter = new Intl.DateTimeFormat('id-ID', {
+      timeZone: tz,
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    });
+    bot.sendMessage(chatId, `🕐 <b>${formatter.format(new Date())}</b>\n📍 ${tz}`, { parse_mode: 'HTML' });
+  } catch (err) {
+    bot.sendMessage(chatId, '❌ Timezone gak valid. Contoh: /time Asia/Tokyo');
+  }
+});
+
+// ================= /weather =================
+bot.onText(/^\/weather (.+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const city = match[1].trim();
+
+  const wait = await bot.sendMessage(chatId, `☁️ Ngecek cuaca "${city}"...`);
+
+  try {
+    const res = await axios.get(`https://wttr.in/${encodeURIComponent(city)}`, {
+      params: { format: 'j1' },
+      timeout: 15000,
+      headers: { 'User-Agent': 'curl/8.0' },
+    });
+
+    const current = res.data.current_condition[0];
+    const area = res.data.nearest_area[0];
+    const areaName = area.areaName[0].value;
+    const country = area.country[0].value;
+
+    const text =
+      `☁️ <b>Cuaca di ${areaName}, ${country}</b>\n\n` +
+      `🌡️ Suhu: ${current.temp_C}°C (terasa ${current.FeelsLikeC}°C)\n` +
+      `💧 Kelembaban: ${current.humidity}%\n` +
+      `💨 Angin: ${current.windspeedKmph} km/jam\n` +
+      `☁️ Kondisi: ${current.weatherDesc[0].value}`;
+
+    bot.sendMessage(chatId, text, { parse_mode: 'HTML' });
+  } catch (err) {
+    bot.sendMessage(chatId, `❌ Gagal ngecek cuaca: ${err.message}`);
+  } finally {
+    bot.deleteMessage(chatId, wait.message_id).catch(() => {});
+  }
+});
+
+// ================= /encode =================
+bot.onText(/^\/encode (.+)/s, (msg, match) => {
+  const chatId = msg.chat.id;
+  const text = match[1];
+  const encoded = Buffer.from(text, 'utf-8').toString('base64');
+  bot.sendMessage(chatId, `🔐 <b>Base64:</b>\n<code>${encoded}</code>`, { parse_mode: 'HTML' });
+});
+
+// ================= /decode =================
+bot.onText(/^\/decode (.+)/s, (msg, match) => {
+  const chatId = msg.chat.id;
+  const text = match[1].trim();
+  try {
+    const decoded = Buffer.from(text, 'base64').toString('utf-8');
+    bot.sendMessage(chatId, `🔓 <b>Hasil decode:</b>\n${decoded}`, { parse_mode: 'HTML' });
+  } catch (err) {
+    bot.sendMessage(chatId, '❌ Gagal decode, pastiin itu teks base64 yang valid.');
+  }
+});
+
+bot.onText(/^\/tebak (.+)/i, (msg, match) => {
+  const chatId = msg.chat.id;
+  const mode = match[1].trim().toLowerCase();
+
+  if (mode === 'angka') {
+    const target = Math.floor(Math.random() * 100) + 1;
+    gameState.set(chatId, { type: 'angka', answer: target, tries: 0 });
+    bot.sendMessage(chatId, '🔢 Gue udah mikirin angka 1-100. Coba tebak, ketik angkanya langsung di chat!');
+    return;
+  }
+
+  if (mode === 'hewan') {
+    const riddle = ANIMAL_RIDDLES[Math.floor(Math.random() * ANIMAL_RIDDLES.length)];
+    gameState.set(chatId, { type: 'hewan', answer: riddle.answer, tries: 0 });
+    bot.sendMessage(chatId, `🐾 Tebak-tebakan hewan!\n\n"${riddle.hint}"\n\nKetik jawaban kamu langsung di chat!`);
+    return;
+  }
+
+  bot.sendMessage(chatId, '❌ Mode gaada. Pake: /tebak angka  atau  /tebak hewan');
+});
+
+// ================= Handle upload file & jawaban game =================
+bot.on('message', async (msg) => {
+  const chatId = msg.chat.id;
+
+  // Track member (khusus grup, buat /tagall) & message id (semua chat, buat /clear)
+  if (msg.chat.type === 'group' || msg.chat.type === 'supergroup') {
+    if (msg.from && !msg.from.is_bot) {
+      if (!chatMembers.has(chatId)) chatMembers.set(chatId, new Map());
+      chatMembers.get(chatId).set(msg.from.id, { first_name: msg.from.first_name || 'User' });
+    }
+  }
+  if (!messageLog.has(chatId)) messageLog.set(chatId, []);
+  const log = messageLog.get(chatId);
+  log.push(msg.message_id);
+  if (log.length > 1000) log.shift();
+
+  // File HTML diupload
+  if (msg.document) {
+    const fileName = msg.document.file_name || 'file.html';
+    const mime = msg.document.mime_type || '';
+
+    if (fileName.toLowerCase().endsWith('.html') || mime.includes('html')) {
+      try {
+        const fileLink = await bot.getFileLink(msg.document.file_id);
+        const res = await axios.get(fileLink, { responseType: 'arraybuffer', timeout: 20000 });
+        const buffer = Buffer.from(res.data);
+
+        const data = { buffer, fileName, messageId: msg.message_id };
+        uploadedFiles.set(chatId, data);
+        filesByMessageId.set(msg.message_id, data);
+
+        bot.sendMessage(
+          chatId,
+          `📄 File "${fileName}" diterima.\n\nReply file ini sambil ketik /deploy <namaweb> buat deploy ke Vercel.`,
+          { reply_to_message_id: msg.message_id }
+        );
+      } catch (err) {
+        bot.sendMessage(chatId, `❌ Gagal download file: ${err.message}`);
+      }
+    }
+    return;
+  }
+
+  // Jawaban game
+  const text = msg.text;
+  if (!text || text.startsWith('/')) return;
+
+  const state = gameState.get(chatId);
+  if (!state) return;
+
+  if (state.type === 'angka') {
+    const guess = parseInt(text, 10);
+    if (isNaN(guess)) return;
+
+    state.tries += 1;
+    if (guess === state.answer) {
+      bot.sendMessage(chatId, `🎉 Bener! Angkanya emang ${state.answer}. Ketebak dalam ${state.tries} kali coba.`);
+      gameState.delete(chatId);
+    } else if (guess < state.answer) {
+      bot.sendMessage(chatId, '📈 Lebih besar lagi!');
+    } else {
+      bot.sendMessage(chatId, '📉 Lebih kecil lagi!');
+    }
+    return;
+  }
+
+  if (state.type === 'hewan') {
+    state.tries += 1;
+    const normalized = text.trim().toLowerCase();
+    if (normalized === state.answer) {
+      bot.sendMessage(chatId, `🎉 Bener banget! Jawabannya "${state.answer}". Ketebak dalam ${state.tries} kali coba.`);
+      gameState.delete(chatId);
+    } else {
+      bot.sendMessage(chatId, '❌ Belum tepat, coba lagi!');
+    }
+    return;
+  }
+});
+
+bot.on('polling_error', (err) => console.error('Polling error:', err.message));
+process.on('unhandledRejection', (err) => console.error('Unhandled rejection:', err));

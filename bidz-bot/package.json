@@ -1,0 +1,13 @@
+{
+  "name": "bidz-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "commonjs",
+  "dependencies": {
+    "@hapi/boom": "^10.0.0",
+    "@whiskeysockets/baileys": "^6.7.0",
+    "jimp": "^1.6.1",
+    "node-webpmux": "^3.2.1",
+    "pino": "^8.0.0"
+  }
+}

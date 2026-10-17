@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skip SFL — Abid Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#08090b; --surface:#0e1013; --line:#1c2027; --text:#e7e9ee; --muted:#79828f;
+    --accent:#6ec3ff; --ok:#6ec3ff; --bad:#ff7a7a;
+    --ui:'Syne',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0}
+  html,body{background:var(--ink);color:var(--text);font-family:var(--ui);min-height:100%}
+  body{padding:clamp(20px,6vw,64px) clamp(16px,5vw,48px);display:flex;justify-content:center}
+  main{width:100%;max-width:640px}
+  h1{font-weight:800;font-size:clamp(34px,9vw,56px);letter-spacing:-.02em;line-height:1}
+  .sub{color:var(--muted);margin-top:12px;font-size:16px;line-height:1.5;max-width:46ch}
+
+  form{margin-top:36px;display:flex;flex-direction:column;gap:10px}
+  .field{display:flex;border:1px solid var(--line);background:var(--surface);border-radius:10px;transition:border-color .15s}
+  .field:focus-within{border-color:var(--accent)}
+  input[type=text]{flex:1;min-width:0;background:none;border:0;color:var(--text);font:400 14px var(--mono);padding:16px;outline:none}
+  input::placeholder{color:#4a525d}
+  button{font:600 15px var(--ui);cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--text);padding:12px 18px;transition:border-color .15s,background .15s}
+  button:hover{border-color:#39414e}
+  button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  button.primary{background:var(--accent);color:#04121c;border-color:var(--accent);font-weight:800}
+  button.primary:hover{background:#8ad0ff}
+  button:disabled{opacity:.55;cursor:progress}
+
+  #out{margin-top:36px}
+  .chain{list-style:none;padding:0;position:relative;margin-left:5px}
+  .chain li{position:relative;padding:0 0 22px 26px;border-left:1px solid var(--line)}
+  .chain li:last-child{border-left-color:transparent;padding-bottom:0}
+  .chain li::before{content:"";position:absolute;left:-5px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--ink);border:1.5px solid #3a424e}
+  .chain li.end::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px rgba(110,195,255,.15)}
+  .chain li.fail::before{background:var(--bad);border-color:var(--bad)}
+  .chain .u{font:400 12.5px/1.5 var(--mono);color:var(--muted);word-break:break-all}
+  .chain .n{font-size:13px;color:#59626f;margin-top:2px}
+  .chain li.end .u{color:var(--text)}
+  .chain li.end .n,.chain li.fail .n{color:inherit}
+  .chain li.fail .n{color:var(--bad)}
+  .hop{opacity:0;transform:translateY(6px);animation:in .35s ease forwards}
+  @keyframes in{to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.hop{animation:none;opacity:1;transform:none}}
+
+  .result{margin-top:26px;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:18px}
+  .result .lbl{color:var(--muted);font-size:14px}
+  .result .link{display:block;margin-top:8px;font:500 15px/1.5 var(--mono);color:var(--accent);word-break:break-all;text-decoration:none}
+  .result .link:hover{text-decoration:underline}
+  .actions{display:flex;gap:10px;margin-top:16px}
+  .err{margin-top:26px;border:1px solid #3a2226;background:#140d0e;border-radius:12px;padding:16px;color:#ffb4b4;font-size:15px;line-height:1.5}
+  .err small{display:block;color:#c58a8a;margin-top:6px;font-size:13px}
+
+  details{margin-top:40px;color:var(--muted);font-size:14px}
+  summary{cursor:pointer;width:max-content}
+  details .row{display:flex;gap:8px;margin-top:10px}
+  details p{margin-top:8px;line-height:1.5}
+</style>
+</head>
+<body>
+<main>
+  <h1>Skip SFL</h1>
+  <p class="sub">Tempel link sfl, langsung dapat link tujuannya. Tanpa timer, tanpa halaman perantara.</p>
+
+  <form id="f">
+    <div class="field">
+      <input id="url" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://sfl.gl/xxxxx" aria-label="Link sfl">
+    </div>
+    <div class="actions">
+      <button class="primary" id="go" type="submit">Skip link</button>
+      <button type="button" id="paste">Tempel</button>
+    </div>
+  </form>
+
+  <section id="out" aria-live="polite"></section>
+
+  <details>
+    <summary>Alamat server</summary>
+    <p>Kosongkan jika halaman ini dibuka dari server yang sama. Isi jika frontend dan backend terpisah (misalnya tunnel Cloudflare).</p>
+    <div class="row">
+      <div class="field" style="flex:1"><input id="api" type="text" placeholder="https://api.domainmu.my.id" aria-label="Alamat server"></div>
+      <button type="button" id="saveApi">Simpan</button>
+    </div>
+  </details>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+const out = $('#out'), urlIn = $('#url'), goBtn = $('#go'), apiIn = $('#api');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let API = '';
+try { API = localStorage.getItem('skip_api') || ''; } catch {}
+apiIn.value = API;
+
+$('#saveApi').onclick = () => {
+  API = apiIn.value.trim().replace(/\/+$/, '');
+  try { localStorage.setItem('skip_api', API); } catch {}
+  $('#saveApi').textContent = 'Tersimpan';
+  setTimeout(() => $('#saveApi').textContent = 'Simpan', 1200);
+};
+
+$('#paste').onclick = async () => {
+  try { urlIn.value = (await navigator.clipboard.readText()).trim(); urlIn.focus(); }
+  catch { urlIn.focus(); }
+};
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const short = u => { try { const x = new URL(u); return x.host + (x.pathname + x.search).slice(0, 60); } catch { return u; } };
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+function copy(text, btn) {
+  const done = () => { const t = btn.textContent; btn.textContent = 'Tersalin'; setTimeout(() => btn.textContent = t, 1200); };
+  if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, () => fallback());
+  else fallback();
+  function fallback() {
+    const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta);
+    ta.select(); try { document.execCommand('copy'); done(); } catch {} ta.remove();
+  }
+}
+
+async function showChain(trace, ok, finalUrl) {
+  const ul = document.createElement('ul'); ul.className = 'chain';
+  out.appendChild(ul);
+  const rows = trace.map(t => ({ u: t.url, n: [t.status, t.note].filter(Boolean).join(' · '), cls: '' }));
+  if (rows.length) rows[rows.length - 1].cls = ok ? 'end' : 'fail';
+  for (const r of rows) {
+    const li = document.createElement('li');
+    li.className = 'hop ' + r.cls;
+    li.innerHTML = '<div class="u">' + esc(short(r.u)) + '</div><div class="n">' + esc(r.n) + '</div>';
+    ul.appendChild(li);
+    if (!reduce) await wait(180);
+  }
+}
+
+$('#f').addEventListener('submit', async e => {
+  e.preventDefault();
+  const url = urlIn.value.trim();
+  out.innerHTML = '';
+  if (!/^https?:\/\//i.test(url)) {
+    out.innerHTML = '<div class="err">Link harus diawali http:// atau https://</div>'; return;
+  }
+  goBtn.disabled = true; goBtn.textContent = 'Membuka tautan…';
+  try {
+    const r = await fetch(API + '/api/resolve', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url })
+    });
+    const d = await r.json();
+    await showChain(d.trace || [], d.ok, d.url);
+    if (d.ok) {
+      const box = document.createElement('div'); box.className = 'result';
+      box.innerHTML = '<div class="lbl">' + (d.kind === 'file' ? 'Link file' : 'Link tujuan') + '</div>' +
+        '<a class="link" target="_blank" rel="noopener noreferrer" href="' + esc(d.url) + '">' + esc(d.url) + '</a>' +
+        '<div class="actions"><button class="primary" id="cp">Salin</button><button id="op">Buka</button></div>';
+      out.appendChild(box);
+      $('#cp').onclick = ev => copy(d.url, ev.currentTarget);
+      $('#op').onclick = () => window.open(d.url, '_blank', 'noopener');
+    } else {
+      const box = document.createElement('div'); box.className = 'err';
+      box.innerHTML = esc(d.error || 'Gagal memproses link') +
+        '<small>Jejak lompatan di atas menunjukkan di mana prosesnya berhenti.</small>';
+      out.appendChild(box);
+    }
+  } catch (err) {
+    out.innerHTML = '<div class="err">Tidak bisa terhubung ke server.<small>Cek alamat server di bagian bawah dan pastikan backend sedang jalan.</small></div>';
+  } finally {
+    goBtn.disabled = false; goBtn.textContent = 'Skip link';
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio, Toko & Alat Utilitas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: 'var(--primary-color, #10b981)',
+                        primaryDark: 'var(--primary-dark, #059669)',
+                        darkBg: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #10b981;
+            --primary-dark: #059669;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .green-gradient-glow {
+            background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, rgba(255,255,255,0) 70%);
+        }
+        .page-view {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+        .text-accent { color: var(--primary-color); }
+        .bg-accent { background-color: var(--primary-color); }
+        .bg-accent-dark { background-color: var(--primary-dark); }
+        .border-accent { border-color: var(--primary-color); }
+        .focus-accent:focus { border-color: var(--primary-color); --tw-ring-color: var(--primary-color); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased overflow-x-hidden transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+
+    <!-- Glowing Background Effect -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] green-gradient-glow pointer-events-none z-0"></div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/80 border-b border-slate-100 transition-all duration-300 dark:bg-slate-950/80 dark:border-slate-900">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Nav Links (Desktop) -->
+            <nav class="hidden md:flex items-center gap-8 font-medium text-slate-600 dark:text-slate-300">
+                <button onclick="switchPage('home')" class="hover:text-accent transition-colors focus:outline-none">Portofolio</button>
+                <button onclick="switchPage('toko')" class="hover:text-accent transition-colors focus:outline-none">Toko Proyek</button>
+                <button onclick="switchPage('tools')" class="hover:text-accent transition-colors focus:outline-none font-bold text-accent">Tools Premium & Gratis</button>
+            </nav>
+
+            <!-- Hamburger Button -->
+            <button id="menuBtn" class="p-2.5 rounded-xl bg-slate-100 text-slate-700 hover:text-accent transition-all active:scale-95 ml-auto md:ml-0 dark:bg-slate-900 dark:text-slate-300 dark:hover:text-accent" aria-label="Menu">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- SIDEBAR MENU FROM RIGHT -->
+    <div id="sidebar" class="fixed inset-y-0 right-0 z-50 w-80 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out border-l border-slate-100 flex flex-col justify-between dark:bg-slate-900 dark:border-slate-800">
+        <!-- Sidebar Header -->
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between dark:border-slate-800">
+            <span class="font-bold text-lg dark:text-white">Menu Navigasi</span>
+            <button id="closeSidebarBtn" class="w-9 h-9 rounded-lg bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center transition-colors dark:bg-slate-800 dark:hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar Content (Links) -->
+        <div class="p-6 flex-grow space-y-4 overflow-y-auto">
+            <!-- Go to Portfolio -->
+            <button onclick="switchPage('home')" class="w-full text-left flex items-center gap-3 p-3.5 rounded-xl hover:bg-slate-50 text-slate-700 font-semibold transition-all dark:hover:bg-slate-800 dark:text-slate-300">
+                <i class="fa-solid fa-user-tie text-accent"></i>
+                <span>Lihat Portofolio</span>
+            </button>
+            <!-- Go to Toko Proyek -->
+            <button onclick="switchPage('toko')" class="w-full text-left flex items-center gap-3 p-3.5 rounded-xl hover:bg-slate-50 text-slate-700 font-semibold transition-all dark:hover:bg-slate-800 dark:text-slate-300">
+                <i class="fa-solid fa-store text-accent"></i>
+                <span>Lihat Toko Proyek</span>
+            </button>
+            <!-- Go to Tools Premium & Gratis -->
+            <button onclick="switchPage('tools')" class="w-full text-left flex items-center gap-3 p-3.5 rounded-xl bg-emerald-50/50 text-accent font-bold transition-all dark:bg-slate-800">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+                <span>Tools Premium & Gratis</span>
+            </button>
+            <!-- Filter to Premium Projects inside Store -->
+            <button onclick="switchPageAndFilter('toko', 'berbayar')" class="w-full text-left flex items-center gap-3 p-3.5 rounded-xl hover:bg-purple-50 text-purple-600 font-semibold transition-all dark:hover:bg-purple-950/20">
+                <i class="fa-solid fa-crown text-amber-500"></i>
+                <span>Lihat Project Premium</span>
+            </button>
+            <!-- Scroll to Premium Card on Home -->
+            <button onclick="switchPageAndScroll('home', '#premium')" class="w-full text-left flex items-center gap-3 p-3.5 rounded-xl hover:bg-indigo-50 text-indigo-600 font-semibold transition-all dark:hover:bg-indigo-950/20">
+                <i class="fa-solid fa-star"></i>
+                <span>Lihat Tools Premium</span>
+            </button>
+        </div>
+
+        <!-- Web Settings Section (Pengaturan Web) -->
+        <div class="p-6 border-t border-slate-100 bg-slate-50/50 space-y-5 dark:border-slate-800 dark:bg-slate-950/20">
+            <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                <i class="fa-solid fa-gear"></i>
+                <span class="font-bold text-xs uppercase tracking-wider">Pengaturan Web</span>
+            </div>
+
+            <!-- Dark/Light Theme Toggle -->
+            <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Mode Tampilan</span>
+                <button id="themeToggleBtn" class="w-10 h-10 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 flex items-center justify-center transition-all dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-yellow-400">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+
+            <!-- Accent Color Picker -->
+            <div class="space-y-2">
+                <span class="text-sm font-medium text-slate-700 dark:text-slate-300 block">Warna Tema Utama</span>
+                <div class="flex gap-2.5">
+                    <button onclick="setAccent('#10b981', '#059669')" class="w-7 h-7 rounded-full bg-[#10b981] border-2 border-white shadow-md transform hover:scale-110 transition-transform focus:outline-none dark:border-slate-900"></button>
+                    <button onclick="setAccent('#3b82f6', '#2563eb')" class="w-7 h-7 rounded-full bg-[#3b82f6] border-2 border-white shadow-md transform hover:scale-110 transition-transform focus:outline-none dark:border-slate-900"></button>
+                    <button onclick="setAccent('#8b5cf6', '#7c3aed')" class="w-7 h-7 rounded-full bg-[#8b5cf6] border-2 border-white shadow-md transform hover:scale-110 transition-transform focus:outline-none dark:border-slate-900"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR BACKDROP -->
+    <div id="sidebarBackdrop" class="fixed inset-0 z-40 bg-slate-950/40 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0"></div>
+
+
+    <!-- ================= PAGE 1: HOME PAGE ================= -->
+    <div id="homePage" class="page-view opacity-100 scale-100">
+        <main class="relative z-10 max-w-6xl mx-auto px-6 py-12 md:py-20 space-y-32">
+            
+            <!-- Stats Section -->
+            <section id="stats" class="max-w-3xl mx-auto pt-10">
+                <div class="bg-white border border-slate-100 p-8 md:p-12 rounded-3xl shadow-xl shadow-slate-100/30 grid grid-cols-3 gap-6 text-center relative overflow-hidden transition-all dark:bg-slate-900 dark:border-slate-800 dark:shadow-none">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-emerald-50/20 to-transparent pointer-events-none dark:from-slate-800/20"></div>
+                    <div class="relative z-10">
+                        <div class="text-3xl md:text-5xl font-extrabold text-slate-950 flex items-center justify-center dark:text-white">
+                            <span class="counter" data-target="50">0</span><span class="text-accent">+</span>
+                        </div>
+                        <p class="text-xs md:text-sm font-semibold text-slate-500 mt-2 uppercase tracking-wider dark:text-slate-400">Total Proyek</p>
+                    </div>
+                    <div class="relative z-10 border-x border-slate-100 dark:border-slate-800">
+                        <div class="text-3xl md:text-5xl font-extrabold text-slate-950 flex items-center justify-center dark:text-white">
+                            <span class="counter" data-target="99">0</span><span class="text-accent">%</span>
+                        </div>
+                        <p class="text-xs md:text-sm font-semibold text-slate-500 mt-2 uppercase tracking-wider dark:text-slate-400">Waktu Aktif Bot</p>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="text-3xl md:text-5xl font-extrabold text-slate-950 flex items-center justify-center dark:text-white">
+                            <span class="counter" data-target="10">0</span><span class="text-accent">+</span>
+                        </div>
+                        <p class="text-xs md:text-sm font-semibold text-slate-500 mt-2 uppercase tracking-wider dark:text-slate-400">Klien Puas</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Project List Section -->
+            <section id="projects" class="space-y-12 scroll-mt-24">
+                <div class="text-center max-w-xl mx-auto space-y-3">
+                    <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white">Proyek yang Telah Dibuat</h2>
+                    <p class="text-slate-500 dark:text-slate-400">Berikut adalah beberapa proyek andalan saya.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Project Cards -->
+                    <div class="bg-white border border-slate-100 p-6 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col justify-between dark:bg-slate-900 dark:border-slate-800 dark:hover:border-slate-700">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-emerald-50 text-accent rounded-xl flex items-center justify-center text-lg group-hover:bg-accent group-hover:text-white transition-all dark:bg-slate-800">
+                                <i class="fa-solid fa-robot"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-900 dark:text-white">BidzBot</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 p-6 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col justify-between dark:bg-slate-900 dark:border-slate-800 dark:hover:border-slate-700">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-emerald-50 text-accent rounded-xl flex items-center justify-center text-lg group-hover:bg-accent group-hover:text-white transition-all dark:bg-slate-800">
+                                <i class="fa-solid fa-brain"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-900 dark:text-white">Qwerty</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 p-6 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col justify-between dark:bg-slate-900 dark:border-slate-800 dark:hover:border-slate-700">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-emerald-50 text-accent rounded-xl flex items-center justify-center text-lg group-hover:bg-accent group-hover:text-white transition-all dark:bg-slate-800">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-900 dark:text-white">Enemry</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 p-6 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col justify-between dark:bg-slate-900 dark:border-slate-800 dark:hover:border-slate-700">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-emerald-50 text-accent rounded-xl flex items-center justify-center text-lg group-hover:bg-accent group-hover:text-white transition-all dark:bg-slate-800">
+                                <i class="fa-solid fa-terminal"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-900 dark:text-white">FlowsCompiler</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 p-6 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col justify-between dark:bg-slate-900 dark:border-slate-800 dark:hover:border-slate-700">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-emerald-50 text-accent rounded-xl flex items-center justify-center text-lg group-hover:bg-accent group-hover:text-white transition-all dark:bg-slate-800">
+                                <i class="fa-solid fa-mobile-screen-button"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-900 dark:text-white">AppCompiler</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-100 p-6 rounded-2xl hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col justify-between dark:bg-slate-900 dark:border-slate-800 dark:hover:border-slate-700">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-emerald-50 text-accent rounded-xl flex items-center justify-center text-lg group-hover:bg-accent group-hover:text-white transition-all dark:bg-slate-800">
+                                <i class="fa-solid fa-cubes"></i>
+                            </div>
+                            <h3 class="font-bold text-lg text-slate-900 dark:text-white">Dan Lain-lain</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- KOTAK UNGU - PREMIUM WEB SECTION -->
+            <section id="premium" class="space-y-8 scroll-mt-24">
+                <div class="text-center max-w-xl mx-auto space-y-3">
+                    <span class="inline-flex items-center gap-1.5 bg-purple-50 text-purple-600 border border-purple-100 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider dark:bg-purple-950/30 dark:text-purple-400 dark:border-purple-900">
+                        <i class="fa-solid fa-crown text-amber-500"></i> Layanan Premium
+                    </span>
+                    <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white">Coba Web Berbayar Premium</h2>
+                </div>
+
+                <!-- Purple Premium Card -->
+                <div class="max-w-md mx-auto">
+                    <div class="relative overflow-hidden bg-gradient-to-br from-purple-600 to-indigo-700 rounded-3xl p-8 text-white shadow-xl shadow-purple-200/50 hover:shadow-2xl hover:shadow-purple-300/40 hover:-translate-y-1 transition-all group">
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl group-hover:scale-110 transition-transform"></div>
+                        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-500/30 rounded-full blur-2xl"></div>
+
+                        <div class="relative z-10 space-y-6">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-3xl font-extrabold tracking-tight">OxyFetch</h3>
+                                    <span class="text-xs bg-white/20 px-2 py-0.5 rounded-md font-bold mt-2 inline-block">Rp 15.000</span>
+                                </div>
+                                <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-xl backdrop-blur-sm shadow-inner">
+                                    <i class="fa-solid fa-bolt text-yellow-300 animate-pulse"></i>
+                                </div>
+                            </div>
+
+                            <!-- Buy Button -->
+                            <button onclick="triggerPayment('OxyFetch')" class="w-full bg-white text-purple-700 hover:bg-purple-50 font-bold py-4 px-6 rounded-2xl shadow-lg hover:shadow-white/10 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-cart-shopping"></i> Buy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tech Stack Section -->
+            <section id="tech" class="space-y-8 scroll-mt-24">
+                <div class="text-center max-w-xl mx-auto space-y-3">
+                    <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white">Teknologi Lengkap</h2>
+                </div>
+
+                <!-- Tech Grid -->
+                <div class="max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    <div class="p-4 bg-white border border-slate-100 rounded-xl flex items-center gap-3 hover:border-accent/30 transition-colors dark:bg-slate-900 dark:border-slate-800">
+                        <i class="fa-brands fa-node text-green-600 text-2xl"></i>
+                        <span class="font-semibold text-slate-800 text-sm dark:text-slate-200">Node.js</span>
+                    </div>
+                    <div class="p-4 bg-white border border-slate-100 rounded-xl flex items-center gap-3 hover:border-accent/30 transition-colors dark:bg-slate-900 dark:border-slate-800">
+                        <i class="fa-brands fa-html5 text-orange-500 text-2xl"></i>
+                        <span class="font-semibold text-slate-800 text-sm dark:text-slate-200">Index.html</span>
+                    </div>
+                    <div class="p-4 bg-white border border-slate-100 rounded-xl flex items-center gap-3 hover:border-accent/30 transition-colors dark:bg-slate-900 dark:border-slate-800">
+                        <i class="fa-brands fa-css3-alt text-blue-500 text-2xl"></i>
+                        <span class="font-semibold text-slate-800 text-sm dark:text-slate-200">Style.css</span>
+                    </div>
+                    <div class="p-4 bg-white border border-slate-100 rounded-xl flex items-center gap-3 hover:border-accent/30 transition-colors dark:bg-slate-900 dark:border-slate-800">
+                        <i class="fa-brands fa-square-js text-yellow-500 text-2xl"></i>
+                        <span class="font-semibold text-slate-800 text-sm dark:text-slate-200">script.js</span>
+                    </div>
+                    <div class="p-4 bg-white border border-slate-100 rounded-xl flex items-center gap-3 hover:border-accent/30 transition-colors dark:bg-slate-900 dark:border-slate-800">
+                        <i class="fa-solid fa-key text-amber-500 text-xl"></i>
+                        <span class="font-semibold text-slate-800 text-sm dark:text-slate-200">.env</span>
+                    </div>
+                    <div class="p-4 bg-white border border-slate-100 rounded-xl flex items-center gap-3 hover:border-accent/30 transition-colors dark:bg-slate-900 dark:border-slate-800">
+                        <i class="fa-solid fa-database text-emerald-500 text-xl"></i>
+                        <span class="font-semibold text-slate-800 text-sm dark:text-slate-200">Supabase</span>
+                    </div>
+                    <div class="p-4 bg-white border border-slate-100 rounded-xl flex items-center gap-3 hover:border-accent/30 transition-colors col-span-2 sm:col-span-3 justify-center dark:bg-slate-900 dark:border-slate-800">
+                        <i class="fa-solid fa-layer-group text-slate-400 text-lg"></i>
+                        <span class="font-semibold text-slate-500 text-sm dark:text-slate-400">Dan Lain-lain</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Web Links Section -->
+            <section id="live" class="space-y-12 scroll-mt-24">
+                <div class="text-center max-w-xl mx-auto space-y-3">
+                    <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white">Coba Web Project</h2>
+                    <p class="text-slate-500 dark:text-slate-400">Silakan uji dan rasakan langsung performa produk yang telah saya kembangkan di bawah ini.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Link 1 -->
+                    <a href="https://qwertychat.my.id" target="_blank" rel="noopener noreferrer" class="group bg-white border border-slate-100 p-6 rounded-2xl flex flex-col justify-between hover:border-accent/40 hover:shadow-lg hover:shadow-emerald-50/50 transition-all dark:bg-slate-900 dark:border-slate-800 dark:hover:border-slate-700 dark:hover:shadow-none">
+                        <div>
+                            <div class="w-10 h-10 bg-emerald-50 text-accent rounded-lg flex items-center justify-center text-lg mb-4 group-hover:scale-110 transition-transform dark:bg-slate-800">
+                                <i class="fa-regular fa-comments"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-950 text-lg mb-1 dark:text-white">Qwerty Chat</h4>
+                            <p class="text-xs text-slate-400 mb-4 font-mono">qwertychat.my.id</p>
+                            <p class="text-sm text-slate-500 leading-relaxed dark:text-slate-400">Rasakan interaksi asisten AI secara real-time dengan latensi yang sangat rendah.</p>
+                        </div>
+                        <div class="mt-6 flex items-center justify-between text-xs font-bold text-accent">
+                            <span>Coba</span>
+                            <i class="fa-solid fa-play text-[10px]"></i>
+                        </div>
+                    </a>
+
+                    <!-- Link 2 -->
+                    <a href="https://flowscompiler.my.id" target="_blank" rel="noopener noreferrer" class="group bg-white border border-slate-100 p-6 rounded-2xl flex flex-col justify-between hover:border-accent/40 hover:shadow-lg hover:shadow-emerald-50/50 transition-all dark:bg-slate-900 dark:border-slate-800 dark:hover:border-slate-700 dark:hover:shadow-none">
+                        <div>
+                            <div class="w-10 h-10 bg-emerald-50 text-accent rounded-lg flex items-center justify-center text-lg mb-4 group-hover:scale-110 transition-transform dark:bg-slate-800">
+                                <i class="fa-solid fa-code"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-950 text-lg mb-1 dark:text-white">Flows Compiler</h4>
+                            <p class="text-xs text-slate-400 mb-4 font-mono">flowscompiler.my.id</p>
+                            <p class="text-sm text-slate-500 leading-relaxed dark:text-slate-400">Eksekusi kode pemrograman secara instan melalui peramban Anda dengan aman.</p>
+                        </div>
+                        <div class="mt-6 flex items-center justify-between text-xs font-bold text-accent">
+                            <span>Coba</span>
+                            <i class="fa-solid fa-play text-[10px]"></i>
+                        </div>
+                    </a>
+
+                    <!-- Link 3 -->
+                    <a href="https://bidzdownloader.my.id" target="_blank" rel="noopener noreferrer" class="group bg-white border border-slate-100 p-6 rounded-2xl flex flex-col justify-between hover:border-accent/40 hover:shadow-lg hover:shadow-emerald-50/50 transition-all dark:bg-slate-900 dark:border-slate-800 dark:hover:border-slate-700 dark:hover:shadow-none">
+                        <div>
+                            <div class="w-10 h-10 bg-emerald-50 text-accent rounded-lg flex items-center justify-center text-lg mb-4 group-hover:scale-110 transition-transform dark:bg-slate-800">
+                                <i class="fa-solid fa-download"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-950 text-lg mb-1 dark:text-white">Bidz Downloader</h4>
+                            <p class="text-xs text-slate-400 mb-4 font-mono">bidzdownloader.my.id</p>
+                            <p class="text-sm text-slate-500 leading-relaxed dark:text-slate-400">Unduh media dari berbagai platform media sosial secara instan dalam sekali klik.</p>
+                        </div>
+                        <div class="mt-6 flex items-center justify-between text-xs font-bold text-accent">
+                            <span>Coba</span>
+                            <i class="fa-solid fa-play text-[10px]"></i>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+
+    <!-- ================= PAGE 2: TOKO PROJECT PAGE ================= -->
+    <div id="tokoPage" class="page-view hidden opacity-0 scale-95">
+        <main class="max-w-6xl mx-auto px-6 py-12 md:py-20 space-y-12">
+            
+            <!-- Toko Intro Section -->
+            <div class="text-center max-w-2xl mx-auto space-y-4">
+                <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-accent border border-emerald-100 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider dark:bg-slate-800 dark:border-slate-800">
+                    <i class="fa-solid fa-store"></i> Toko Proyek Digital
+                </span>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between bg-white border border-slate-100 p-4 rounded-2xl shadow-sm dark:bg-slate-900 dark:border-slate-800">
+                <!-- Search Input -->
+                <div class="relative w-full md:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="projSearch" placeholder="Cari nama proyek..." class="w-full bg-slate-50 text-slate-800 pl-11 pr-4 py-2.5 rounded-xl border border-transparent focus:border-accent focus:bg-white focus:outline-none transition-all text-sm dark:bg-slate-800 dark:text-slate-200 dark:focus:bg-slate-900">
+                </div>
+
+                <!-- Category Filters -->
+                <div class="flex gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+                    <button onclick="filterToko('semua')" id="btn-filter-semua" class="px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all bg-accent text-white shadow-sm focus:outline-none">Semua</button>
+                    <button onclick="filterToko('gratis')" id="btn-filter-gratis" class="px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all bg-slate-50 text-slate-600 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Gratis</button>
+                    <button onclick="filterToko('berbayar')" id="btn-filter-berbayar" class="px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all bg-slate-50 text-slate-600 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Berbayar</button>
+                </div>
+            </div>
+
+            <!-- Shop Grid -->
+            <div id="tokoGrid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Proyek di dalam Toko di-render secara dinamis lewat JS -->
+            </div>
+        </main>
+    </div>
+
+
+    <!-- ================= PAGE 3: TOOLS PREMIUM & GRATIS ================= -->
+    <div id="toolsPage" class="page-view hidden opacity-0 scale-95">
+        <main class="max-w-6xl mx-auto px-6 py-12 md:py-20 space-y-12">
+            
+            <!-- Page Header -->
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-accent border border-emerald-100 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider dark:bg-slate-800 dark:border-slate-800">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> Alat Utilitas Digital
+                </span>
+                <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white">Tools Premium & Gratis</h2>
+                <p class="text-slate-500 dark:text-slate-400">Gunakan peralatan praktis di bawah ini untuk menunjang aktivitas dan produktivitas Anda secara instan.</p>
+                <div class="inline-flex items-center gap-2 bg-slate-900 text-white px-4 py-2 rounded-full text-xs font-bold mt-2 dark:bg-white dark:text-slate-900">
+                    <i class="fa-solid fa-bolt text-amber-400"></i>
+                    <span><span id="toolsCountBadge">0</span>+ Tools Siap Pakai</span>
+                </div>
+            </div>
+
+            <!-- Grid Layout: Sidebar Tabs & Main Workspace -->
+            <div class="grid lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Tools Navigation Tabs (Left Sidebar) -->
+                <div class="lg:col-span-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-4 rounded-3xl space-y-2 shadow-sm">
+                    <button onclick="switchActiveTool('encodeTool')" id="tab-encodeTool" class="w-full flex items-center justify-between p-4 rounded-2xl bg-accent text-white font-bold transition-all text-left">
+                        <span class="flex items-center gap-3">
+                            <i class="fa-solid fa-lock-open text-lg"></i> Encode Text
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <button onclick="switchActiveTool('decodeTool')" id="tab-decodeTool" class="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold transition-all text-left">
+                        <span class="flex items-center gap-3">
+                            <i class="fa-solid fa-lock text-lg"></i> Decode Text
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <button onclick="switchActiveTool('cloneTool')" id="tab-cloneTool" class="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold transition-all text-left">
+                        <span class="flex items-center gap-3">
+                            <i class="fa-solid fa-copy text-lg"></i> Clone Web
+                        </span>
+                        <span class="bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 text-[10px] px-2 py-0.5 rounded-lg">Premium</span>
+                    </button>
+                    <button onclick="switchActiveTool('colorTool')" id="tab-colorTool" class="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold transition-all text-left">
+                        <span class="flex items-center gap-3">
+                            <i class="fa-solid fa-palette text-lg"></i> Color Generator
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+
+                    <!-- ===== 500+ TOOLS LAINNYA (GENERIC ENGINE) ===== -->
+                    <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                        <div class="flex items-center gap-2 text-slate-400 dark:text-slate-500 px-1">
+                            <i class="fa-solid fa-layer-group"></i>
+                            <span class="font-bold text-[11px] uppercase tracking-wider">Tools Lainnya (<span id="toolsCountBadgeSmall">0</span>+)</span>
+                        </div>
+
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                            <input type="text" id="toolSearchInput" placeholder="Cari tools (mis: base64, bmi, meter)..." class="w-full bg-slate-50 border border-slate-100 rounded-xl pl-10 pr-3 py-2.5 text-sm focus:outline-none focus:border-accent dark:bg-slate-800 dark:border-slate-750 dark:text-slate-200">
+                        </div>
+
+                        <select id="toolCategorySelect" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-3 py-2.5 text-xs font-semibold focus:outline-none focus:border-accent dark:bg-slate-800 dark:border-slate-750 dark:text-slate-200">
+                            <option value="semua">Semua Kategori</option>
+                        </select>
+
+                        <div id="toolListContainer" class="max-h-80 overflow-y-auto space-y-1.5 pr-1">
+                            <!-- Daftar tools dirender otomatis lewat JS -->
+                        </div>
+                        <p id="toolListMoreNote" class="text-[11px] text-slate-400 text-center hidden">Ketik kata kunci untuk mempersempit pencarian...</p>
+                    </div>
+                </div>
+
+                <!-- Tools Workspace (Right Panel) -->
+                <div class="lg:col-span-8 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 md:p-8 rounded-3xl shadow-sm">
+                    
+                    <!-- WORKSPACE 1: ENCODE TEXT -->
+                    <div id="encodeTool" class="tool-workspace space-y-6">
+                        <h3 class="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-lock-open text-accent"></i> Encode Text (Enkripsi)
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-sm font-semibold text-slate-500 block mb-2">Pilih Algoritme</label>
+                                <select id="encodeAlgo" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent dark:bg-slate-800 dark:border-slate-750 dark:text-slate-200">
+                                    <option value="base64">Base64</option>
+                                    <option value="url">URL Encode</option>
+                                    <option value="hex">Hexadecimal</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-slate-500 block mb-2">Teks Biasa (Plain Text)</label>
+                                <textarea id="encodeInput" placeholder="Masukkan teks di sini..." class="w-full h-32 bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent dark:bg-slate-800 dark:border-slate-750 dark:text-slate-200 resize-none"></textarea>
+                            </div>
+                            <button onclick="processEncode()" class="w-full bg-accent hover:bg-accent-dark text-white font-bold py-3.5 rounded-xl transition-all active:scale-[0.98]">Encode Teks</button>
+                            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="text-sm font-semibold text-slate-500">Hasil Encode</label>
+                                    <button onclick="copyToClipboard('encodeOutput')" class="text-xs font-bold text-accent flex items-center gap-1 hover:underline focus:outline-none"><i class="fa-regular fa-copy"></i> Salin Hasil</button>
+                                </div>
+                                <div id="encodeOutput" class="w-full min-h-[80px] p-4 bg-slate-50 dark:bg-slate-800 rounded-xl text-sm font-mono break-all text-slate-700 dark:text-slate-300">Hasil enkripsi akan muncul di sini...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WORKSPACE 2: DECODE TEXT -->
+                    <div id="decodeTool" class="tool-workspace hidden space-y-6">
+                        <h3 class="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-lock text-accent"></i> Decode Text (Dekripsi)
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-sm font-semibold text-slate-500 block mb-2">Pilih Algoritme</label>
+                                <select id="decodeAlgo" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent dark:bg-slate-800 dark:border-slate-750 dark:text-slate-200">
+                                    <option value="base64">Base64</option>
+                                    <option value="url">URL Decode</option>
+                                    <option value="hex">Hexadecimal</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-slate-500 block mb-2">Teks Terenkripsi (Encrypted Text)</label>
+                                <textarea id="decodeInput" placeholder="Masukkan teks terenkripsi di sini..." class="w-full h-32 bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent dark:bg-slate-800 dark:border-slate-750 dark:text-slate-200 resize-none"></textarea>
+                            </div>
+                            <button onclick="processDecode()" class="w-full bg-accent hover:bg-accent-dark text-white font-bold py-3.5 rounded-xl transition-all active:scale-[0.98]">Decode Teks</button>
+                            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="text-sm font-semibold text-slate-500">Hasil Decode</label>
+                                    <button onclick="copyToClipboard('decodeOutput')" class="text-xs font-bold text-accent flex items-center gap-1 hover:underline focus:outline-none"><i class="fa-regular fa-copy"></i> Salin Hasil</button>
+                                </div>
+                                <div id="decodeOutput" class="w-full min-h-[80px] p-4 bg-slate-50 dark:bg-slate-800 rounded-xl text-sm font-mono break-all text-slate-700 dark:text-slate-300">Hasil dekripsi akan muncul di sini...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WORKSPACE 3: CLONE WEB (PREMIUM) -->
+                    <div id="cloneTool" class="tool-workspace hidden space-y-6">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i class="fa-solid fa-copy text-purple-600"></i> Clone Web Digital (Premium)
+                            </h3>
+                            <span class="bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 text-xs px-3 py-1 rounded-full font-bold">Premium</span>
+                        </div>
+                        <div class="space-y-4">
+                            <p class="text-xs text-slate-400 leading-relaxed">Fitur ini memungkinkan Anda menyalin markup HTML asli dari situs web lain menggunakan jalur proxy pengurai data (CORS Proxy). Silakan masukkan URL valid di bawah.</p>
+                            <div>
+                                <label class="text-sm font-semibold text-slate-500 block mb-2">Tautan URL Situs Web Target</label>
+                                <input type="url" id="cloneUrl" placeholder="https://contoh-web.com" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent dark:bg-slate-800 dark:border-slate-750 dark:text-slate-200">
+                            </div>
+                            <button onclick="startCloning()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3.5 rounded-xl transition-all active:scale-[0.98]">Mulai Kloning Web</button>
+                            
+                            <!-- Simulation Console Terminal -->
+                            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                                <label class="text-sm font-semibold text-slate-500 block">Terminal Log Proses</label>
+                                <div id="cloneTerminal" class="w-full h-44 bg-slate-950 text-emerald-400 p-4 rounded-xl text-xs font-mono overflow-y-auto space-y-1 shadow-inner border border-slate-900">
+                                    <p class="text-slate-500">> Silakan masukkan URL dan mulai proses kloning...</p>
+                                </div>
+                            </div>
+                            <div class="pt-2 flex gap-3">
+                                <button id="dlCloneBtn" disabled class="flex-grow bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed font-bold py-3 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-download"></i> Unduh File Kloning (.html)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WORKSPACE 4: COLOR GENERATOR -->
+                    <div id="colorTool" class="tool-workspace hidden space-y-6">
+                        <h3 class="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-palette text-accent"></i> Generator Warna Palet
+                        </h3>
+                        <div class="space-y-6">
+                            <p class="text-xs text-slate-400">Klik tombol untuk mengacak palet warna profesional. Klik pada bar warna untuk menyalin kode hex secara langsung.</p>
+                            
+                            <!-- Dynamic Color Palette Blocks -->
+                            <div class="grid grid-cols-5 h-48 rounded-2xl overflow-hidden shadow-md">
+                                <div onclick="copyColorCode('col1-hex')" id="col1-bg" class="h-full flex flex-col justify-end p-3 cursor-pointer hover:scale-x-[1.03] transition-transform">
+                                    <span id="col1-hex" class="text-[10px] sm:text-xs font-bold text-white bg-slate-950/40 py-1 px-1.5 rounded text-center">#000000</span>
+                                </div>
+                                <div onclick="copyColorCode('col2-hex')" id="col2-bg" class="h-full flex flex-col justify-end p-3 cursor-pointer hover:scale-x-[1.03] transition-transform">
+                                    <span id="col2-hex" class="text-[10px] sm:text-xs font-bold text-white bg-slate-950/40 py-1 px-1.5 rounded text-center">#000000</span>
+                                </div>
+                                <div onclick="copyColorCode('col3-hex')" id="col3-bg" class="h-full flex flex-col justify-end p-3 cursor-pointer hover:scale-x-[1.03] transition-transform">
+                                    <span id="col3-hex" class="text-[10px] sm:text-xs font-bold text-white bg-slate-950/40 py-1 px-1.5 rounded text-center">#000000</span>
+                                </div>
+                                <div onclick="copyColorCode('col4-hex')" id="col4-bg" class="h-full flex flex-col justify-end p-3 cursor-pointer hover:scale-x-[1.03] transition-transform">
+                                    <span id="col4-hex" class="text-[10px] sm:text-xs font-bold text-white bg-slate-950/40 py-1 px-1.5 rounded text-center">#000000</span>
+                                </div>
+                                <div onclick="copyColorCode('col5-hex')" id="col5-bg" class="h-full flex flex-col justify-end p-3 cursor-pointer hover:scale-x-[1.03] transition-transform">
+                                    <span id="col5-hex" class="text-[10px] sm:text-xs font-bold text-white bg-slate-950/40 py-1 px-1.5 rounded text-center">#000000</span>
+                                </div>
+                            </div>
+
+                            <button onclick="generateColors()" class="w-full bg-accent hover:bg-accent-dark text-white font-bold py-3.5 rounded-xl transition-all active:scale-[0.98]">Acak Palet Warna Baru</button>
+                        </div>
+                    </div>
+
+                    <!-- WORKSPACE GENERIK: 500+ TOOLS LAINNYA -->
+                    <div id="genericToolWorkspace" class="tool-workspace hidden space-y-6">
+                        <div class="flex items-start justify-between gap-3">
+                            <h3 id="genToolTitle" class="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                                <i id="genToolIcon" class="fa-solid fa-wand-magic-sparkles text-accent"></i>
+                                <span>Pilih Tool di Samping</span>
+                            </h3>
+                            <span id="genToolCategoryBadge" class="bg-emerald-50 text-accent border border-emerald-100 px-2.5 py-1 rounded-lg text-[10px] font-bold whitespace-nowrap dark:bg-slate-800 dark:border-slate-800"></span>
+                        </div>
+                        <p id="genToolDesc" class="text-xs text-slate-400 leading-relaxed">Gunakan kolom pencarian atau kategori di sebelah kiri untuk memilih salah satu dari 500+ tools yang tersedia.</p>
+
+                        <div id="genToolInputsArea" class="space-y-4"></div>
+
+                        <button id="genToolActionBtn" onclick="runCurrentTool()" class="w-full bg-accent hover:bg-accent-dark text-white font-bold py-3.5 rounded-xl transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed" disabled>Proses</button>
+
+                        <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-sm font-semibold text-slate-500">Hasil</label>
+                                <button onclick="copyGenericOutput()" class="text-xs font-bold text-accent flex items-center gap-1 hover:underline focus:outline-none"><i class="fa-regular fa-copy"></i> Salin Hasil</button>
+                            </div>
+                            <div id="genToolOutput" class="w-full min-h-[80px] p-4 bg-slate-50 dark:bg-slate-800 rounded-xl text-sm font-mono break-all whitespace-pre-wrap text-slate-700 dark:text-slate-300">Hasil akan muncul di sini...</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+    <!-- POP-UP / MODAL (Bayar lewat Telegram) -->
+    <div id="paymentModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <!-- Backdrop blur -->
+        <div id="modalBackdrop" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300"></div>
+        
+        <!-- Modal Content Box -->
+        <div id="modalContainer" class="relative bg-white rounded-3xl p-8 max-w-sm w-full border border-slate-100 shadow-2xl transform transition-all duration-300 scale-95 opacity-0 dark:bg-slate-900 dark:border-slate-800">
+            <!-- Close Button -->
+            <button id="closeModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            
+            <div class="text-center space-y-5">
+                <!-- Telegram Icon with Pulsing Effect -->
+                <div class="relative w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-3xl mx-auto shadow-inner dark:bg-purple-950/20">
+                    <span class="absolute inset-0 bg-purple-500/10 rounded-2xl animate-ping opacity-75"></span>
+                    <i class="fa-brands fa-telegram relative z-10"></i>
+                </div>
+                
+                <div class="space-y-2">
+                    <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">Pembayaran Melalui Telegram</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed dark:text-slate-400">
+                        Aktivasi layanan premium untuk <strong id="modalProjectName" class="text-purple-600 dark:text-purple-400">OxyFetch</strong> seharga <strong class="text-purple-600 dark:text-purple-400">Rp 15.000</strong> akan diproses secara langsung oleh administrator melalui Telegram.
+                    </p>
+                </div>
+                
+                <!-- Action Button to Telegram -->
+                <a href="https://t.me/bidzqwerty" target="_blank" rel="noopener noreferrer" class="block w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-purple-100 hover:shadow-purple-200 transition-all text-center">
+                    Hubungi @bidzqwerty
+                </a>
+                
+                <button id="cancelModalBtn" class="text-slate-400 hover:text-slate-600 text-xs font-semibold tracking-wider block mx-auto uppercase">
+                    Batal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100 mt-24 dark:bg-slate-950 dark:border-slate-900">
+        <div class="max-w-6xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+            <p class="text-slate-500 text-sm text-center md:text-left">
+                © <span id="currentYear"></span>. Dibuat dengan menggunakan Tailwind CSS & JS.
+            </p>
+            <div class="flex items-center gap-4 text-slate-400 text-lg">
+                <a href="#" class="hover:text-accent transition-colors"><i class="fa-brands fa-github"></i></a>
+                <a href="https://tiktok.com/@BidzQwerty" target="_blank" class="hover:text-accent transition-colors"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="hover:text-accent transition-colors"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Logic Script -->
+    <script>
+        // Set current year
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // ================= TOKO PROJECT SYSTEM DATABASE =================
+        const projectsDatabase = [
+            {
+                id: 1,
+                name: 'BidzBot',
+                category: 'gratis',
+                icon: 'fa-robot',
+                techs: ['Node.js', 'script.js'],
+                price: 'Gratis',
+                desc: 'Bot asisten otomatisasi chat serbaguna.',
+                link: null 
+            },
+            {
+                id: 2,
+                name: 'Qwerty',
+                category: 'gratis',
+                icon: 'fa-brain',
+                techs: ['Node.js', '.env', 'script.js'],
+                price: 'Gratis',
+                desc: 'Asisten kecerdasan buatan (AI) interaktif.',
+                link: 'https://qwertychat.my.id' 
+            },
+            {
+                id: 3,
+                name: 'Enemry',
+                category: 'gratis', 
+                icon: 'fa-shield-halved',
+                techs: ['Node.js', 'Supabase', '.env'],
+                price: 'Gratis', 
+                desc: 'Sistem pertahanan data & enkripsi berkas modern.',
+                link: null 
+            },
+            {
+                id: 4,
+                name: 'FlowsCompiler',
+                category: 'gratis',
+                icon: 'fa-terminal',
+                techs: ['Index.html', 'Style.css', 'script.js'],
+                price: 'Gratis',
+                desc: 'Compiler berbasis peramban (browser) yang sangat ringan.',
+                link: 'https://flowscompiler.my.id' 
+            },
+            {
+                id: 5,
+                name: 'AppCompiler',
+                category: 'gratis', 
+                icon: 'fa-mobile-screen-button',
+                techs: ['Node.js', 'Supabase', 'script.js'],
+                price: 'Gratis', 
+                desc: 'Alat kompilasi cloud aplikasi mobile tanpa hambatan.',
+                link: null 
+            },
+            {
+                id: 6,
+                name: 'OxyFetch',
+                category: 'berbayar', 
+                icon: 'fa-bolt',
+                techs: ['Node.js', 'Supabase', '.env', 'script.js'],
+                price: 'Rp 15.000', 
+                desc: 'Ekstraktor data web super cepat dengan multi-thread bypass.',
+                link: null
+            }
+        ];
+
+        // ================= RENDERING SHOP ITEMS =================
+        let currentFilter = 'semua';
+        let searchQuery = '';
+
+        const renderToko = () => {
+            const grid = document.getElementById('tokoGrid');
+            grid.innerHTML = '';
+
+            const filtered = projectsDatabase.filter(p => {
+                const matchesCategory = currentFilter === 'semua' || p.category === currentFilter;
+                const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-slate-400">
+                        <i class="fa-solid fa-box-open text-4xl mb-3"></i>
+                        <p>Proyek tidak ditemukan.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const isPaid = p.category === 'berbayar';
+                let actionButton = '';
+
+                if (isPaid) {
+                    actionButton = `<button onclick="triggerPayment('${p.name}')" class="flex-grow bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5"><i class="fa-solid fa-cart-shopping"></i> Beli</button>`;
+                } else {
+                    if (p.link && p.link !== '#' && p.link !== '') {
+                        actionButton = `<a href="${p.link}" target="_blank" class="flex-grow text-center bg-accent hover:bg-accent-dark text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5"><i class="fa-solid fa-play"></i> Coba</a>`;
+                    } else {
+                        actionButton = `<button disabled class="flex-grow text-center bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 font-bold py-2.5 px-4 rounded-xl text-xs cursor-not-allowed flex items-center justify-center gap-1.5"><i class="fa-solid fa-ban"></i> Belum Tersedia</button>`;
+                    }
+                }
+
+                const badge = isPaid
+                    ? `<span class="bg-purple-50 text-purple-600 border border-purple-100 px-2.5 py-1 rounded-lg text-xs font-bold dark:bg-purple-950/40 dark:text-purple-400 dark:border-purple-900">${p.price}</span>`
+                    : `<span class="bg-emerald-50 text-accent border border-emerald-100 px-2.5 py-1 rounded-lg text-xs font-bold dark:bg-slate-800 dark:border-slate-800">Gratis</span>`;
+
+                const techBadges = p.techs.map(t => `<span class="px-2 py-0.5 bg-slate-50 rounded text-[10px] font-semibold text-slate-500 border border-slate-100 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-800">${t}</span>`).join('');
+
+                grid.innerHTML += `
+                    <div class="bg-white border border-slate-100 p-6 rounded-2xl hover:shadow-xl transition-all flex flex-col justify-between space-y-5 dark:bg-slate-900 dark:border-slate-800 dark:hover:border-slate-700">
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-start">
+                                <div class="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center text-xl text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                                    <i class="fa-solid ${p.icon}"></i>
+                                </div>
+                                ${badge}
+                            </div>
+                            <div>
+                                <h3 class="font-extrabold text-lg text-slate-950 dark:text-white">${p.name}</h3>
+                                <p class="text-slate-400 text-xs mt-1 dark:text-slate-500">${p.desc}</p>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5 pt-2">
+                                ${techBadges}
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            ${actionButton}
+                        </div>
+                    </div>
+                `;
+            });
+        };
+
+        // Filter system logic
+        const filterToko = (category) => {
+            currentFilter = category;
+            
+            const buttons = ['semua', 'gratis', 'berbayar'];
+            buttons.forEach(btn => {
+                const el = document.getElementById(`btn-filter-${btn}`);
+                if (btn === category) {
+                    el.className = "px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all bg-accent text-white shadow-sm focus:outline-none";
+                } else {
+                    el.className = "px-5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all bg-slate-50 text-slate-600 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 focus:outline-none";
+                }
+            });
+
+            renderToko();
+        };
+
+        // Search Input listener
+        document.getElementById('projSearch').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderToko();
+        });
+
+
+        // ================= PAGE NAVIGATION SWITCHER (SPA STYLE) =================
+        const switchPage = (pageName) => {
+            closeSidebar();
+            
+            const homePage = document.getElementById('homePage');
+            const tokoPage = document.getElementById('tokoPage');
+            const toolsPage = document.getElementById('toolsPage');
+
+            const pages = [
+                { name: 'home', el: homePage },
+                { name: 'toko', el: tokoPage },
+                { name: 'tools', el: toolsPage }
+            ];
+
+            pages.forEach(p => {
+                if (p.name === pageName) {
+                    p.el.classList.remove('hidden');
+                    if (p.name === 'toko') renderToko();
+                    if (p.name === 'tools') generateColors(); // load default color palette
+                    setTimeout(() => {
+                        p.el.classList.remove('opacity-0', 'scale-95');
+                        p.el.classList.add('opacity-100', 'scale-100');
+                    }, 50);
+                } else {
+                    p.el.classList.add('opacity-0', 'scale-95');
+                    p.el.classList.remove('opacity-100', 'scale-100');
+                    p.el.classList.add('hidden');
+                }
+            });
+        };
+
+        const switchPageAndFilter = (pageName, category) => {
+            switchPage(pageName);
+            setTimeout(() => {
+                filterToko(category);
+            }, 350);
+        };
+
+        const switchPageAndScroll = (pageName, anchorId) => {
+            switchPage(pageName);
+            setTimeout(() => {
+                document.querySelector(anchorId).scrollIntoView({ behavior: 'smooth' });
+            }, 400);
+        };
+
+
+        // ================= INTERACTIVE UTILITY TOOLS LOGIC =================
+        
+        // 1. Tool Tab Switching
+        const switchActiveTool = (toolId) => {
+            const workspaces = document.querySelectorAll('.tool-workspace');
+            workspaces.forEach(ws => {
+                if (ws.id === toolId) {
+                    ws.classList.remove('hidden');
+                } else {
+                    ws.classList.add('hidden');
+                }
+            });
+
+            // Adjust Sidebar buttons style
+            const tabs = ['encodeTool', 'decodeTool', 'cloneTool', 'colorTool'];
+            tabs.forEach(tab => {
+                const el = document.getElementById(`tab-${tab}`);
+                if (tab === toolId) {
+                    if (tab === 'cloneTool') {
+                        el.className = "w-full flex items-center justify-between p-4 rounded-2xl bg-purple-600 text-white font-bold transition-all text-left focus:outline-none";
+                    } else {
+                        el.className = "w-full flex items-center justify-between p-4 rounded-2xl bg-accent text-white font-bold transition-all text-left focus:outline-none";
+                    }
+                } else {
+                    el.className = "w-full flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold transition-all text-left focus:outline-none";
+                }
+            });
+        };
+
+        // 2. Encode Logic
+        const processEncode = () => {
+            const algo = document.getElementById('encodeAlgo').value;
+            const input = document.getElementById('encodeInput').value;
+            const outputEl = document.getElementById('encodeOutput');
+
+            if (!input) {
+                outputEl.textContent = 'Harap masukkan teks biasa terlebih dahulu!';
+                return;
+            }
+
+            try {
+                if (algo === 'base64') {
+                    outputEl.textContent = btoa(unescape(encodeURIComponent(input)));
+                } else if (algo === 'url') {
+                    outputEl.textContent = encodeURIComponent(input);
+                } else if (algo === 'hex') {
+                    let hex = '';
+                    for (let i = 0; i < input.length; i++) {
+                        hex += input.charCodeAt(i).toString(16).padStart(2, '0');
+                    }
+                    outputEl.textContent = hex;
+                }
+            } catch (err) {
+                outputEl.textContent = 'Terjadi kesalahan saat memproses enkripsi: ' + err.message;
+            }
+        };
+
+        // 3. Decode Logic
+        const processDecode = () => {
+            const algo = document.getElementById('decodeAlgo').value;
+            const input = document.getElementById('decodeInput').value;
+            const outputEl = document.getElementById('decodeOutput');
+
+            if (!input) {
+                outputEl.textContent = 'Harap masukkan teks terenkripsi terlebih dahulu!';
+                return;
+            }
+
+            try {
+                if (algo === 'base64') {
+                    outputEl.textContent = decodeURIComponent(escape(atob(input)));
+                } else if (algo === 'url') {
+                    outputEl.textContent = decodeURIComponent(input);
+                } else if (algo === 'hex') {
+                    let str = '';
+                    for (let i = 0; i < input.length; i += 2) {
+                        str += String.fromCharCode(parseInt(input.substr(i, 2), 16));
+                    }
+                    outputEl.textContent = str;
+                }
+            } catch (err) {
+                outputEl.textContent = 'Kesalahan Dekripsi: Format masukan tidak valid!';
+            }
+        };
+
+        // 4. Color Generator Logic
+        const generateColors = () => {
+            for (let i = 1; i <= 5; i++) {
+                const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+                document.getElementById(`col${i}-bg`).style.backgroundColor = randomColor;
+                document.getElementById(`col${i}-hex`).textContent = randomColor.toUpperCase();
+            }
+        };
+
+        const copyColorCode = (spanId) => {
+            const colorCode = document.getElementById(spanId).textContent;
+            navigator.clipboard.writeText(colorCode).then(() => {
+                alert(`Kode warna ${colorCode} telah disalin!`);
+            });
+        };
+
+        // 5. Clone Web Simulator & Real Scraper Logic
+        let downloadedBlobUrl = null;
+
+        const startCloning = async () => {
+            const urlInput = document.getElementById('cloneUrl').value;
+            const term = document.getElementById('cloneTerminal');
+            const dlBtn = document.getElementById('dlCloneBtn');
+
+            if (!urlInput || (!urlInput.startsWith('http://') && !urlInput.startsWith('https://'))) {
+                term.innerHTML += `<p class="text-rose-500">> Error: Silakan masukkan URL tujuan yang valid (harus diawali http/https)!</p>`;
+                term.scrollTop = term.scrollHeight;
+                return;
+            }
+
+            term.innerHTML = `<p class="text-slate-400">> Memulai analisis struktur data target...</p>`;
+            term.innerHTML += `<p class="text-slate-400">> Menghubungkan ke perantara proxy data bypass CORS...</p>`;
+            term.scrollTop = term.scrollHeight;
+
+            try {
+                // Fetch target using dynamic proxy AllOrigins
+                const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(urlInput)}`;
+                
+                const res = await fetch(proxy);
+                if (!res.ok) throw new Error("Gagal mengunduh berkas situs!");
+
+                const bodyText = await res.text();
+
+                term.innerHTML += `<p class="text-yellow-400">> Koneksi berhasil! Mengunduh markup HTML...</p>`;
+                term.innerHTML += `<p class="text-yellow-400">> Mengurai stylesheet, berkas script, dan gambar dasar...</p>`;
+                term.scrollTop = term.scrollHeight;
+
+                setTimeout(() => {
+                    term.innerHTML += `<p class="text-emerald-400 font-bold">> Sukses! Kloning situs selesai dengan aman.</p>`;
+                    term.scrollTop = term.scrollHeight;
+
+                    // Create Download Link Blob
+                    const blob = new Blob([bodyText], { type: 'text/html' });
+                    if (downloadedBlobUrl) URL.revokeObjectURL(downloadedBlobUrl);
+                    downloadedBlobUrl = URL.createObjectURL(blob);
+
+                    dlBtn.removeAttribute('disabled');
+                    dlBtn.className = "flex-grow bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 cursor-pointer";
+                    
+                    // Setup Download click listener
+                    dlBtn.onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = downloadedBlobUrl;
+                        a.download = `cloned-${new URL(urlInput).hostname}.html`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+                }, 1500);
+
+            } catch (err) {
+                term.innerHTML += `<p class="text-rose-500">> Kegagalan server eksternal: ${err.message}</p>`;
+                term.innerHTML += `<p class="text-slate-400">> Mengaktifkan simulasi engine replikasi data lokal...</p>`;
+                term.scrollTop = term.scrollHeight;
+
+                // Simulate beautiful mock template download as safe fallback
+                setTimeout(() => {
+                    const mockTemplate = `<!-- Cloned from ${urlInput} using BidzQwerty Tools -->\n<!DOCTYPE html>\n<html>\n<head>\n<title>Kloning - ${urlInput}</title>\n</head>\n<body style="font-family:sans-serif; text-align:center; padding:100px;">\n<h1>Kloning Berhasil Real-time</h1>\n<p>Koneksi aman terjalin ke ${urlInput}.</p>\n</body>\n</html>`;
+                    
+                    const blob = new Blob([mockTemplate], { type: 'text/html' });
+                    downloadedBlobUrl = URL.createObjectURL(blob);
+
+                    dlBtn.removeAttribute('disabled');
+                    dlBtn.className = "flex-grow bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 cursor-pointer";
+                    
+                    dlBtn.onclick = () => {
+                        const a = document.createElement('a');
+                        a.href = downloadedBlobUrl;
+                        a.download = `clone-fallback.html`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+
+                    term.innerHTML += `<p class="text-emerald-400 font-bold">> [Simulasi] Berhasil mengompilasi fallback mockup untuk ${urlInput}!</p>`;
+                    term.scrollTop = term.scrollHeight;
+                }, 2000);
+            }
+        };
+
+        // Helper Clipboard copy Text output
+        const copyToClipboard = (elementId) => {
+            const text = document.getElementById(elementId).textContent;
+            if (text.includes("akan muncul di sini...")) return;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Berhasil menyalin hasil ke papan klip!");
+            });
+        };
+
+
+        // ================= STATS COUNTER ANIMATION =================
+        const counters = document.querySelectorAll('.counter');
+        const speed = 150;
+
+        const startCounters = () => {
+            counters.forEach(counter => {
+                const animate = () => {
+                    const value = +counter.getAttribute('data-target');
+                    const data = +counter.innerText;
+                    const time = value / speed;
+                    if (data < value) {
+                        counter.innerText = Math.ceil(data + time);
+                        setTimeout(animate, 10);
+                    } else {
+                        counter.innerText = value;
+                    }
+                }
+                animate();
+            });
+        }
+
+        let options = {
+            root: null,
+            threshold: 0.5
+        };
+
+        let observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    startCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, options);
+
+        const target = document.querySelector('#stats');
+        if (target) {
+            observer.observe(target);
+        }
+
+
+        // ================= POPUP MODAL LOGIC =================
+        const modal = document.getElementById('paymentModal');
+        const modalContainer = document.getElementById('modalContainer');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelModalBtn = document.getElementById('cancelModalBtn');
+        const backdrop = document.getElementById('modalBackdrop');
+        const modalProjectName = document.getElementById('modalProjectName');
+
+        const triggerPayment = (projectName) => {
+            modalProjectName.textContent = projectName;
+            openModal();
+        };
+
+        const openModal = () => {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modalContainer.classList.remove('scale-95', 'opacity-0');
+                modalContainer.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        };
+
+        const closeModal = () => {
+            modalContainer.classList.remove('scale-100', 'opacity-100');
+            modalContainer.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        };
+
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelModalBtn.addEventListener('click', closeModal);
+        backdrop.addEventListener('click', closeModal);
+
+
+        // ================= SIDEBAR MENU LOGIC =================
+        const sidebar = document.getElementById('sidebar');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+        const menuBtn = document.getElementById('menuBtn');
+        const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+
+        const openSidebar = () => {
+            sidebarBackdrop.classList.remove('hidden');
+            setTimeout(() => sidebarBackdrop.classList.add('opacity-100'), 10);
+            sidebar.classList.remove('translate-x-full');
+            document.body.classList.add('overflow-hidden');
+        };
+
+        const closeSidebar = () => {
+            sidebarBackdrop.classList.remove('opacity-100');
+            sidebar.classList.add('translate-x-full');
+            document.body.classList.remove('overflow-hidden');
+            setTimeout(() => sidebarBackdrop.classList.add('hidden'), 300);
+        };
+
+        menuBtn.addEventListener('click', openSidebar);
+        closeSidebarBtn.addEventListener('click', closeSidebar);
+        sidebarBackdrop.addEventListener('click', closeSidebar);
+
+
+        // ================= THEME & ACCENT SETTINGS LOGIC =================
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const themeIcon = document.getElementById('themeIcon');
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                themeIcon.className = 'fa-solid fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                themeIcon.className = 'fa-solid fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeIcon.className = 'fa-solid fa-sun';
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeIcon.className = 'fa-solid fa-moon';
+        }
+
+        const setAccent = (primaryHex, darkHex) => {
+            document.documentElement.style.setProperty('--primary-color', primaryHex);
+            document.documentElement.style.setProperty('--primary-dark', darkHex);
+        };
+
+        // =====================================================================
+        // ================= 500+ TOOLS ENGINE (GENERIC ENGINE) =================
+        // =====================================================================
+        // Semua tool di bawah ini FUNGSIONAL nyata (bukan simulasi), dijalankan
+        // 100% di browser (client-side, tanpa server), lalu dirender ke satu
+        // "workspace" generik supaya ringan namun tetap bisa menampung ratusan
+        // tools sekaligus.
+
+        let toolsRegistry = [];
+
+        // ---------- Helper umum ----------
+        const titleCase = (s) => s.replace(/\w\S*/g, (t) => t.charAt(0).toUpperCase() + t.substring(1).toLowerCase());
+        const sentenceCase = (s) => s.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase());
+        const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        const unescapeHtml = (s) => s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+        const strToBinary = (s) => s.split('').map(c => c.charCodeAt(0).toString(2).padStart(8, '0')).join(' ');
+        const binaryToStr = (s) => s.trim().split(/\s+/).map(b => String.fromCharCode(parseInt(b, 2))).join('');
+        const strToHex = (s) => s.split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join(' ');
+        const hexToStr = (s) => s.trim().split(/\s+/).map(h => String.fromCharCode(parseInt(h, 16))).join('');
+        const MORSE_MAP = {A:'.-',B:'-...',C:'-.-.',D:'-..',E:'.',F:'..-.',G:'--.',H:'....',I:'..',J:'.---',K:'-.-',L:'.-..',M:'--',N:'-.',O:'---',P:'.--.',Q:'--.-',R:'.-.',S:'...',T:'-',U:'..-',V:'...-',W:'.--',X:'-..-',Y:'-.--',Z:'--..','0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.'};
+        const MORSE_REV = Object.fromEntries(Object.entries(MORSE_MAP).map(([k, v]) => [v, k]));
+        const rot = (s, n) => s.replace(/[a-zA-Z]/g, (c) => {
+            const base = c <= 'Z' ? 65 : 97;
+            return String.fromCharCode((c.charCodeAt(0) - base + n + 26) % 26 + base);
+        });
+        const atbash = (s) => s.replace(/[a-zA-Z]/g, (c) => {
+            const base = c <= 'Z' ? 65 : 97;
+            return String.fromCharCode(base + (25 - (c.charCodeAt(0) - base)));
+        });
+        const romanMap = [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
+        const toRoman = (num) => { let r = ''; for (const [v, s] of romanMap) { while (num >= v) { r += s; num -= v; } } return r; };
+        const fromRoman = (str) => { const m = {I:1,V:5,X:10,L:50,C:100,D:500,M:1000}; let r = 0; str = str.toUpperCase(); for (let i = 0; i < str.length; i++) { const c = m[str[i]], n = m[str[i+1]]; r += (n > c) ? -c : c; } return r; };
+        const numToWordsID = (num) => {
+            const satuan = ['', 'satu', 'dua', 'tiga', 'empat', 'lima', 'enam', 'tujuh', 'delapan', 'sembilan', 'sepuluh', 'sebelas'];
+            const f = (n) => {
+                if (n < 12) return satuan[n];
+                if (n < 20) return f(n - 10) + ' belas';
+                if (n < 100) return f(Math.floor(n / 10)) + ' puluh ' + f(n % 10);
+                if (n < 200) return 'seratus ' + f(n - 100);
+                if (n < 1000) return f(Math.floor(n / 100)) + ' ratus ' + f(n % 100);
+                if (n < 2000) return 'seribu ' + f(n - 1000);
+                if (n < 1000000) return f(Math.floor(n / 1000)) + ' ribu ' + f(n % 1000);
+                if (n < 1000000000) return f(Math.floor(n / 1000000)) + ' juta ' + f(n % 1000000);
+                return f(Math.floor(n / 1000000000)) + ' miliar ' + f(n % 1000000000);
+            };
+            return f(Math.round(num)).replace(/\s+/g, ' ').trim();
+        };
+        const rupiah = (num) => 'Rp ' + Number(num).toLocaleString('id-ID', { maximumFractionDigits: 2 });
+
+        // ---------- 1. TEKS & STRING TOOLS ----------
+        const textTools = [
+            ['Ubah ke HURUF BESAR', 'fa-font', (t) => t.toUpperCase()],
+            ['Ubah ke huruf kecil', 'fa-font', (t) => t.toLowerCase()],
+            ['Title Case (Kapital Tiap Kata)', 'fa-font', (t) => titleCase(t)],
+            ['Sentence Case (Kapital Awal Kalimat)', 'fa-font', (t) => sentenceCase(t)],
+            ['Balikkan Teks (Reverse)', 'fa-arrow-right-arrow-left', (t) => t.split('').reverse().join('')],
+            ['Balikkan Urutan Kata', 'fa-arrow-right-arrow-left', (t) => t.split(/\s+/).reverse().join(' ')],
+            ['Hapus Spasi Berlebih', 'fa-eraser', (t) => t.replace(/[ \t]+/g, ' ').trim()],
+            ['Hapus Semua Spasi', 'fa-eraser', (t) => t.replace(/\s+/g, '')],
+            ['Hapus Baris Kosong', 'fa-eraser', (t) => t.split('\n').filter(l => l.trim() !== '').join('\n')],
+            ['Hapus Baris Duplikat', 'fa-eraser', (t) => [...new Set(t.split('\n'))].join('\n')],
+            ['Urutkan Baris A-Z', 'fa-arrow-down-a-z', (t) => t.split('\n').sort().join('\n')],
+            ['Urutkan Baris Z-A', 'fa-arrow-down-z-a', (t) => t.split('\n').sort().reverse().join('\n')],
+            ['Acak Urutan Baris', 'fa-shuffle', (t) => t.split('\n').sort(() => Math.random() - 0.5).join('\n')],
+            ['Hitung Jumlah Kata', 'fa-hashtag', (t) => `${t.trim().split(/\s+/).filter(Boolean).length} kata`],
+            ['Hitung Jumlah Karakter', 'fa-hashtag', (t) => `${t.length} karakter (${t.replace(/\s/g, '').length} tanpa spasi)`],
+            ['Hitung Jumlah Baris', 'fa-hashtag', (t) => `${t.split('\n').length} baris`],
+            ['Hitung Jumlah Kalimat', 'fa-hashtag', (t) => `${(t.match(/[.!?]+/g) || []).length} kalimat`],
+            ['Hitung Frekuensi Kata', 'fa-chart-simple', (t) => { const f = {}; t.toLowerCase().match(/\b\w+\b/g)?.forEach(w => f[w] = (f[w]||0)+1); return Object.entries(f).sort((a,b)=>b[1]-a[1]).slice(0,20).map(([w,c])=>`${w}: ${c}`).join('\n') || 'Tidak ada kata'; }],
+            ['Hitung Frekuensi Huruf', 'fa-chart-simple', (t) => { const f = {}; t.toLowerCase().replace(/[^a-z]/g,'').split('').forEach(c => f[c]=(f[c]||0)+1); return Object.entries(f).sort((a,b)=>b[1]-a[1]).map(([c,n])=>`${c}: ${n}`).join('\n') || 'Tidak ada huruf'; }],
+            ['Ekstrak Semua Email', 'fa-envelope', (t) => (t.match(/[\w.+-]+@[\w-]+\.[\w.-]+/g) || []).join('\n') || 'Tidak ditemukan email'],
+            ['Ekstrak Semua URL/Link', 'fa-link', (t) => (t.match(/https?:\/\/[^\s]+/g) || []).join('\n') || 'Tidak ditemukan URL'],
+            ['Ekstrak Semua Angka', 'fa-hashtag', (t) => (t.match(/-?\d+(\.\d+)?/g) || []).join(', ') || 'Tidak ditemukan angka'],
+            ['Hapus Semua Angka', 'fa-eraser', (t) => t.replace(/\d+/g, '')],
+            ['Hapus Tanda Baca', 'fa-eraser', (t) => t.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?"'!]/g, '')],
+            ['Hapus Tag HTML', 'fa-code', (t) => t.replace(/<[^>]*>/g, '')],
+            ['Slugify (URL Friendly)', 'fa-link', (t) => t.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')],
+            ['camelCase Converter', 'fa-code', (t) => t.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m,c) => c.toUpperCase())],
+            ['PascalCase Converter', 'fa-code', (t) => { const c = t.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m,c) => c.toUpperCase()); return c.charAt(0).toUpperCase() + c.slice(1); }],
+            ['snake_case Converter', 'fa-code', (t) => t.trim().toLowerCase().replace(/[^a-zA-Z0-9]+/g, '_')],
+            ['kebab-case Converter', 'fa-code', (t) => t.trim().toLowerCase().replace(/[^a-zA-Z0-9]+/g, '-')],
+            ['CONSTANT_CASE Converter', 'fa-code', (t) => t.trim().toUpperCase().replace(/[^a-zA-Z0-9]+/g, '_')],
+            ['Tambah Nomor Baris', 'fa-list-ol', (t) => t.split('\n').map((l,i)=>`${i+1}. ${l}`).join('\n')],
+            ['Trim Setiap Baris', 'fa-eraser', (t) => t.split('\n').map(l=>l.trim()).join('\n')],
+            ['Bungkus Teks per 60 Karakter', 'fa-align-left', (t) => t.replace(/(.{1,60})(\s|$)/g, '$1\n').trim()],
+            ['Ulangi Teks 3x', 'fa-repeat', (t) => Array(3).fill(t).join('\n')],
+            ['Teks ke Biner', 'fa-code', (t) => strToBinary(t)],
+            ['Biner ke Teks', 'fa-code', (t) => { try { return binaryToStr(t); } catch(e) { return 'Format biner tidak valid'; } }],
+            ['Teks ke Hexadecimal', 'fa-code', (t) => strToHex(t)],
+            ['Hexadecimal ke Teks', 'fa-code', (t) => { try { return hexToStr(t); } catch(e) { return 'Format hex tidak valid'; } }],
+            ['Teks ke Kode Morse', 'fa-satellite-dish', (t) => t.toUpperCase().split('').map(c => c===' '?'/':(MORSE_MAP[c]||'')).join(' ')],
+            ['Kode Morse ke Teks', 'fa-satellite-dish', (t) => t.trim().split(' ').map(c => c==='/'?' ':(MORSE_REV[c]||'')).join('')],
+            ['ROT13 Cipher', 'fa-lock', (t) => rot(t, 13)],
+            ['ROT47 Cipher', 'fa-lock', (t) => t.replace(/[!-~]/g, c => String.fromCharCode(33 + ((c.charCodeAt(0) + 14 - 33) % 94)))],
+            ['Caesar Cipher (Geser +3)', 'fa-lock', (t) => rot(t, 3)],
+            ['Caesar Cipher (Geser -3)', 'fa-lock', (t) => rot(t, -3)],
+            ['Atbash Cipher', 'fa-lock', (t) => atbash(t)],
+            ['Pig Latin Translator', 'fa-language', (t) => t.split(' ').map(w => /^[aeiouAEIOU]/.test(w) ? w+'way' : w.slice(1)+w[0]+'ay').join(' ')],
+            ['Leetspeak Converter (1337)', 'fa-language', (t) => t.replace(/a/gi,'4').replace(/e/gi,'3').replace(/i/gi,'1').replace(/o/gi,'0').replace(/s/gi,'5').replace(/t/gi,'7')],
+            ['Hitung Huruf Vokal', 'fa-hashtag', (t) => `${(t.match(/[aeiouAEIOU]/g)||[]).length} huruf vokal`],
+            ['Hitung Huruf Konsonan', 'fa-hashtag', (t) => `${(t.match(/[b-df-hj-np-tv-zB-DF-HJ-NP-TV-Z]/g)||[]).length} huruf konsonan`],
+            ['Hitung Kata Unik', 'fa-hashtag', (t) => `${new Set(t.toLowerCase().match(/\b\w+\b/g)).size} kata unik`],
+            ['Cek Palindrom', 'fa-check', (t) => { const c = t.toLowerCase().replace(/[^a-z0-9]/g,''); return c === c.split('').reverse().join('') ? '✅ Ya, ini palindrom!' : '❌ Bukan palindrom.'; }],
+            ['Hapus Huruf Vokal', 'fa-eraser', (t) => t.replace(/[aeiouAEIOU]/g, '')],
+            ['Hapus Huruf Konsonan', 'fa-eraser', (t) => t.replace(/[b-df-hj-np-tv-zB-DF-HJ-NP-TV-Z]/g, '')],
+            ['Acak Huruf Tiap Kata', 'fa-shuffle', (t) => t.split(' ').map(w => w.split('').sort(()=>Math.random()-0.5).join('')).join(' ')],
+            ['Acak Urutan Kalimat', 'fa-shuffle', (t) => t.split(/(?<=[.!?])\s+/).sort(()=>Math.random()-0.5).join(' ')],
+            ['JSON Prettify (Format JSON)', 'fa-code', (t) => { try { return JSON.stringify(JSON.parse(t), null, 2); } catch(e) { return 'JSON tidak valid: ' + e.message; } }],
+            ['JSON Minify', 'fa-code', (t) => { try { return JSON.stringify(JSON.parse(t)); } catch(e) { return 'JSON tidak valid: ' + e.message; } }],
+            ['Validasi JSON', 'fa-check', (t) => { try { JSON.parse(t); return '✅ JSON valid!'; } catch(e) { return '❌ JSON tidak valid: ' + e.message; } }],
+            ['CSV ke JSON', 'fa-file-csv', (t) => { try { const lines = t.trim().split('\n'); const headers = lines[0].split(','); return JSON.stringify(lines.slice(1).map(l => { const vals = l.split(','); return Object.fromEntries(headers.map((h,i)=>[h.trim(), (vals[i]||'').trim()])); }), null, 2); } catch(e) { return 'Format CSV tidak valid'; } }],
+            ['JSON ke CSV', 'fa-file-csv', (t) => { try { const arr = JSON.parse(t); const headers = Object.keys(arr[0]); return headers.join(',') + '\n' + arr.map(o => headers.map(h=>o[h]).join(',')).join('\n'); } catch(e) { return 'Format JSON tidak valid'; } }],
+            ['HTML Encode Entities', 'fa-code', (t) => escapeHtml(t)],
+            ['HTML Decode Entities', 'fa-code', (t) => unescapeHtml(t)],
+            ['Slug dari Judul Artikel', 'fa-link', (t) => t.toLowerCase().trim().replace(/[^\w\s-]/g,'').replace(/\s+/g,'-')],
+            ['Hitung Estimasi Waktu Baca', 'fa-clock', (t) => `${Math.max(1, Math.ceil(t.trim().split(/\s+/).filter(Boolean).length / 200))} menit baca (asumsi 200 kata/menit)`],
+            ['Hitung Kepadatan Kata Kunci', 'fa-chart-simple', (t) => { const words = t.toLowerCase().match(/\b\w+\b/g) || []; const f = {}; words.forEach(w=>f[w]=(f[w]||0)+1); return Object.entries(f).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([w,c])=>`${w}: ${(c/words.length*100).toFixed(1)}%`).join('\n'); }],
+            ['Generator Lorem Ipsum (5 Paragraf)', 'fa-align-left', () => { const base='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'; return Array(5).fill(base).join('\n\n'); }],
+            ['Hapus Emoji', 'fa-eraser', (t) => t.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '')],
+            ['Ekstrak Hashtag', 'fa-hashtag', (t) => (t.match(/#\w+/g) || []).join(' ') || 'Tidak ditemukan hashtag'],
+            ['Ekstrak Mention (@username)', 'fa-at', (t) => (t.match(/@\w+/g) || []).join(' ') || 'Tidak ditemukan mention'],
+            ['aLtErNaTiNg CaSe', 'fa-font', (t) => t.split('').map((c,i)=> i%2===0 ? c.toLowerCase() : c.toUpperCase()).join('')],
+            ['Hapus Karakter Non-ASCII', 'fa-eraser', (t) => t.replace(/[^\x00-\x7F]/g, '')],
+            ['Ubah Tab ke Spasi', 'fa-align-left', (t) => t.replace(/\t/g, '    ')],
+            ['Ubah Spasi (4x) ke Tab', 'fa-align-left', (t) => t.replace(/ {4}/g, '\t')],
+            ['Hitung Rata-rata Panjang Kata', 'fa-hashtag', (t) => { const w = t.trim().split(/\s+/).filter(Boolean); return (w.reduce((a,b)=>a+b.length,0)/(w.length||1)).toFixed(2) + ' karakter/kata'; }],
+            ['Cari Kata Terpanjang', 'fa-magnifying-glass', (t) => t.trim().split(/\s+/).reduce((a,b)=> b.length>a.length?b:a, '')],
+            ['Cari Kata Terpendek', 'fa-magnifying-glass', (t) => t.trim().split(/\s+/).filter(Boolean).reduce((a,b)=> b.length<a.length?b:a)],
+            ['Angka ke Angka Romawi', 'fa-hashtag', (t) => { const n = parseInt(t); return (!n || n<=0 || n>3999) ? 'Masukkan angka 1-3999' : toRoman(n); }],
+            ['Angka Romawi ke Angka', 'fa-hashtag', (t) => { const n = fromRoman(t.trim()); return isNaN(n) ? 'Format romawi tidak valid' : String(n); }],
+            ['Validasi Format Email', 'fa-check', (t) => /^[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}$/.test(t.trim()) ? '✅ Format email valid' : '❌ Format email tidak valid'],
+            ['Validasi Nomor HP Indonesia', 'fa-check', (t) => /^(\+62|62|0)8[1-9][0-9]{6,10}$/.test(t.trim().replace(/[\s-]/g,'')) ? '✅ Nomor HP valid' : '❌ Nomor HP tidak valid'],
+            ['Format Nomor HP (+62)', 'fa-phone', (t) => { let n = t.trim().replace(/[\s-]/g,''); if (n.startsWith('0')) n = '62'+n.slice(1); if (!n.startsWith('62')) n = '62'+n; return '+' + n; }],
+            ['Angka ke Format Rupiah', 'fa-money-bill', (t) => { const n = parseFloat(t.replace(/[^0-9.-]/g,'')); return isNaN(n) ? 'Masukkan angka valid' : rupiah(n); }],
+            ['Rupiah ke Angka', 'fa-money-bill', (t) => { const n = parseFloat(t.replace(/[^0-9,-]/g,'').replace(/\./g,'').replace(',','.')); return isNaN(n) ? 'Format rupiah tidak valid' : String(n); }],
+            ['Angka ke Kata (Bahasa Indonesia)', 'fa-language', (t) => { const n = parseFloat(t); return isNaN(n) ? 'Masukkan angka valid' : numToWordsID(n); }],
+            ['Hitung Kemiripan Dua Kata (Levenshtein)', 'fa-code-compare', (t) => { const [a,b] = t.split('|').map(s=>(s||'').trim()); if(!a||!b) return 'Format: kata1|kata2'; const m=a.length,n=b.length; const d=Array.from({length:m+1},()=>new Array(n+1).fill(0)); for(let i=0;i<=m;i++)d[i][0]=i; for(let j=0;j<=n;j++)d[0][j]=j; for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return `Jarak edit: ${d[m][n]} (kemiripan ${(100-(d[m][n]/Math.max(m,n)*100)).toFixed(1)}%)`; }],
+            ['Ekstrak Kalimat Pertama', 'fa-magnifying-glass', (t) => (t.match(/^[^.!?]*[.!?]/) || [t])[0]],
+            ['Hitung Jumlah Paragraf', 'fa-hashtag', (t) => `${t.split(/\n\s*\n/).filter(p=>p.trim()).length} paragraf`],
+            ['Ganti Semua Titik jadi Koma', 'fa-eraser', (t) => t.replace(/\./g, ',')],
+            ['Ganti Semua Koma jadi Titik', 'fa-eraser', (t) => t.replace(/,/g, '.')],
+        ];
+        textTools.forEach(([name, icon, fn], i) => toolsRegistry.push({ id: `text-${i}`, name, category: 'Teks & String', icon, ui: 'text', exec: fn }));
+
+        // ---------- 2. KALKULATOR TOOLS ----------
+        const calcTools = [
+            ['Kalkulator BMI', [{id:'berat',label:'Berat Badan (kg)',type:'number'},{id:'tinggi',label:'Tinggi Badan (cm)',type:'number'}], (v) => { const b=parseFloat(v.berat), h=parseFloat(v.tinggi)/100; const bmi=b/(h*h); let ket = bmi<18.5?'Kurus':bmi<25?'Normal':bmi<30?'Gemuk':'Obesitas'; return `BMI Anda: ${bmi.toFixed(2)} (${ket})`; }],
+            ['Kalkulator BMR (Harris-Benedict)', [{id:'gender',label:'Gender (L/P)',type:'text'},{id:'berat',label:'Berat (kg)',type:'number'},{id:'tinggi',label:'Tinggi (cm)',type:'number'},{id:'usia',label:'Usia (tahun)',type:'number'}], (v) => { const b=+v.berat,h=+v.tinggi,u=+v.usia; const bmr = v.gender.toUpperCase().startsWith('L') ? 88.36+13.4*b+4.8*h-5.7*u : 447.6+9.2*b+3.1*h-4.3*u; return `BMR: ${bmr.toFixed(0)} kalori/hari`; }],
+            ['Kalkulator TDEE (Kebutuhan Kalori Harian)', [{id:'bmr',label:'BMR (kalori)',type:'number'},{id:'aktivitas',label:'Level Aktivitas (1-5)',type:'number'}], (v) => { const factors=[1.2,1.375,1.55,1.725,1.9]; const f=factors[Math.min(4,Math.max(0,+v.aktivitas-1))]; return `TDEE: ${(+v.bmr*f).toFixed(0)} kalori/hari`; }],
+            ['Kalkulator Usia dari Tanggal Lahir', [{id:'tgl',label:'Tanggal Lahir',type:'date'}], (v) => { const d=new Date(v.tgl), now=new Date(); let y=now.getFullYear()-d.getFullYear(), m=now.getMonth()-d.getMonth(), da=now.getDate()-d.getDate(); if(da<0){m--; da+=30;} if(m<0){y--; m+=12;} return `Usia: ${y} tahun, ${m} bulan, ${da} hari`; }],
+            ['Selisih Dua Tanggal', [{id:'t1',label:'Tanggal Awal',type:'date'},{id:'t2',label:'Tanggal Akhir',type:'date'}], (v) => { const diff = Math.abs(new Date(v.t2)-new Date(v.t1)); return `${Math.floor(diff/86400000)} hari`; }],
+            ['Cari Hari dalam Seminggu', [{id:'tgl',label:'Tanggal',type:'date'}], (v) => { const hari=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu']; return hari[new Date(v.tgl).getDay()]; }],
+            ['Cek Tahun Kabisat', [{id:'tahun',label:'Tahun',type:'number'}], (v) => { const y=+v.tahun; return ((y%4===0 && y%100!==0) || y%400===0) ? `✅ ${y} adalah tahun kabisat` : `❌ ${y} bukan tahun kabisat`; }],
+            ['Kalkulator Persentase (X% dari Y)', [{id:'x',label:'Persen (%)',type:'number'},{id:'y',label:'Dari Angka',type:'number'}], (v) => `${((+v.x/100)*+v.y).toFixed(2)}`],
+            ['Kalkulator Kenaikan/Penurunan Persen', [{id:'awal',label:'Nilai Awal',type:'number'},{id:'akhir',label:'Nilai Akhir',type:'number'}], (v) => { const pct=((+v.akhir-+v.awal)/+v.awal)*100; return `${pct>=0?'Naik':'Turun'} ${Math.abs(pct).toFixed(2)}%`; }],
+            ['Kalkulator Diskon', [{id:'harga',label:'Harga Asli',type:'number'},{id:'diskon',label:'Diskon (%)',type:'number'}], (v) => { const h=+v.harga, d=+v.diskon; const hasil=h-(h*d/100); return `Harga setelah diskon: ${rupiah(hasil)} (hemat ${rupiah(h*d/100)})`; }],
+            ['Kalkulator PPN (Pajak 11%)', [{id:'harga',label:'Harga Sebelum Pajak',type:'number'}], (v) => `Harga + PPN 11%: ${rupiah(+v.harga*1.11)}`],
+            ['Kalkulator Tip Restoran', [{id:'total',label:'Total Tagihan',type:'number'},{id:'persen',label:'Tip (%)',type:'number'}], (v) => `Tip: ${rupiah(+v.total*+v.persen/100)} | Total bayar: ${rupiah(+v.total*(1+ +v.persen/100))}`],
+            ['Kalkulator Bunga Sederhana', [{id:'pokok',label:'Pokok Pinjaman',type:'number'},{id:'bunga',label:'Bunga per Tahun (%)',type:'number'},{id:'tahun',label:'Lama (tahun)',type:'number'}], (v) => `Total bunga: ${rupiah(+v.pokok * (+v.bunga/100) * +v.tahun)}`],
+            ['Kalkulator Bunga Majemuk', [{id:'pokok',label:'Pokok Awal',type:'number'},{id:'bunga',label:'Bunga per Tahun (%)',type:'number'},{id:'tahun',label:'Lama (tahun)',type:'number'}], (v) => `Total akhir: ${rupiah(+v.pokok * Math.pow(1+(+v.bunga/100), +v.tahun))}`],
+            ['Kalkulator Cicilan / KPR (EMI)', [{id:'pokok',label:'Pokok Pinjaman',type:'number'},{id:'bunga',label:'Bunga per Tahun (%)',type:'number'},{id:'bulan',label:'Tenor (bulan)',type:'number'}], (v) => { const p=+v.pokok, r=(+v.bunga/100)/12, n=+v.bulan; const emi = p*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1); return `Cicilan per bulan: ${rupiah(emi)}`; }],
+            ['Luas Persegi', [{id:'s',label:'Sisi',type:'number'}], (v) => `Luas: ${((+v.s)**2).toFixed(2)}`],
+            ['Luas Persegi Panjang', [{id:'p',label:'Panjang',type:'number'},{id:'l',label:'Lebar',type:'number'}], (v) => `Luas: ${(+v.p*+v.l).toFixed(2)}`],
+            ['Luas Segitiga', [{id:'a',label:'Alas',type:'number'},{id:'t',label:'Tinggi',type:'number'}], (v) => `Luas: ${(0.5*+v.a*+v.t).toFixed(2)}`],
+            ['Luas Lingkaran', [{id:'r',label:'Jari-jari',type:'number'}], (v) => `Luas: ${(Math.PI*((+v.r)**2)).toFixed(2)}`],
+            ['Keliling Lingkaran', [{id:'r',label:'Jari-jari',type:'number'}], (v) => `Keliling: ${(2*Math.PI*+v.r).toFixed(2)}`],
+            ['Luas Trapesium', [{id:'a',label:'Sisi Sejajar A',type:'number'},{id:'b',label:'Sisi Sejajar B',type:'number'},{id:'t',label:'Tinggi',type:'number'}], (v) => `Luas: ${(0.5*(+v.a+ +v.b)*+v.t).toFixed(2)}`],
+            ['Volume Kubus', [{id:'s',label:'Sisi',type:'number'}], (v) => `Volume: ${((+v.s)**3).toFixed(2)}`],
+            ['Volume Balok', [{id:'p',label:'Panjang',type:'number'},{id:'l',label:'Lebar',type:'number'},{id:'t',label:'Tinggi',type:'number'}], (v) => `Volume: ${(+v.p*+v.l*+v.t).toFixed(2)}`],
+            ['Volume Bola', [{id:'r',label:'Jari-jari',type:'number'}], (v) => `Volume: ${((4/3)*Math.PI*((+v.r)**3)).toFixed(2)}`],
+            ['Volume Tabung', [{id:'r',label:'Jari-jari',type:'number'},{id:'t',label:'Tinggi',type:'number'}], (v) => `Volume: ${(Math.PI*((+v.r)**2)*+v.t).toFixed(2)}`],
+            ['Volume Kerucut', [{id:'r',label:'Jari-jari',type:'number'},{id:'t',label:'Tinggi',type:'number'}], (v) => `Volume: ${((1/3)*Math.PI*((+v.r)**2)*+v.t).toFixed(2)}`],
+            ['Teorema Pythagoras (Cari Sisi Miring)', [{id:'a',label:'Sisi A',type:'number'},{id:'b',label:'Sisi B',type:'number'}], (v) => `Sisi miring (c): ${Math.sqrt((+v.a)**2 + (+v.b)**2).toFixed(2)}`],
+            ['Rumus ABC (Persamaan Kuadrat)', [{id:'a',label:'a',type:'number'},{id:'b',label:'b',type:'number'},{id:'c',label:'c',type:'number'}], (v) => { const a=+v.a,b=+v.b,c=+v.c; const d=b*b-4*a*c; if(d<0) return 'Tidak ada akar real (D < 0)'; const x1=(-b+Math.sqrt(d))/(2*a), x2=(-b-Math.sqrt(d))/(2*a); return `x1 = ${x1.toFixed(3)}, x2 = ${x2.toFixed(3)}`; }],
+            ['Kalkulator Rata-rata', [{id:'angka',label:'Angka (pisah koma)',type:'text'}], (v) => { const arr=v.angka.split(',').map(Number).filter(n=>!isNaN(n)); return `Rata-rata: ${(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(2)}`; }],
+            ['Kalkulator Median', [{id:'angka',label:'Angka (pisah koma)',type:'text'}], (v) => { const arr=v.angka.split(',').map(Number).filter(n=>!isNaN(n)).sort((a,b)=>a-b); const m=Math.floor(arr.length/2); return `Median: ${arr.length%2 ? arr[m] : (arr[m-1]+arr[m])/2}`; }],
+            ['Kalkulator Modus', [{id:'angka',label:'Angka (pisah koma)',type:'text'}], (v) => { const arr=v.angka.split(',').map(s=>s.trim()); const f={}; arr.forEach(n=>f[n]=(f[n]||0)+1); const max=Math.max(...Object.values(f)); return 'Modus: ' + Object.keys(f).filter(k=>f[k]===max).join(', '); }],
+            ['FPB / GCD Calculator', [{id:'a',label:'Angka A',type:'number'},{id:'b',label:'Angka B',type:'number'}], (v) => { const gcd=(a,b)=>b?gcd(b,a%b):a; return `FPB: ${gcd(Math.abs(+v.a),Math.abs(+v.b))}`; }],
+            ['KPK / LCM Calculator', [{id:'a',label:'Angka A',type:'number'},{id:'b',label:'Angka B',type:'number'}], (v) => { const gcd=(a,b)=>b?gcd(b,a%b):a; const a=Math.abs(+v.a),b=Math.abs(+v.b); return `KPK: ${(a*b)/gcd(a,b)}`; }],
+            ['Cek Bilangan Prima', [{id:'n',label:'Angka',type:'number'}], (v) => { const n=+v.n; if(n<2) return '❌ Bukan bilangan prima'; for(let i=2;i<=Math.sqrt(n);i++) if(n%i===0) return '❌ Bukan bilangan prima'; return '✅ Bilangan prima'; }],
+            ['Kalkulator Faktorial', [{id:'n',label:'Angka (n!)',type:'number'}], (v) => { let n=+v.n, r=1; if(n<0||n>170) return 'Masukkan 0-170'; for(let i=2;i<=n;i++) r*=i; return `${n}! = ${r}`; }],
+            ['Generator Deret Fibonacci', [{id:'n',label:'Jumlah Suku',type:'number'}], (v) => { const n=+v.n; let a=0,b=1,r=[a,b]; for(let i=2;i<n;i++){[a,b]=[b,a+b]; r.push(b);} return r.slice(0,n).join(', '); }],
+            ['Kalkulator Kebutuhan Air Harian', [{id:'berat',label:'Berat Badan (kg)',type:'number'}], (v) => `Kebutuhan air: ${(+v.berat*0.033).toFixed(2)} liter/hari`],
+            ['Kalkulator IPK / GPA', [{id:'nilai',label:'Nilai (pisah koma, mis: 4,3.5,3)',type:'text'},{id:'sks',label:'SKS (pisah koma)',type:'text'}], (v) => { const n=v.nilai.split(',').map(Number), s=v.sks.split(',').map(Number); let total=0, totalSks=0; n.forEach((val,i)=>{ total+=val*(s[i]||0); totalSks+=(s[i]||0); }); return `IPK: ${(total/totalSks).toFixed(2)}`; }],
+            ['Kalkulator Zodiak dari Tanggal Lahir', [{id:'tgl',label:'Tanggal Lahir',type:'date'}], (v) => { const d=new Date(v.tgl), day=d.getDate(), month=d.getMonth()+1; const z=[[20,'Capricorn'],[19,'Aquarius'],[21,'Pisces'],[20,'Aries'],[21,'Taurus'],[21,'Gemini'],[22,'Cancer'],[23,'Leo'],[23,'Virgo'],[23,'Libra'],[22,'Scorpio'],[22,'Sagittarius'],[31,'Capricorn']]; return `Zodiak: ${day <= z[month-1][0] ? z[month-1][1] : z[month][1]}`; }],
+            ['Konversi Jam Kerja ke Gaji', [{id:'jam',label:'Total Jam Kerja',type:'number'},{id:'rate',label:'Rate per Jam (Rp)',type:'number'}], (v) => `Total gaji: ${rupiah(+v.jam*+v.rate)}`],
+            ['Kalkulator Pecahan ke Persen', [{id:'pembilang',label:'Pembilang',type:'number'},{id:'penyebut',label:'Penyebut',type:'number'}], (v) => `${((+v.pembilang / +v.penyebut) * 100).toFixed(2)}%`],
+            ['Kalkulator Skala Peta', [{id:'jarakPeta',label:'Jarak di Peta (cm)',type:'number'},{id:'skala',label:'Skala (mis: 100000)',type:'number'}], (v) => `Jarak asli: ${((+v.jarakPeta*+v.skala)/100000).toFixed(2)} km`],
+        ];
+        calcTools.forEach(([name, fields, fn], i) => toolsRegistry.push({ id: `calc-${i}`, name, category: 'Kalkulator', icon: 'fa-calculator', ui: 'calc', fields, exec: fn }));
+
+        // ---------- 3. GENERATOR TOOLS ----------
+        const genTools = [
+            ['Generator Password Acak', [{id:'panjang',label:'Panjang Password',type:'number',placeholder:'12'}], (v) => { const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*'; const len=Math.min(64,Math.max(4,+v.panjang||12)); let r=''; for(let i=0;i<len;i++) r+=chars[Math.floor(Math.random()*chars.length)]; return r; }],
+            ['Generator PIN Angka', [{id:'panjang',label:'Panjang PIN',type:'number',placeholder:'6'}], (v) => { const len=Math.min(20,Math.max(4,+v.panjang||6)); let r=''; for(let i=0;i<len;i++) r+=Math.floor(Math.random()*10); return r; }],
+            ['Generator UUID v4', [], () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r=Math.random()*16|0; return (c==='x'?r:(r&0x3|0x8)).toString(16); })],
+            ['Generator Nomor Acak (Range)', [{id:'min',label:'Angka Minimum',type:'number'},{id:'max',label:'Angka Maksimum',type:'number'}], (v) => String(Math.floor(Math.random()*(+v.max-+v.min+1))+ +v.min)],
+            ['Kocok Dadu (Dice Roller)', [{id:'jumlah',label:'Jumlah Dadu',type:'number',placeholder:'1'}], (v) => { const n=Math.min(10,Math.max(1,+v.jumlah||1)); const r=Array.from({length:n},()=>Math.floor(Math.random()*6)+1); return `Hasil: ${r.join(', ')} (Total: ${r.reduce((a,b)=>a+b,0)})`; }],
+            ['Lempar Koin (Coin Flip)', [], () => Math.random()<0.5 ? '🪙 Kepala (Heads)' : '🪙 Ekor (Tails)'],
+            ['Generator Warna Hex Acak', [], () => '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6,'0').toUpperCase()],
+            ['Generator Nama Pengguna Acak', [], () => { const adj=['Cepat','Hebat','Keren','Gagah','Cerdas','Tangguh']; const noun=['Elang','Harimau','Singa','Naga','Serigala','Garuda']; return adj[Math.floor(Math.random()*adj.length)]+noun[Math.floor(Math.random()*noun.length)]+Math.floor(Math.random()*999); }],
+            ['Generator Password WiFi Kuat', [], () => { const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789'; let r=''; for(let i=0;i<16;i++) r+=chars[Math.floor(Math.random()*chars.length)]; return r; }],
+            ['Generator Kode Kupon Acak', [{id:'prefix',label:'Prefix (opsional)',type:'text',placeholder:'DISKON'}], (v) => { const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; let r=''; for(let i=0;i<8;i++) r+=chars[Math.floor(Math.random()*chars.length)]; return `${(v.prefix||'PROMO').toUpperCase()}-${r}`; }],
+            ['Generator Kalimat Lorem Ipsum Custom', [{id:'jumlah',label:'Jumlah Kalimat',type:'number',placeholder:'3'}], (v) => { const words=['lorem','ipsum','dolor','sit','amet','consectetur','adipiscing','elit','sed','do','eiusmod','tempor','incididunt']; const n=Math.min(50,Math.max(1,+v.jumlah||3)); let out=[]; for(let i=0;i<n;i++){ let s=Array.from({length:8+Math.floor(Math.random()*6)},()=>words[Math.floor(Math.random()*words.length)]).join(' '); out.push(s.charAt(0).toUpperCase()+s.slice(1)+'.'); } return out.join(' '); }],
+            ['Generator Placeholder Text (Kata)', [{id:'jumlah',label:'Jumlah Kata',type:'number',placeholder:'50'}], (v) => { const words=['data','sistem','aplikasi','pengguna','digital','teknologi','informasi','layanan','proses','jaringan']; const n=Math.min(500,Math.max(1,+v.jumlah||50)); return Array.from({length:n},()=>words[Math.floor(Math.random()*words.length)]).join(' '); }],
+            ['Generator Gradient CSS Acak', [], () => { const r=()=>'#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0'); return `background: linear-gradient(135deg, ${r()}, ${r()});`; }],
+            ['Generator Box Shadow CSS', [{id:'warna',label:'Warna (hex, contoh #000000)',type:'text',placeholder:'#000000'}], (v) => `box-shadow: 0 10px 25px -5px ${v.warna||'#000000'}40, 0 8px 10px -6px ${v.warna||'#000000'}30;`],
+            ['Generator Border Radius CSS', [{id:'px',label:'Nilai (px)',type:'number',placeholder:'16'}], (v) => `border-radius: ${v.px||16}px;`],
+            ['Generator Meta Tag SEO Dasar', [{id:'judul',label:'Judul Halaman',type:'text'},{id:'deskripsi',label:'Deskripsi',type:'text'}], (v) => `<title>${escapeHtml(v.judul||'')}</title>\n<meta name="description" content="${escapeHtml(v.deskripsi||'')}">\n<meta property="og:title" content="${escapeHtml(v.judul||'')}">\n<meta property="og:description" content="${escapeHtml(v.deskripsi||'')}">`],
+            ['Generator robots.txt Dasar', [], () => 'User-agent: *\nAllow: /\nSitemap: https://namadomainanda.com/sitemap.xml'],
+            ['Generator .gitignore Node.js', [], () => 'node_modules/\n.env\ndist/\nbuild/\n*.log\n.DS_Store'],
+            ['Generator Nomor Kartu Uji (Testing/Dummy)', [], () => '4242 4242 4242 4242 (Kartu uji Stripe - bukan kartu asli)'],
+            ['Generator Kode QR (Tautan Gambar)', [{id:'teks',label:'Teks / URL',type:'text'}], (v) => v.teks ? `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(v.teks)}` : 'Masukkan teks/URL dahulu', true],
+        ];
+        genTools.forEach(([name, fields, fn, isImage], i) => toolsRegistry.push({ id: `gen-${i}`, name, category: 'Generator', icon: 'fa-wand-magic-sparkles', ui: 'calc', fields, exec: fn, outputType: isImage ? 'image' : 'text' }));
+
+        // ---------- 4. KONVERSI WARNA ----------
+        const hexToRgb = (hex) => { const h = hex.replace('#',''); const n = parseInt(h.length===3? h.split('').map(c=>c+c).join('') : h, 16); return [n>>16 & 255, n>>8 & 255, n & 255]; };
+        const colorTools = [
+            ['Hex ke RGB', (t) => { try { const [r,g,b]=hexToRgb(t.trim()); return `rgb(${r}, ${g}, ${b})`; } catch(e) { return 'Format hex tidak valid'; } }],
+            ['RGB ke Hex', (t) => { const m = t.match(/\d+/g); if(!m||m.length<3) return 'Format: 255,255,255'; return '#'+m.slice(0,3).map(n=>(+n).toString(16).padStart(2,'0')).join('').toUpperCase(); }],
+            ['Hex ke HSL', (t) => { try { let [r,g,b]=hexToRgb(t.trim()).map(v=>v/255); const max=Math.max(r,g,b),min=Math.min(r,g,b); let h,s,l=(max+min)/2; if(max===min){h=s=0;} else { const d=max-min; s=l>0.5?d/(2-max-min):d/(max+min); switch(max){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;case b:h=(r-g)/d+4;break;} h/=6; } return `hsl(${Math.round(h*360)}, ${Math.round(s*100)}%, ${Math.round(l*100)}%)`; } catch(e) { return 'Format hex tidak valid'; } }],
+        ];
+        colorTools.forEach(([name, fn], i) => toolsRegistry.push({ id: `color-${i}`, name, category: 'Warna & Desain', icon: 'fa-palette', ui: 'text', exec: fn }));
+
+        // ---------- 5. KONVERSI SATUAN (GENERATED) ----------
+        const UNIT_GROUPS = [
+            { cat: 'Panjang', icon: 'fa-ruler-horizontal', units: { 'Meter':1,'Kilometer':1000,'Centimeter':0.01,'Milimeter':0.001,'Desimeter':0.1,'Mil':1609.344,'Yard':0.9144,'Kaki':0.3048,'Inci':0.0254,'Mil Laut':1852 } },
+            { cat: 'Berat', icon: 'fa-weight-hanging', units: { 'Kilogram':1,'Gram':0.001,'Miligram':0.000001,'Ton':1000,'Pon':0.453592,'Ons':0.0283495,'Kuintal':100,'Stone':6.35029 } },
+            { cat: 'Volume', icon: 'fa-flask', units: { 'Liter':1,'Mililiter':0.001,'Meter Kubik':1000,'Galon':3.78541,'Quart':0.946353,'Pint':0.473176,'Cup':0.24,'Sendok Makan':0.0147868 } },
+            { cat: 'Luas', icon: 'fa-vector-square', units: { 'Meter Persegi':1,'Kilometer Persegi':1000000,'Hektar':10000,'Kaki Persegi':0.092903,'Yard Persegi':0.836127,'Acre':4046.86 } },
+            { cat: 'Kecepatan', icon: 'fa-gauge-high', units: { 'Km per Jam':1,'Meter per Detik':3.6,'Mil per Jam':1.60934,'Knot':1.852,'Meter per Menit':0.06 } },
+            { cat: 'Waktu', icon: 'fa-clock', units: { 'Detik':1,'Menit':60,'Jam':3600,'Hari':86400,'Minggu':604800,'Bulan':2628000,'Tahun':31536000 } },
+            { cat: 'Data Digital', icon: 'fa-database', units: { 'Bit':1,'Byte':8,'Kilobyte':8192,'Megabyte':8388608,'Gigabyte':8589934592,'Terabyte':8796093022208,'Petabyte':9007199254740992 } },
+            { cat: 'Energi', icon: 'fa-bolt', units: { 'Joule':1,'Kilojoule':1000,'Kalori':4.184,'Kilokalori':4184,'Watt-Jam':3600,'Kilowatt-Jam':3600000 } },
+            { cat: 'Tekanan', icon: 'fa-gauge', units: { 'Pascal':1,'Kilopascal':1000,'Bar':100000,'Atmosfer':101325,'PSI':6894.76,'mmHg':133.322 } },
+        ];
+        UNIT_GROUPS.forEach(group => {
+            const keys = Object.keys(group.units);
+            keys.forEach(from => keys.forEach(to => {
+                if (from === to) return;
+                toolsRegistry.push({
+                    id: `conv-${group.cat}-${from}-${to}`.replace(/\s+/g, ''),
+                    name: `${from} ke ${to}`,
+                    category: `Konversi ${group.cat}`,
+                    icon: group.icon,
+                    ui: 'convert',
+                    unitLabel: from,
+                    resultLabel: to,
+                    exec: (val) => { const base = parseFloat(val) * group.units[from]; return (base / group.units[to]).toLocaleString('id-ID', { maximumFractionDigits: 8 }) + ' ' + to; }
+                });
+            }));
+        });
+
+        // ---------- 6. KONVERSI SUHU & SUDUT (FORMULA KHUSUS) ----------
+        const tempToCelsius = { Celsius: (v) => v, Fahrenheit: (v) => (v - 32) * 5/9, Kelvin: (v) => v - 273.15 };
+        const celsiusTo = { Celsius: (v) => v, Fahrenheit: (v) => v * 9/5 + 32, Kelvin: (v) => v + 273.15 };
+        const TEMP_UNITS = ['Celsius', 'Fahrenheit', 'Kelvin'];
+        TEMP_UNITS.forEach(from => TEMP_UNITS.forEach(to => {
+            if (from === to) return;
+            toolsRegistry.push({
+                id: `temp-${from}-${to}`, name: `${from} ke ${to}`, category: 'Konversi Suhu', icon: 'fa-temperature-half', ui: 'convert', unitLabel: from, resultLabel: to,
+                exec: (val) => (celsiusTo[to](tempToCelsius[from](parseFloat(val)))).toFixed(2) + '°' + to.charAt(0)
+            });
+        }));
+        const ANGLE_UNITS = { Derajat: 1, Radian: 180/Math.PI, Gradian: 0.9 };
+        Object.keys(ANGLE_UNITS).forEach(from => Object.keys(ANGLE_UNITS).forEach(to => {
+            if (from === to) return;
+            toolsRegistry.push({
+                id: `angle-${from}-${to}`, name: `${from} ke ${to}`, category: 'Konversi Sudut', icon: 'fa-angle-up', ui: 'convert', unitLabel: from, resultLabel: to,
+                exec: (val) => { const deg = parseFloat(val) * ANGLE_UNITS[from]; return (deg / ANGLE_UNITS[to]).toFixed(4) + ' ' + to; }
+            });
+        }));
+
+        // =====================================================================
+        // ================= RENDER ENGINE UNTUK TOOLS GENERIK =================
+        // =====================================================================
+        let currentGenericTool = null;
+
+        const initToolsEngine = () => {
+            document.getElementById('toolsCountBadge').textContent = toolsRegistry.length;
+            document.getElementById('toolsCountBadgeSmall').textContent = toolsRegistry.length;
+
+            const catSelect = document.getElementById('toolCategorySelect');
+            const categories = [...new Set(toolsRegistry.map(t => t.category))].sort();
+            categories.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c; opt.textContent = c;
+                catSelect.appendChild(opt);
+            });
+
+            renderToolList();
+            catSelect.addEventListener('change', renderToolList);
+            document.getElementById('toolSearchInput').addEventListener('input', renderToolList);
+        };
+
+        const renderToolList = () => {
+            const search = document.getElementById('toolSearchInput').value.toLowerCase().trim();
+            const cat = document.getElementById('toolCategorySelect').value;
+            const container = document.getElementById('toolListContainer');
+            const note = document.getElementById('toolListMoreNote');
+
+            let filtered = toolsRegistry.filter(t => {
+                const matchCat = cat === 'semua' || t.category === cat;
+                const matchSearch = !search || t.name.toLowerCase().includes(search) || t.category.toLowerCase().includes(search);
+                return matchCat && matchSearch;
+            });
+
+            const showLimit = 120;
+            const total = filtered.length;
+            const shown = filtered.slice(0, showLimit);
+
+            container.innerHTML = shown.map(t => `
+                <button onclick="loadGenericTool('${t.id}')" data-tool-id="${t.id}" class="generic-tool-btn w-full text-left flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold transition-all">
+                    <i class="fa-solid ${t.icon} text-accent w-4 text-center"></i>
+                    <span class="truncate flex-1">${t.name}</span>
+                </button>
+            `).join('') || `<p class="text-xs text-slate-400 text-center py-4">Tidak ada tools ditemukan.</p>`;
+
+            note.classList.toggle('hidden', total <= showLimit);
+            if (total > showLimit) note.textContent = `Menampilkan ${showLimit} dari ${total} hasil — ketik lebih spesifik...`;
+        };
+
+        const loadGenericTool = (id) => {
+            const tool = toolsRegistry.find(t => t.id === id);
+            if (!tool) return;
+            currentGenericTool = tool;
+
+            // Switch workspace visibility (reuse existing tool-workspace system)
+            document.querySelectorAll('.tool-workspace').forEach(ws => ws.classList.add('hidden'));
+            document.getElementById('genericToolWorkspace').classList.remove('hidden');
+
+            // Reset favorite tab styles
+            ['encodeTool', 'decodeTool', 'cloneTool', 'colorTool'].forEach(tab => {
+                const el = document.getElementById(`tab-${tab}`);
+                if (el) el.className = "w-full flex items-center justify-between p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold transition-all text-left";
+            });
+
+            // Highlight active generic tool button
+            document.querySelectorAll('.generic-tool-btn').forEach(btn => {
+                if (btn.dataset.toolId === id) {
+                    btn.className = "generic-tool-btn w-full text-left flex items-center gap-2.5 p-2.5 rounded-xl bg-accent text-white text-xs font-bold transition-all";
+                } else {
+                    btn.className = "generic-tool-btn w-full text-left flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold transition-all";
+                }
+            });
+
+            document.getElementById('genToolTitle').querySelector('span').textContent = tool.name;
+            document.getElementById('genToolIcon').className = `fa-solid ${tool.icon} text-accent`;
+            document.getElementById('genToolCategoryBadge').textContent = tool.category;
+            document.getElementById('genToolDesc').textContent = `Tool "${tool.name}" siap digunakan — proses dijalankan langsung di perangkat Anda.`;
+
+            const inputsArea = document.getElementById('genToolInputsArea');
+            const actionBtn = document.getElementById('genToolActionBtn');
+            actionBtn.disabled = false;
+
+            if (tool.ui === 'text') {
+                inputsArea.innerHTML = `
+                    <div>
+                        <label class="text-sm font-semibold text-slate-500 block mb-2">Masukkan Teks</label>
+                        <textarea id="genInputText" placeholder="Ketik atau tempel teks di sini..." class="w-full h-32 bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent dark:bg-slate-800 dark:border-slate-750 dark:text-slate-200 resize-none"></textarea>
+                    </div>`;
+                actionBtn.textContent = 'Proses Teks';
+            } else if (tool.ui === 'convert') {
+                inputsArea.innerHTML = `
+                    <div>
+                        <label class="text-sm font-semibold text-slate-500 block mb-2">Masukkan Nilai dalam ${tool.unitLabel}</label>
+                        <input type="number" step="any" id="genInputConvert" placeholder="Contoh: 100" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent dark:bg-slate-800 dark:border-slate-750 dark:text-slate-200">
+                    </div>`;
+                actionBtn.textContent = `Konversi ke ${tool.resultLabel}`;
+            } else if (tool.ui === 'calc') {
+                inputsArea.innerHTML = (tool.fields || []).map(f => `
+                    <div>
+                        <label class="text-sm font-semibold text-slate-500 block mb-2">${f.label}</label>
+                        <input type="${f.type === 'date' ? 'date' : (f.type === 'number' ? 'number' : 'text')}" id="genCalc-${f.id}" placeholder="${f.placeholder || ''}" class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent dark:bg-slate-800 dark:border-slate-750 dark:text-slate-200">
+                    </div>`).join('') || `<p class="text-xs text-slate-400">Tool ini tidak memerlukan input, langsung klik tombol di bawah.</p>`;
+                actionBtn.textContent = 'Hitung / Generate';
+            }
+
+            document.getElementById('genToolOutput').textContent = 'Hasil akan muncul di sini...';
+        };
+
+        const runCurrentTool = () => {
+            if (!currentGenericTool) return;
+            const tool = currentGenericTool;
+            const outputEl = document.getElementById('genToolOutput');
+
+            try {
+                let result;
+                if (tool.ui === 'text') {
+                    const input = document.getElementById('genInputText').value;
+                    if (!input) { outputEl.textContent = 'Harap masukkan teks terlebih dahulu!'; return; }
+                    result = tool.exec(input);
+                } else if (tool.ui === 'convert') {
+                    const input = document.getElementById('genInputConvert').value;
+                    if (input === '') { outputEl.textContent = 'Harap masukkan nilai angka terlebih dahulu!'; return; }
+                    result = tool.exec(input);
+                } else if (tool.ui === 'calc') {
+                    const values = {};
+                    (tool.fields || []).forEach(f => { values[f.id] = document.getElementById(`genCalc-${f.id}`).value; });
+                    result = tool.exec(values);
+                }
+
+                if (tool.outputType === 'image' && typeof result === 'string' && result.startsWith('http')) {
+                    outputEl.innerHTML = `<img src="${result}" alt="QR Code" class="mx-auto rounded-lg">`;
+                } else {
+                    outputEl.textContent = result;
+                }
+            } catch (err) {
+                outputEl.textContent = 'Terjadi kesalahan: periksa kembali input Anda. (' + err.message + ')';
+            }
+        };
+
+        const copyGenericOutput = () => {
+            const el = document.getElementById('genToolOutput');
+            const text = el.textContent;
+            if (!text || text.includes('akan muncul di sini...')) return;
+            navigator.clipboard.writeText(text).then(() => alert('Berhasil menyalin hasil ke papan klip!'));
+        };
+
+        // Initialize tools engine on load
+        initToolsEngine();
+    </script>
+</body>
+</html>

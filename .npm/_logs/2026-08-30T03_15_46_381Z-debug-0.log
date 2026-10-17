@@ -1,0 +1,47 @@
+0 verbose cli /data/data/com.termux/files/usr/bin/node /data/data/com.termux/files/usr/bin/npm
+1 info using npm@11.19.0
+2 info using node@v26.4.0
+3 silly config load:file:/data/data/com.termux/files/usr/lib/node_modules/npm/npmrc
+4 silly config load:file:/data/data/com.termux/files/home/.npmrc
+5 silly config load:file:/data/data/com.termux/files/usr/etc/npmrc
+6 verbose title npm install browse-sync
+7 verbose argv "install" "--global" "browse-sync"
+8 verbose logfile logs-max:10 dir:/data/data/com.termux/files/home/.npm/_logs/2026-08-30T03_15_46_381Z-
+9 verbose logfile /data/data/com.termux/files/home/.npm/_logs/2026-08-30T03_15_46_381Z-debug-0.log
+10 silly packumentCache heap:1079771136 maxSize:269942784 maxEntrySize:134971392
+11 silly logfile start cleaning logs, removing 1 files
+12 silly logfile done cleaning log files
+13 silly idealTree buildDeps
+14 silly fetch manifest browse-sync@*
+15 silly packumentCache full:https://registry.npmjs.org/browse-sync cache-miss
+16 http fetch GET 404 https://registry.npmjs.org/browse-sync 1376ms (cache skip)
+17 silly placeDep ROOT browse-sync@ OK for:  want: *
+18 verbose stack HttpErrorGeneral: 404 Not Found - GET https://registry.npmjs.org/browse-sync - Not found
+18 verbose stack     at /data/data/com.termux/files/usr/lib/node_modules/npm/node_modules/npm-registry-fetch/lib/check-response.js:103:15
+18 verbose stack     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+18 verbose stack     at async RegistryFetcher.packument (/data/data/com.termux/files/usr/lib/node_modules/npm/node_modules/pacote/lib/registry.js:90:19)
+18 verbose stack     at async RegistryFetcher.manifest (/data/data/com.termux/files/usr/lib/node_modules/npm/node_modules/pacote/lib/registry.js:128:23)
+18 verbose stack     at async #fetchManifest (/data/data/com.termux/files/usr/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:1346:20)
+18 verbose stack     at async #nodeFromEdge (/data/data/com.termux/files/usr/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:1162:19)
+18 verbose stack     at async #buildDepStep (/data/data/com.termux/files/usr/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:999:15)
+18 verbose stack     at async Arborist.buildIdealTree (/data/data/com.termux/files/usr/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js:180:7)
+18 verbose stack     at async Arborist.reify (/data/data/com.termux/files/usr/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:118:5)
+18 verbose stack     at async Install.exec (/data/data/com.termux/files/usr/lib/node_modules/npm/lib/commands/install.js:158:5)
+19 verbose statusCode 404
+20 verbose pkgid browse-sync@*
+21 error code E404
+22 error 404 Not Found - GET https://registry.npmjs.org/browse-sync - Not found
+23 error 404
+24 error 404  The requested resource 'browse-sync@*' could not be found or you do not have permission to access it.
+25 error 404
+26 error 404 Note that you can also install from a
+27 error 404 tarball, folder, http url, or git url.
+28 silly unfinished npm timer reify 1788059751194
+29 silly unfinished npm timer reify:loadTrees 1788059751231
+30 verbose cwd /data/data/com.termux/files/home
+31 verbose os Linux 4.9.117+
+32 verbose node v26.4.0
+33 verbose npm  v11.19.0
+34 verbose exit 1
+35 verbose code 1
+36 error A complete log of this run can be found in: /data/data/com.termux/files/home/.npm/_logs/2026-08-30T03_15_46_381Z-debug-0.log

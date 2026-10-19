@@ -16,7 +16,7 @@ function showPromptView(r, delFn){
   pvRow = r; pvDel = delFn;
   const p = r.profiles || PROF[r.user_id] || {};
   const name = p.display_name || "Anonim";
-  $("#pvTag").innerHTML = `<i style="background:${color(r.category)}"></i>${esc(r.category)}${r.is_public ? "" : ' <span class="lock">Pribadi</span>'}`;
+  $("#pvTag").innerHTML = `<i style="background:${color(r.category)}"></i>${esc(r.category)}${r.is_public ? "" : ' <span class="lock">Pribadi</span>'} ${statusChip(r)}`;
   $("#pvTitle").textContent = r.title;
   const d = $("#pvDesc"); d.textContent = r.description || ""; d.hidden = !r.description;
   const by = $("#pvBy");

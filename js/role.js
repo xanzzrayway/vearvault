@@ -23,7 +23,7 @@ $("#rolList").onclick = async e => {
 
 /* Hanya prompt publik dengan isi lebih dari MISSION.chars karakter yang dihitung */
 function countMission(){
-  return rows.filter(r => user && r.user_id===user.id && r.is_public && charLen(r.content) > MISSION.chars).length;
+  return rows.filter(r => user && r.user_id===user.id && r.is_public && r.status==="approved" && charLen(r.content) > MISSION.chars).length;
 }
 function paintMission(n){
   const done = hasRole(MISSION.role);
@@ -34,7 +34,7 @@ function paintMission(n){
     <p>Upload ${fmt(MISSION.count)} prompt dengan isi lebih dari ${fmt(MISSION.chars)} karakter dan dapatkan role Gear Vault.</p>
     <div class="bar2"><i style="width:${pct}%"></i></div>
     <div class="mnum"><b>${fmt(shownN)}</b> / ${fmt(MISSION.count)}</div>
-    <div class="note">Hanya prompt publik yang dihitung.</div>
+    <div class="note">Hanya prompt publik yang sudah disetujui admin yang dihitung.</div>
   </div>${done ? "" : '<button class="btn" id="misAdd" type="button">Tambah prompt</button>'}`;
   const a = $("#misAdd");
   if(a) a.onclick = () => { $("#mis").close(); $("#addBtn").click(); };

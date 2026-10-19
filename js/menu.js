@@ -11,7 +11,7 @@ function paintDrawerUser(){
   d.innerHTML = `<button class="dr-card" id="drCard" type="button">${avatarTag(img, name, "avatar sm")}<div><b>${esc(name)}</b><span class="pill">${esc(roleName(profile && profile.role))}</span></div></button>`;
   $("#drCard").onclick = () => { $("#drawer").close(); openProfile(); };
 }
-$("#menuBtn").onclick = () => { paintDrawerUser(); $("#drawer").showModal(); };
+$("#menuBtn").onclick = () => { paintDrawerUser(); $("#drawer").showModal(); if(typeof refreshReviewCount === "function") refreshReviewCount(); };
 $("#drX").onclick = () => $("#drawer").close();
 $("#drawer").addEventListener("click", e => { if(e.target === $("#drawer")) $("#drawer").close(); });
 
@@ -22,6 +22,7 @@ const GO = {
   box: () => openBox(),
   find: () => openFind(),
   store: () => openStore(),
+  review: () => openReview(),
   set: () => openSettings()
 };
 $("#drawer").querySelectorAll("[data-go]").forEach(b => b.onclick = () => {

@@ -2,7 +2,7 @@
 async function load(){
   if(!configured){ render(); return; }
   $("#grid").innerHTML = '<div class="skel"></div><div class="skel"></div><div class="skel"></div>';
-  const { data, error } = await sb.from("prompts").select("id,user_id,title,description,content,category,is_public,created_at").order("created_at",{ascending:false});
+  const { data, error } = await sb.from("prompts").select("id,user_id,title,description,content,category,is_public,status,review_note,created_at").order("created_at",{ascending:false});
   if(error){ toast("Gagal memuat prompt"); rows = []; render(); return; }
   const map = {};
   const ps = await sb.from("profiles").select("id,display_name,avatar_url,role");
@@ -14,7 +14,7 @@ async function load(){
 function render(){
   const list = rows.filter(r =>
     (cat==="Semua" || r.category===cat) &&
-    (view==="all" ? r.is_public : (user && r.user_id===user.id)) &&
+    (view==="all" ? (r.is_public && r.status==="approved") : (user && r.user_id===user.id)) &&
     (!term || (r.title+" "+(r.description||"")+" "+r.content).toLowerCase().includes(term))
   );
   const g = $("#grid");
@@ -86,16 +86,16 @@ $("#form").onsubmit = async e => {
     content: $("#fBody").value.trim(),
     is_public: $("#fPub").checked
   };
-  const res = await sb.from("prompts").insert(row).select("id,user_id,title,description,content,category,is_public,created_at").single();
+  const res = await sb.from("prompts").insert(row).select("id,user_id,title,description,content,category,is_public,status,review_note,created_at").single();
   if(res.error){
     btn.disabled = false;
     const em = res.error.message || "";
-    return toast(/duplikat/.test(em) ? "Prompt yang sama sudah pernah kamu kirim" : /terlalu banyak/.test(em) ? "Terlalu banyak, tunggu sebentar" : "Gagal menyimpan prompt");
+    return toast(/duplikat/.test(em) ? "Prompt yang sama sudah pernah kamu kirim" : /antrian penuh/.test(em) ? "Terlalu banyak prompt menunggu tinjauan, tunggu admin dulu" : /terlalu banyak/.test(em) ? "Terlalu banyak, tunggu sebentar" : "Gagal menyimpan prompt");
   }
   const data = { ...res.data, profiles: { display_name: profile.display_name, avatar_url: profile.avatar_url } };
   btn.disabled = false;
-  rows.unshift(data); $("#form").reset(); $("#fPub").checked = true; setCat(CATS[0][0]); updCnt(); $("#dlg").close(); render(); refreshProfileList(); toast("Prompt disimpan");
-  if(row.is_public && charLen(row.content) > MISSION.chars && !hasRole(MISSION.role)){
+  rows.unshift(data); $("#form").reset(); $("#fPub").checked = true; setCat(CATS[0][0]); updCnt(); $("#dlg").close(); render(); refreshProfileList(); toast(data.status==="pending" ? "Prompt terkirim, menunggu tinjauan admin" : "Prompt disimpan");
+  if(data.status==="approved" && row.is_public && charLen(row.content) > MISSION.chars && !hasRole(MISSION.role)){
     const p = await loadProfile();
     if(p){ profile = p; renderAuth(); syncProfileView(); if(hasRole(MISSION.role)) toast("Role Gear Vault terbuka"); }
   }
@@ -110,14 +110,26 @@ function updCnt(){
 $("#fBody").addEventListener("input", updCnt);
 $("#fPub").addEventListener("change", updCnt);
 
+/* ---------- Status tinjauan (terlihat oleh pemilik dan admin) ---------- */
+function statusChip(r){
+  if(!user || !(r.user_id===user.id || isAdmin())) return "";
+  if(r.status==="pending") return '<span class="st wait">Menunggu tinjauan</span>';
+  if(r.status==="rejected") return '<span class="st no">Ditolak</span>';
+  return "";
+}
+function rejectNote(r){
+  return (r.status==="rejected" && user && r.user_id===user.id && r.review_note) ? `<p class="rejn">Alasan: ${esc(r.review_note)}</p>` : "";
+}
+
 /* ---------- Kartu prompt (dipakai di beranda dan halaman profil) ---------- */
 function cardHTML(r){
     const mine = user && r.user_id===user.id;
     const p = r.profiles || {};
     const name = p.display_name || "Anonim";
     return `<article class="card" data-id="${r.id}" tabindex="0">
-      <div class="top"><span class="tag"><i style="background:${color(r.category)}"></i>${esc(r.category)}</span>${r.is_public?"":'<span class="lock">Pribadi</span>'}</div>
+      <div class="top"><span class="tag"><i style="background:${color(r.category)}"></i>${esc(r.category)}</span>${r.is_public?"":'<span class="lock">Pribadi</span>'}${statusChip(r)}</div>
       <h3>${esc(r.title)}</h3>
+      ${rejectNote(r)}
       ${r.description ? `<p class="desc">${esc(r.description)}</p>` : ""}
       <div class="body${r.description ? " s" : ""}">${esc(r.content)}</div>
       <div class="foot">

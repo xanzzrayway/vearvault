@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-build="20261009181835">
+<html lang="id" data-build="20261019101757">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/theme.js?v=20261009181835"></script>
-<link rel="stylesheet" href="css/style.css?v=20261009181835">
+<script src="js/theme.js?v=20261019101757"></script>
+<link rel="stylesheet" href="css/style.css?v=20261019101757">
 </head>
 <body>
 <div class="orbs" aria-hidden="true"></div>
@@ -53,8 +53,9 @@
     <label>Deskripsi<textarea id="fDesc" maxlength="300"></textarea></label>
     <div class="fld"><span>AI</span><button type="button" class="pickbtn" id="catBtn"></button><input type="hidden" id="fCat" value="ChatGPT"></div>
     <label>Prompt<textarea id="fBody" required></textarea></label>
-    <div class="cnt"><span id="cntN">0 karakter</span><span class="ok" id="cntOk" hidden>Masuk Misi Role</span></div>
+    <div class="cnt"><span id="cntN">0 karakter</span><span class="ok" id="cntOk" hidden>Dihitung Misi Role setelah disetujui</span></div>
     <div class="pub"><span>Jadikan publik</span><label class="sw"><input type="checkbox" id="fPub" checked><span></span></label></div>
+    <p class="note pubn">Prompt publik ditinjau admin dulu sebelum tampil di beranda.</p>
     <button class="btn" type="submit" id="saveBtn">Simpan</button>
   </form>
 </dialog>
@@ -175,6 +176,7 @@
     <button class="dr-item" data-go="pm" type="button" style="--i:3"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg></span><span class="lb">Pesan</span><b class="cb" id="pmBadge" hidden>0</b><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <button class="dr-item" data-go="box" type="button" style="--i:4"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 3h6l1-3h5"/></svg></span><span class="lb">Box</span><b class="cb" id="boxBadge" hidden>0</b><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <button class="dr-item" data-go="find" type="button" style="--i:5"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span><span class="lb">Cari Akun</span><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    <button class="dr-item" data-go="review" id="drReview" type="button" style="--i:6" hidden><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><span class="lb">Tinjau Prompt</span><b class="cb" id="revBadge" hidden>0</b><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <div class="dr-sep"></div>
     <button class="dr-item hot" data-go="store" type="button" style="--i:6"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 016 0"/></svg></span><span class="lb">Toko Prompt Premium</span><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <button class="dr-item" data-go="set" type="button" style="--i:7"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></span><span class="lb">Pengaturan</span><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
@@ -199,6 +201,23 @@
     <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="fnQ" type="search" placeholder="Cari nama akun" aria-label="Cari akun" autocomplete="off"></div>
     <div class="fn-list" id="fnList"></div>
   </div>
+</dialog>
+
+<dialog id="rev" class="page">
+  <div class="pf-bar"><button class="back" id="rvX" type="button" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><span>Tinjau Prompt</span><em class="rv-c" id="rvCount"></em></div>
+  <div class="fn-wrap rv-wrap">
+    <p class="note">Prompt publik baru tampil di beranda setelah kamu setujui. Yang paling lama menunggu ada di atas.</p>
+    <div class="fn-list rv-list" id="rvList"></div>
+  </div>
+</dialog>
+
+<dialog id="rj">
+  <div class="mh"><h2>Tolak prompt</h2><button class="x" id="rjX" type="button" aria-label="Tutup">&times;</button></div>
+  <form id="rjForm">
+    <p class="rj-t" id="rjT"></p>
+    <label>Alasan (boleh dikosongkan)<textarea id="rjText" maxlength="200"></textarea></label>
+    <button class="btn danger" type="submit" id="rjSend">Tolak prompt</button>
+  </form>
 </dialog>
 
 <dialog id="sd">
@@ -317,26 +336,27 @@
 
 <div class="toast" id="toast"></div>
 
-<script defer src="js/update.js?v=20261009181835"></script>
-<script defer src="js/lock.js?v=20261009181835"></script>
-<script defer src="js/config.js?v=20261009181835"></script>
-<script defer src="js/core.js?v=20261009181835"></script>
-<script defer src="js/auth.js?v=20261009181835"></script>
-<script defer src="js/prompts.js?v=20261009181835"></script>
-<script defer src="js/account.js?v=20261009181835"></script>
-<script defer src="js/profile.js?v=20261009181835"></script>
-<script defer src="js/role.js?v=20261009181835"></script>
-<script defer src="js/picker.js?v=20261009181835"></script>
-<script defer src="js/viewer.js?v=20261009181835"></script>
-<script defer src="js/settings.js?v=20261009181835"></script>
-<script defer src="js/menu.js?v=20261009181835"></script>
-<script defer src="js/chat.js?v=20261009181835"></script>
-<script defer src="js/box.js?v=20261009181835"></script>
-<script defer src="js/find.js?v=20261009181835"></script>
-<script defer src="js/dm.js?v=20261009181835"></script>
-<script defer src="js/store.js?v=20261009181835"></script>
-<script defer src="js/admin.js?v=20261009181835"></script>
-<script defer src="js/bot.js?v=20261009181835"></script>
-<script defer src="js/main.js?v=20261009181835"></script>
+<script defer src="js/update.js?v=20261019101757"></script>
+<script defer src="js/lock.js?v=20261019101757"></script>
+<script defer src="js/config.js?v=20261019101757"></script>
+<script defer src="js/core.js?v=20261019101757"></script>
+<script defer src="js/auth.js?v=20261019101757"></script>
+<script defer src="js/prompts.js?v=20261019101757"></script>
+<script defer src="js/account.js?v=20261019101757"></script>
+<script defer src="js/profile.js?v=20261019101757"></script>
+<script defer src="js/role.js?v=20261019101757"></script>
+<script defer src="js/picker.js?v=20261019101757"></script>
+<script defer src="js/viewer.js?v=20261019101757"></script>
+<script defer src="js/settings.js?v=20261019101757"></script>
+<script defer src="js/menu.js?v=20261019101757"></script>
+<script defer src="js/chat.js?v=20261019101757"></script>
+<script defer src="js/box.js?v=20261019101757"></script>
+<script defer src="js/find.js?v=20261019101757"></script>
+<script defer src="js/dm.js?v=20261019101757"></script>
+<script defer src="js/store.js?v=20261019101757"></script>
+<script defer src="js/admin.js?v=20261019101757"></script>
+<script defer src="js/review.js?v=20261019101757"></script>
+<script defer src="js/bot.js?v=20261019101757"></script>
+<script defer src="js/main.js?v=20261019101757"></script>
 </body>
 </html>

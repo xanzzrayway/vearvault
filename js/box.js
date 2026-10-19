@@ -8,7 +8,7 @@ function paintBadge(){
   const d = $("#pmBadge");
   d.textContent = dmUnread > 99 ? "99+" : dmUnread;
   d.hidden = dmUnread === 0;
-  $("#menuDot").hidden = (unread + dmUnread) === 0;
+  $("#menuDot").hidden = (unread + dmUnread + (typeof revCount === "number" ? revCount : 0)) === 0;
 }
 async function refreshUnread(){
   const { count } = await sb.from("inbox").select("id", { count:"exact", head:true }).eq("is_read", false);

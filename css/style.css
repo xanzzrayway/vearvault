@@ -581,3 +581,17 @@ button:focus{outline:none}
 .rv-acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
 .rj-t{font-weight:700;font-size:15px;overflow-wrap:anywhere}
 .avatar.xs{width:26px;height:26px;font-size:12px;box-shadow:none;border-width:1px;flex:none}
+
+
+/* Panel admin dan informasi pop up */
+#an,#anf{width:min(440px,calc(100% - 24px))}
+#anT{overflow-wrap:anywhere;padding-right:8px}
+#anB{max-height:50vh;overflow-y:auto}
+.pn{align-items:center}
+.pn-ic{flex:none;width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--bluegrad);color:#fff}
+.pn-ic svg{width:22px;height:22px}
+.pn .fr-t .note{display:block;margin-top:2px}
+.an-cur{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9)}
+.an-cur[hidden]{display:none}
+.an-cur>div{min-width:0;display:grid;gap:2px}
+.an-cur b{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

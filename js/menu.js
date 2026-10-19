@@ -23,6 +23,7 @@ const GO = {
   find: () => openFind(),
   store: () => openStore(),
   review: () => openReview(),
+  panel: () => openPanel(),
   set: () => openSettings()
 };
 $("#drawer").querySelectorAll("[data-go]").forEach(b => b.onclick = () => {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-build="20261020102034">
+<html lang="id" data-build="20261020110906">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/theme.js?v=20261020102034"></script>
-<link rel="stylesheet" href="css/style.css?v=20261020102034">
+<script src="js/theme.js?v=20261020110906"></script>
+<link rel="stylesheet" href="css/style.css?v=20261020110906">
 </head>
 <body>
 <div class="orbs" aria-hidden="true"></div>
@@ -176,6 +176,7 @@
     <button class="dr-item" data-go="pm" type="button" style="--i:3"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 8l9 6 9-6"/></svg></span><span class="lb">Pesan</span><b class="cb" id="pmBadge" hidden>0</b><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <button class="dr-item" data-go="box" type="button" style="--i:4"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 3h6l1-3h5"/></svg></span><span class="lb">Box</span><b class="cb" id="boxBadge" hidden>0</b><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <button class="dr-item" data-go="find" type="button" style="--i:5"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span><span class="lb">Cari Akun</span><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    <button class="dr-item" data-go="mission" id="drMission" type="button" style="--i:6"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4z"/><path d="M17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3"/></svg></span><span class="lb">Misi</span><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <button class="dr-item" data-go="review" id="drReview" type="button" style="--i:6" hidden><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><span class="lb">Tinjau Prompt</span><b class="cb" id="revBadge" hidden>0</b><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <button class="dr-item" data-go="panel" id="drPanel" type="button" style="--i:7" hidden><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg></span><span class="lb">Panel</span><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <div class="dr-sep"></div>
@@ -227,6 +228,7 @@
     <div class="fn-list" id="pnList">
       <button class="fr pn" type="button" data-a="info"><span class="pn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11v2a1 1 0 001 1h2l5 4V6L7 10H5a1 1 0 00-1 1z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11"/></svg></span><div class="fr-t"><b>Kirim Informasi Pop up</b><span class="note">Tampil ke semua pengguna saat masuk</span></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
       <button class="fr pn" type="button" data-a="multi"><span class="pn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5L12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg></span><div class="fr-t"><b>Upload Multi Prompt</b><span class="note">Unggah banyak file .txt sekaligus</span></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button class="fr pn" type="button" data-a="mission"><span class="pn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4z"/><path d="M17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3"/></svg></span><div class="fr-t"><b>Tambahkan Misi</b><span class="note">Buat misi dan hadiah untuk semua pengguna</span></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
   </div>
 </dialog>
@@ -265,6 +267,51 @@
     <div class="pub"><span>Jadikan publik</span><label class="sw"><input type="checkbox" id="muPub" checked><span></span></label></div>
     <div class="mu-foot"><span id="muStat"></span><button class="btn" type="button" id="muGo" disabled>Unggah</button></div>
   </div>
+</dialog>
+
+<dialog id="ms" class="page">
+  <div class="pf-bar"><button class="back" id="msX" type="button" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><span>Misi</span></div>
+  <div class="fn-wrap">
+    <div class="fn-list ms-list" id="msList"></div>
+  </div>
+</dialog>
+
+<dialog id="mr">
+  <div class="mh"><h2 id="mrT"></h2><button class="x" id="mrX" type="button" aria-label="Tutup">&times;</button></div>
+  <div class="am-body mr-body" id="mrBody"></div>
+</dialog>
+
+<dialog id="mf" class="page">
+  <div class="pf-bar"><button class="back" id="mfX" type="button" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><span>Tambahkan Misi</span></div>
+  <div class="fn-wrap"><div class="mf-scroll">
+    <form id="mfForm">
+      <div class="seg mf-seg" id="mfKind"><button type="button" class="on" data-k="progress">Progress Prompt</button><button type="button" data-k="page">Selesaikan Page</button></div>
+      <label>Judul misi<input type="text" id="mfTitle" maxlength="80" required></label>
+      <label>Deskripsi<textarea id="mfDesc" maxlength="300"></textarea></label>
+      <div id="mfProg">
+        <label>Target jumlah prompt (1 sampai 100)<input type="text" inputmode="numeric" id="mfTarget" maxlength="3" value="10"></label>
+        <p class="note">Yang dihitung: prompt publik yang disetujui admin dan dibuat setelah misi ini dibuat.</p>
+      </div>
+      <div id="mfPage" hidden>
+        <div class="mf-steps" id="mfSteps"></div>
+        <div class="mf-add" id="mfAdd">
+          <button class="btn sm line" type="button" data-add="tiktok">+ TikTok</button>
+          <button class="btn sm line" type="button" data-add="youtube">+ YouTube</button>
+          <button class="btn sm line" type="button" data-add="other">+ Link lain</button>
+        </div>
+        <p class="note">Pengguna membuka tiap link, lalu menandai selesai setelah 10 detik. Follow atau subscribe tidak bisa diperiksa otomatis.</p>
+      </div>
+      <h3 class="mf-h">Hadiah</h3>
+      <label>Nama hadiah<input type="text" id="mfRTitle" maxlength="80" required></label>
+      <label>Teks hadiah (prompt, kode, dll.)<textarea id="mfRText" maxlength="5000"></textarea></label>
+      <label>Link hadiah (https)<input type="text" inputmode="url" id="mfRLink" maxlength="500" autocapitalize="off" autocomplete="off"></label>
+      <label>File hadiah (APK dll., maks. 50 MB)<input type="file" id="mfRFile"></label>
+      <p class="note">Isi minimal satu: teks, link, atau file. Hadiah hanya terlihat oleh pengguna yang sudah menyelesaikan misi.</p>
+      <button class="btn" type="submit" id="mfSend">Buat Misi</button>
+    </form>
+    <h3 class="mf-h mf-h2">Misi yang sudah dibuat</h3>
+    <div class="mf-list" id="mfList"></div>
+  </div></div>
 </dialog>
 
 <dialog id="sd">
@@ -383,30 +430,32 @@
 
 <div class="toast" id="toast"></div>
 
-<script defer src="js/update.js?v=20261020102034"></script>
-<script defer src="js/lock.js?v=20261020102034"></script>
-<script defer src="js/config.js?v=20261020102034"></script>
-<script defer src="js/core.js?v=20261020102034"></script>
-<script defer src="js/auth.js?v=20261020102034"></script>
-<script defer src="js/prompts.js?v=20261020102034"></script>
-<script defer src="js/account.js?v=20261020102034"></script>
-<script defer src="js/profile.js?v=20261020102034"></script>
-<script defer src="js/role.js?v=20261020102034"></script>
-<script defer src="js/picker.js?v=20261020102034"></script>
-<script defer src="js/viewer.js?v=20261020102034"></script>
-<script defer src="js/settings.js?v=20261020102034"></script>
-<script defer src="js/menu.js?v=20261020102034"></script>
-<script defer src="js/chat.js?v=20261020102034"></script>
-<script defer src="js/box.js?v=20261020102034"></script>
-<script defer src="js/find.js?v=20261020102034"></script>
-<script defer src="js/dm.js?v=20261020102034"></script>
-<script defer src="js/store.js?v=20261020102034"></script>
-<script defer src="js/admin.js?v=20261020102034"></script>
-<script defer src="js/review.js?v=20261020102034"></script>
-<script defer src="js/panel.js?v=20261020102034"></script>
-<script defer src="js/multi.js?v=20261020102034"></script>
-<script defer src="js/notice.js?v=20261020102034"></script>
-<script defer src="js/bot.js?v=20261020102034"></script>
-<script defer src="js/main.js?v=20261020102034"></script>
+<script defer src="js/update.js?v=20261020110906"></script>
+<script defer src="js/lock.js?v=20261020110906"></script>
+<script defer src="js/config.js?v=20261020110906"></script>
+<script defer src="js/core.js?v=20261020110906"></script>
+<script defer src="js/auth.js?v=20261020110906"></script>
+<script defer src="js/prompts.js?v=20261020110906"></script>
+<script defer src="js/account.js?v=20261020110906"></script>
+<script defer src="js/profile.js?v=20261020110906"></script>
+<script defer src="js/role.js?v=20261020110906"></script>
+<script defer src="js/picker.js?v=20261020110906"></script>
+<script defer src="js/viewer.js?v=20261020110906"></script>
+<script defer src="js/settings.js?v=20261020110906"></script>
+<script defer src="js/menu.js?v=20261020110906"></script>
+<script defer src="js/chat.js?v=20261020110906"></script>
+<script defer src="js/box.js?v=20261020110906"></script>
+<script defer src="js/find.js?v=20261020110906"></script>
+<script defer src="js/dm.js?v=20261020110906"></script>
+<script defer src="js/store.js?v=20261020110906"></script>
+<script defer src="js/admin.js?v=20261020110906"></script>
+<script defer src="js/review.js?v=20261020110906"></script>
+<script defer src="js/panel.js?v=20261020110906"></script>
+<script defer src="js/multi.js?v=20261020110906"></script>
+<script defer src="js/missions.js?v=20261020110906"></script>
+<script defer src="js/missions-admin.js?v=20261020110906"></script>
+<script defer src="js/notice.js?v=20261020110906"></script>
+<script defer src="js/bot.js?v=20261020110906"></script>
+<script defer src="js/main.js?v=20261020110906"></script>
 </body>
 </html>

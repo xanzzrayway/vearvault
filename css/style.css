@@ -595,3 +595,23 @@ button:focus{outline:none}
 .an-cur[hidden]{display:none}
 .an-cur>div{min-width:0;display:grid;gap:2px}
 .an-cur b{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+
+/* Upload Multi Prompt */
+.mu-pick{display:flex;align-items:center;justify-content:center;height:48px;cursor:pointer}
+.mu-list{gap:10px}
+.mu-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:18px;background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.92);box-shadow:var(--shadow),var(--inner)}
+.mu-item.bad{border-color:rgba(248,113,113,.6)}
+.mu-item.done{opacity:.78}
+.mu-n{flex:none;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;font-weight:700;color:#fff;background:var(--bluegrad)}
+.mu-b{flex:1;min-width:0;display:grid;gap:6px}
+.mu-b b{overflow-wrap:anywhere;line-height:1.3}
+.mu-b small{color:var(--muted);font-size:12.5px}
+.mu-b .ph{color:var(--muted);font-weight:500}
+.mu-b .mu-e{color:#b91c1c}
+.mu-b .mu-ok{color:#15803d;font-weight:600}
+.mu-x{flex:none;width:34px;height:34px;border-radius:12px;font-size:22px;line-height:1;color:var(--muted);background:rgba(255,255,255,.6)}
+.mu-foot{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:env(safe-area-inset-bottom,0px)}
+.mu-foot span{font-size:13.5px;font-weight:600;color:var(--muted)}
+.mu-foot .btn{margin-left:auto}
+#muBulk[hidden]{display:none}

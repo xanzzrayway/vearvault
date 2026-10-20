@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-build="20261019103049">
+<html lang="id" data-build="20261020102034">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/theme.js?v=20261019103049"></script>
-<link rel="stylesheet" href="css/style.css?v=20261019103049">
+<script src="js/theme.js?v=20261020102034"></script>
+<link rel="stylesheet" href="css/style.css?v=20261020102034">
 </head>
 <body>
 <div class="orbs" aria-hidden="true"></div>
@@ -226,6 +226,7 @@
   <div class="fn-wrap">
     <div class="fn-list" id="pnList">
       <button class="fr pn" type="button" data-a="info"><span class="pn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11v2a1 1 0 001 1h2l5 4V6L7 10H5a1 1 0 00-1 1z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11"/></svg></span><div class="fr-t"><b>Kirim Informasi Pop up</b><span class="note">Tampil ke semua pengguna saat masuk</span></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      <button class="fr pn" type="button" data-a="multi"><span class="pn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M7.5 8.5L12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3"/></svg></span><div class="fr-t"><b>Upload Multi Prompt</b><span class="note">Unggah banyak file .txt sekaligus</span></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
   </div>
 </dialog>
@@ -250,6 +251,19 @@
   <div class="am-body">
     <p class="wn-msg" id="anB"></p>
     <button class="btn" id="anOk" type="button">Mengerti</button>
+  </div>
+</dialog>
+
+<dialog id="mu" class="page">
+  <div class="pf-bar"><button class="back" id="muX" type="button" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><span>Upload Multi Prompt</span></div>
+  <div class="fn-wrap">
+    <label class="btn line mu-pick" for="muFile">Pilih file .txt</label>
+    <input type="file" id="muFile" accept=".txt,text/plain" multiple hidden>
+    <p class="note">Nama file menjadi judul prompt dan isi file menjadi isi prompt. Atur kategori tiap prompt di kotak berurut di bawah.</p>
+    <button class="pickbtn" type="button" id="muBulk" hidden><span>Samakan kategori semua</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+    <div class="fn-list mu-list" id="muList"></div>
+    <div class="pub"><span>Jadikan publik</span><label class="sw"><input type="checkbox" id="muPub" checked><span></span></label></div>
+    <div class="mu-foot"><span id="muStat"></span><button class="btn" type="button" id="muGo" disabled>Unggah</button></div>
   </div>
 </dialog>
 
@@ -369,29 +383,30 @@
 
 <div class="toast" id="toast"></div>
 
-<script defer src="js/update.js?v=20261019103049"></script>
-<script defer src="js/lock.js?v=20261019103049"></script>
-<script defer src="js/config.js?v=20261019103049"></script>
-<script defer src="js/core.js?v=20261019103049"></script>
-<script defer src="js/auth.js?v=20261019103049"></script>
-<script defer src="js/prompts.js?v=20261019103049"></script>
-<script defer src="js/account.js?v=20261019103049"></script>
-<script defer src="js/profile.js?v=20261019103049"></script>
-<script defer src="js/role.js?v=20261019103049"></script>
-<script defer src="js/picker.js?v=20261019103049"></script>
-<script defer src="js/viewer.js?v=20261019103049"></script>
-<script defer src="js/settings.js?v=20261019103049"></script>
-<script defer src="js/menu.js?v=20261019103049"></script>
-<script defer src="js/chat.js?v=20261019103049"></script>
-<script defer src="js/box.js?v=20261019103049"></script>
-<script defer src="js/find.js?v=20261019103049"></script>
-<script defer src="js/dm.js?v=20261019103049"></script>
-<script defer src="js/store.js?v=20261019103049"></script>
-<script defer src="js/admin.js?v=20261019103049"></script>
-<script defer src="js/review.js?v=20261019103049"></script>
-<script defer src="js/panel.js?v=20261019103049"></script>
-<script defer src="js/notice.js?v=20261019103049"></script>
-<script defer src="js/bot.js?v=20261019103049"></script>
-<script defer src="js/main.js?v=20261019103049"></script>
+<script defer src="js/update.js?v=20261020102034"></script>
+<script defer src="js/lock.js?v=20261020102034"></script>
+<script defer src="js/config.js?v=20261020102034"></script>
+<script defer src="js/core.js?v=20261020102034"></script>
+<script defer src="js/auth.js?v=20261020102034"></script>
+<script defer src="js/prompts.js?v=20261020102034"></script>
+<script defer src="js/account.js?v=20261020102034"></script>
+<script defer src="js/profile.js?v=20261020102034"></script>
+<script defer src="js/role.js?v=20261020102034"></script>
+<script defer src="js/picker.js?v=20261020102034"></script>
+<script defer src="js/viewer.js?v=20261020102034"></script>
+<script defer src="js/settings.js?v=20261020102034"></script>
+<script defer src="js/menu.js?v=20261020102034"></script>
+<script defer src="js/chat.js?v=20261020102034"></script>
+<script defer src="js/box.js?v=20261020102034"></script>
+<script defer src="js/find.js?v=20261020102034"></script>
+<script defer src="js/dm.js?v=20261020102034"></script>
+<script defer src="js/store.js?v=20261020102034"></script>
+<script defer src="js/admin.js?v=20261020102034"></script>
+<script defer src="js/review.js?v=20261020102034"></script>
+<script defer src="js/panel.js?v=20261020102034"></script>
+<script defer src="js/multi.js?v=20261020102034"></script>
+<script defer src="js/notice.js?v=20261020102034"></script>
+<script defer src="js/bot.js?v=20261020102034"></script>
+<script defer src="js/main.js?v=20261020102034"></script>
 </body>
 </html>

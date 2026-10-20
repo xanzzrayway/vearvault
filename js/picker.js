@@ -6,6 +6,7 @@ const PICKERS = {
   store: { input: "#tCat", btn: "#tCatBtn" }  // form jual prompt
 };
 let pickKey = "main";
+let pickCb = null, pickCur = "";
 
 function setCat(name, key = "main"){
   const p = PICKERS[key];
@@ -13,13 +14,19 @@ function setCat(name, key = "main"){
   $(p.btn).innerHTML = `<i class="dot" style="background:${color(name)}"></i><span>${esc(name)}</span>${CHEV}`;
 }
 function paintCP(){
-  const cur = $(PICKERS[pickKey].input).value;
+  const cur = pickCb ? pickCur : $(PICKERS[pickKey].input).value;
   $("#cpList").innerHTML = CATS.map(([n,c]) =>
     `<button type="button" class="ai ${n===cur?"on":""}" data-c="${esc(n)}"><i style="background:${c}"></i><span>${esc(n)}</span>${n===cur?TICK:""}</button>`
   ).join("");
 }
 function openPicker(key){
-  pickKey = key; paintCP();
+  pickCb = null; pickKey = key; paintCP();
+  $("#cp").showModal();
+  setTimeout(() => { const on = $("#cpList .on"); if(on) on.scrollIntoView({ block:"nearest" }); }, 0);
+}
+/* Pilih kategori dengan callback (dipakai Upload Multi Prompt) */
+function pickCat(cur, cb){
+  pickCb = cb; pickCur = cur || ""; paintCP();
   $("#cp").showModal();
   setTimeout(() => { const on = $("#cpList .on"); if(on) on.scrollIntoView({ block:"nearest" }); }, 0);
 }
@@ -28,8 +35,10 @@ $("#sCatBtn").onclick = () => openPicker("send");
 $("#tCatBtn").onclick = () => openPicker("store");
 $("#cpList").onclick = e => {
   const b = e.target.closest(".ai"); if(!b) return;
+  if(pickCb){ const f = pickCb; pickCb = null; f(b.dataset.c); $("#cp").close(); return; }
   setCat(b.dataset.c, pickKey); $("#cp").close();
 };
+$("#cp").addEventListener("close", () => { pickCb = null; });
 $("#cpX").onclick = () => $("#cp").close();
 $("#cp").addEventListener("click", e => { if(e.target===$("#cp")) $("#cp").close(); });
 setCat(CATS[0][0], "main");

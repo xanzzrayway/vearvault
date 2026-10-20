@@ -2,7 +2,7 @@
 function syncPanel(){
   const admin = !!(configured && user && profile && isAdmin());
   $("#drPanel").hidden = !admin;
-  if(!admin){ if($("#pnl").open) $("#pnl").close(); if($("#anf").open) $("#anf").close(); }
+  if(!admin){ if($("#pnl").open) $("#pnl").close(); if($("#anf").open) $("#anf").close(); if($("#mu").open && !muBusy) $("#mu").close(); }
 }
 function openPanel(){
   if(!isAdmin()) return toast("Khusus admin");
@@ -12,6 +12,7 @@ $("#pnX").onclick = () => $("#pnl").close();
 $("#pnList").onclick = e => {
   const b = e.target.closest("button"); if(!b) return;
   if(b.dataset.a === "info") openInfoForm();
+  if(b.dataset.a === "multi") openMulti();
 };
 
 /* ---------- Kirim Informasi Pop up ---------- */

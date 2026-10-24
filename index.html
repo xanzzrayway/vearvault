@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-build="20261020110906">
+<html lang="id" data-build="20261024132258">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/theme.js?v=20261020110906"></script>
-<link rel="stylesheet" href="css/style.css?v=20261020110906">
+<script src="js/theme.js?v=20261024132258"></script>
+<link rel="stylesheet" href="css/style.css?v=20261024132258">
 </head>
 <body>
 <div class="orbs" aria-hidden="true"></div>
@@ -314,6 +314,29 @@
   </div></div>
 </dialog>
 
+<dialog id="vc" class="vc" data-st="calling">
+  <video id="vcRemote" class="vc-remote" autoplay playsinline></video>
+  <video id="vcLocal" class="vc-local" autoplay playsinline muted></video>
+  <div class="vc-shade"></div>
+  <div class="vc-top">
+    <button class="vc-back" id="vcBack" type="button" aria-label="Info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="vc-who"><b id="vcName"></b><small id="vcStat"></small></div>
+  </div>
+  <div class="vc-mid"><span class="vc-av" id="vcAv"></span></div>
+  <div class="vc-ctl vc-ctl-in">
+    <div class="vc-big"><button class="vc-btn red" id="vcDecline" type="button" aria-label="Tolak"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 9c-3.2 0-6.3 1-8.5 3.1-.5.5-.5 1.3 0 1.8l1.6 1.6c.4.4 1 .5 1.5.2l2-1.2c.4-.2.6-.6.6-1V12c.9-.3 1.8-.4 2.8-.4s1.9.1 2.8.4v1.5c0 .4.2.8.6 1l2 1.2c.5.3 1.1.2 1.5-.2l1.6-1.6c.5-.5.5-1.3 0-1.8C18.3 10 15.2 9 12 9z"/></svg></button><span>Tolak</span></div>
+    <div class="vc-big"><button class="vc-btn green" id="vcAccept" type="button" aria-label="Terima"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 7a2 2 0 012-2h7a2 2 0 012 2v2.6l4.2-2.7a.8.8 0 011.3.7v9.8a.8.8 0 01-1.3.7L15 14.4V17a2 2 0 01-2 2H6a2 2 0 01-2-2z"/></svg></button><span>Terima</span></div>
+  </div>
+  <div class="vc-ctl vc-ctl-act">
+    <div class="vc-bar">
+      <button class="vc-btn sm" id="vcFlip" type="button" aria-label="Balik kamera"></button>
+      <button class="vc-btn sm" id="vcCam" type="button" aria-label="Kamera"></button>
+      <button class="vc-btn sm" id="vcMic" type="button" aria-label="Mikrofon"></button>
+      <button class="vc-btn sm red" id="vcEnd" type="button" aria-label="Akhiri"></button>
+    </div>
+  </div>
+</dialog>
+
 <dialog id="sd">
   <div class="mh"><h2>Kirim Prompt</h2><button class="x" id="sdX" type="button" aria-label="Tutup">&times;</button></div>
   <form id="sdForm">
@@ -380,7 +403,7 @@
 </dialog>
 
 <dialog id="dm" class="page chatpage">
-  <div class="pf-bar"><button class="back" id="dmX" type="button" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><button class="dm-peer" id="dmPeer" type="button" aria-label="Lihat profil"></button></div>
+  <div class="pf-bar"><button class="back" id="dmX" type="button" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><button class="dm-peer" id="dmPeer" type="button" aria-label="Lihat profil"></button><button class="dm-call" id="dmCall" type="button" aria-label="Video call"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 7a2 2 0 012-2h7a2 2 0 012 2v2.6l4.2-2.7a.8.8 0 011.3.7v9.8a.8.8 0 01-1.3.7L15 14.4V17a2 2 0 01-2 2H6a2 2 0 01-2-2z"/></svg></button></div>
   <div class="ch-list" id="dmList"></div>
   <div class="ch-in" id="dmIn"></div>
 </dialog>
@@ -430,32 +453,33 @@
 
 <div class="toast" id="toast"></div>
 
-<script defer src="js/update.js?v=20261020110906"></script>
-<script defer src="js/lock.js?v=20261020110906"></script>
-<script defer src="js/config.js?v=20261020110906"></script>
-<script defer src="js/core.js?v=20261020110906"></script>
-<script defer src="js/auth.js?v=20261020110906"></script>
-<script defer src="js/prompts.js?v=20261020110906"></script>
-<script defer src="js/account.js?v=20261020110906"></script>
-<script defer src="js/profile.js?v=20261020110906"></script>
-<script defer src="js/role.js?v=20261020110906"></script>
-<script defer src="js/picker.js?v=20261020110906"></script>
-<script defer src="js/viewer.js?v=20261020110906"></script>
-<script defer src="js/settings.js?v=20261020110906"></script>
-<script defer src="js/menu.js?v=20261020110906"></script>
-<script defer src="js/chat.js?v=20261020110906"></script>
-<script defer src="js/box.js?v=20261020110906"></script>
-<script defer src="js/find.js?v=20261020110906"></script>
-<script defer src="js/dm.js?v=20261020110906"></script>
-<script defer src="js/store.js?v=20261020110906"></script>
-<script defer src="js/admin.js?v=20261020110906"></script>
-<script defer src="js/review.js?v=20261020110906"></script>
-<script defer src="js/panel.js?v=20261020110906"></script>
-<script defer src="js/multi.js?v=20261020110906"></script>
-<script defer src="js/missions.js?v=20261020110906"></script>
-<script defer src="js/missions-admin.js?v=20261020110906"></script>
-<script defer src="js/notice.js?v=20261020110906"></script>
-<script defer src="js/bot.js?v=20261020110906"></script>
-<script defer src="js/main.js?v=20261020110906"></script>
+<script defer src="js/update.js?v=20261024132258"></script>
+<script defer src="js/lock.js?v=20261024132258"></script>
+<script defer src="js/config.js?v=20261024132258"></script>
+<script defer src="js/core.js?v=20261024132258"></script>
+<script defer src="js/auth.js?v=20261024132258"></script>
+<script defer src="js/prompts.js?v=20261024132258"></script>
+<script defer src="js/account.js?v=20261024132258"></script>
+<script defer src="js/profile.js?v=20261024132258"></script>
+<script defer src="js/role.js?v=20261024132258"></script>
+<script defer src="js/picker.js?v=20261024132258"></script>
+<script defer src="js/viewer.js?v=20261024132258"></script>
+<script defer src="js/settings.js?v=20261024132258"></script>
+<script defer src="js/menu.js?v=20261024132258"></script>
+<script defer src="js/chat.js?v=20261024132258"></script>
+<script defer src="js/box.js?v=20261024132258"></script>
+<script defer src="js/find.js?v=20261024132258"></script>
+<script defer src="js/dm.js?v=20261024132258"></script>
+<script defer src="js/call.js?v=20261024132258"></script>
+<script defer src="js/store.js?v=20261024132258"></script>
+<script defer src="js/admin.js?v=20261024132258"></script>
+<script defer src="js/review.js?v=20261024132258"></script>
+<script defer src="js/panel.js?v=20261024132258"></script>
+<script defer src="js/multi.js?v=20261024132258"></script>
+<script defer src="js/missions.js?v=20261024132258"></script>
+<script defer src="js/missions-admin.js?v=20261024132258"></script>
+<script defer src="js/notice.js?v=20261024132258"></script>
+<script defer src="js/bot.js?v=20261024132258"></script>
+<script defer src="js/main.js?v=20261024132258"></script>
 </body>
 </html>

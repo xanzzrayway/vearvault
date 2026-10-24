@@ -650,3 +650,49 @@ button:focus{outline:none}
 .mf-rt{flex:1;min-width:0;display:grid;gap:3px}
 .mf-rt b{overflow-wrap:anywhere}
 .mf-rt small{color:var(--muted);font-size:12.5px;line-height:1.4}
+
+
+/* Video call (gaya WhatsApp) */
+.dm-call{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:var(--blue)}
+.dm-call svg{width:24px;height:24px}
+dialog.vc{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;border-radius:0;background:#0b141a;color:#fff;overflow:hidden;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+dialog.vc::backdrop{background:#0b141a}
+.vc-remote,.vc-local{position:absolute;object-fit:cover;background:#111b21}
+.vc-remote{inset:0;width:100%;height:100%}
+.vc-local{z-index:2;right:14px;bottom:calc(118px + env(safe-area-inset-bottom,0px));width:28%;max-width:132px;aspect-ratio:3/4;border-radius:16px;transform:scaleX(-1);box-shadow:0 6px 20px rgba(0,0,0,.45)}
+.vc-local.rear{transform:none}
+.vc-local.camoff{filter:brightness(.15)}
+.vc-shade{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,0) 24%,rgba(0,0,0,0) 60%,rgba(0,0,0,.7))}
+.vc-top{position:absolute;z-index:3;left:0;right:0;top:0;display:flex;align-items:center;gap:6px;padding:calc(12px + env(safe-area-inset-top,0px)) 14px 0}
+.vc-back{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff}
+.vc-back svg{width:26px;height:26px}
+.vc-who{display:grid;min-width:0}
+.vc-who b{font-size:19px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vc-who small{font-size:14px;color:rgba(255,255,255,.82)}
+.vc-mid{position:absolute;inset:0;z-index:1;display:none;place-items:center;pointer-events:none}
+.vc-av{width:150px;height:150px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#2a3942;font-size:60px;font-weight:700;box-shadow:0 0 0 6px rgba(255,255,255,.08)}
+.vc-av img{width:100%;height:100%;object-fit:cover}
+.vc-ctl{position:absolute;z-index:3;left:0;right:0;bottom:0;display:none;justify-content:center;padding:0 16px calc(24px + env(safe-area-inset-bottom,0px))}
+.vc-bar{display:flex;gap:14px;align-items:center;padding:12px 18px;border-radius:32px;background:rgba(32,44,51,.92)}
+.vc-btn{flex:none;width:60px;height:60px;border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.14)}
+.vc-btn svg{width:26px;height:26px}
+.vc-btn.sm{width:52px;height:52px}
+.vc-btn.sm svg{width:24px;height:24px}
+.vc-btn.red{background:#ea3a52}
+.vc-btn.green{background:#25d366}
+.vc-btn.off{background:#fff;color:#111b21}
+.vc-ctl-in{gap:64px;padding-bottom:calc(56px + env(safe-area-inset-bottom,0px))}
+.vc-big{display:grid;justify-items:center;gap:10px;font-size:14px;color:rgba(255,255,255,.85)}
+.vc-big .vc-btn{width:72px;height:72px}
+.vc-big .vc-btn svg{width:32px;height:32px}
+/* tahap: incoming = panggilan masuk, calling = memanggil / menghubungkan, connected = tersambung */
+.vc[data-st="incoming"] .vc-remote,.vc[data-st="incoming"] .vc-local,.vc[data-st="calling"] .vc-remote{display:none}
+.vc[data-st="calling"] .vc-local{inset:0;right:0;bottom:0;width:100%;max-width:none;height:100%;aspect-ratio:auto;border-radius:0;box-shadow:none}
+.vc[data-st="incoming"] .vc-mid{display:grid}
+.vc[data-st="incoming"] .vc-top{flex-direction:column;align-items:center;text-align:center;padding-top:calc(12vh + env(safe-area-inset-top,0px))}
+.vc[data-st="incoming"] .vc-back{display:none}
+.vc[data-st="incoming"] .vc-who b{font-size:26px}
+.vc[data-st="incoming"] .vc-shade{background:radial-gradient(circle at 50% 40%,#1d2d36,#0b141a 70%)}
+.vc[data-st="incoming"] .vc-ctl-in{display:flex}
+.vc[data-st="calling"] .vc-ctl-act,.vc[data-st="connected"] .vc-ctl-act{display:flex}
+.vc button:focus,.vc button:focus-visible{outline:none;box-shadow:none}

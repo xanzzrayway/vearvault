@@ -34,6 +34,7 @@ async function setUser(u){
   if(typeof syncPanel === "function") syncPanel();
   if(typeof syncMissions === "function") syncMissions();
   if(typeof syncDM === "function") syncDM();
+  if(typeof syncCall === "function") syncCall();
   if(u && !profile) openOnb("first");
   load();
 }

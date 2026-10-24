@@ -696,3 +696,158 @@ dialog.vc::backdrop{background:#0b141a}
 .vc[data-st="incoming"] .vc-ctl-in{display:flex}
 .vc[data-st="calling"] .vc-ctl-act,.vc[data-st="connected"] .vc-ctl-act{display:flex}
 .vc button:focus,.vc button:focus-visible{outline:none;box-shadow:none}
+
+
+/* =====================================================================
+   MODE TAMPILAN  (html[data-ui]):  klasik = tanpa kaca | normal = bawaan | baru = liquid glass
+   ===================================================================== */
+
+/* ---------- KLASIK: polos, tanpa kaca ---------- */
+html[data-ui="klasik"]{
+  --glass:#fff;
+  --shadow:0 1px 2px rgba(15,23,42,.07),0 1px 1px rgba(15,23,42,.04);
+  --inner:0 0 0 0 transparent;
+  --bluegrad:linear-gradient(var(--b2),var(--b2));
+  --kl-line:#dde3ec; --kl-soft:#eef2f8;
+}
+html[data-ui="klasik"] .orbs{display:none}
+html[data-ui="klasik"] *,html[data-ui="klasik"] *::before,html[data-ui="klasik"] *::after{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-ui="klasik"] .card::before{display:none}
+html[data-ui="klasik"] :where(.bar,.menu,.pf-bar,.cmd-menu,.ch-in,dialog:not(.page):not(.vc):not(.imgbox):not(#prof),.gbtn,.search input,.seg,.chip,.card,.bx,.fr,.sdto,.pf-stats>div,.st-card,.mcard,.rv,.mu-item,.mf-step,.mf-row,.ms-step,.an-cur,.info,.role,.pub,.out,.pickbtn,.ai,.am-i,.am-msg,.wn-msg,.bn-why,.pf-adm,.dmr,.dr-login,.dr-card,.ch-btn,.ch-prev,input[type=text],select,textarea,.sf-img,.bub,.body,.pv-body,.mr-t){background:#fff;border-color:var(--kl-line);box-shadow:var(--shadow)}
+html[data-ui="klasik"] :where(input[type=text],select,textarea,.sf-img){box-shadow:none}
+html[data-ui="klasik"] :where(.seg,.sdto,.pub,.info,.body,.pv-body,.mr-t,.am-msg,.wn-msg,.bn-why){background:var(--kl-soft);box-shadow:none}
+html[data-ui="klasik"] :is(.page,#prof){background:var(--bg1)}
+html[data-ui="klasik"] #drawer{background:#fff;border-color:var(--kl-line);box-shadow:4px 0 24px rgba(15,23,42,.18)}
+html[data-ui="klasik"] dialog:not(.page):not(.vc){box-shadow:0 14px 44px rgba(15,23,42,.28)}
+html[data-ui="klasik"] dialog::backdrop{background:rgba(15,23,42,.45)}
+html[data-ui="klasik"] .pf-bar{border-bottom:1px solid var(--kl-line);box-shadow:none}
+html[data-ui="klasik"] .chatpage .pf-bar,html[data-ui="klasik"] .chatpage .ch-in{background:#fff;border:1px solid var(--kl-line);box-shadow:0 2px 8px rgba(15,23,42,.1)}
+html[data-ui="klasik"] .cmd-menu{background:#fff;border:1px solid var(--kl-line);box-shadow:0 6px 20px rgba(15,23,42,.16)}
+html[data-ui="klasik"] .btn{background:var(--b2);border-color:transparent;box-shadow:none}
+html[data-ui="klasik"] .btn:hover{filter:brightness(1.08)}
+html[data-ui="klasik"] .btn.line{background:#fff;color:var(--blue);border:1px solid var(--kl-line);box-shadow:none}
+html[data-ui="klasik"] .btn.danger{background:#dc2626;border-color:transparent;box-shadow:none}
+html[data-ui="klasik"] .chip.on,html[data-ui="klasik"] .seg button.on{background:var(--b2);border-color:transparent;box-shadow:none}
+html[data-ui="klasik"] .msg.me .bub{background:var(--b2);border-color:transparent;box-shadow:none}
+html[data-ui="klasik"] .menu button:hover,html[data-ui="klasik"] .dr-item:hover,html[data-ui="klasik"] .x:hover,html[data-ui="klasik"] .back:hover,html[data-ui="klasik"] .menubtn:hover{background:var(--kl-soft)}
+html[data-ui="klasik"] .card:hover{box-shadow:0 4px 14px rgba(15,23,42,.12)}
+html[data-ui="klasik"] .avatar{border-color:#fff;box-shadow:0 1px 4px rgba(15,23,42,.2)}
+html[data-ui="klasik"] .skel{background:var(--kl-soft)}
+
+/* ---------- BARU: liquid glass penuh ---------- */
+html[data-ui="baru"]{
+  --lg-spec:radial-gradient(130% 160% at var(--lx,16%) var(--ly,-10%),rgba(255,255,255,.82) 0,rgba(255,255,255,.2) 36%,rgba(255,255,255,0) 62%);
+  --lg-body:linear-gradient(158deg,rgba(255,255,255,.5) 0%,rgba(255,255,255,.12) 48%,rgba(255,255,255,.3) 100%);
+  --lg-rim:inset 0 0 0 1px rgba(255,255,255,.5),inset 0 2px 2px -1px rgba(255,255,255,1),inset 0 -2px 3px -1px rgba(255,255,255,.75),inset 2px 0 3px -2px rgba(255,255,255,.85),inset -2px 0 3px -2px rgba(255,255,255,.55),inset 0 0 28px rgba(255,255,255,.2);
+  --lg-drop:0 18px 40px -12px rgba(var(--sh-rgb),.36),0 3px 9px rgba(var(--sh-rgb),.1);
+  --glass:transparent;
+  --shadow:var(--lg-drop);
+  --inner:var(--lg-rim);
+  --bluegrad:radial-gradient(130% 150% at var(--lx,16%) var(--ly,-10%),rgba(255,255,255,.62) 0,rgba(255,255,255,0) 52%),linear-gradient(160deg,rgba(var(--acc1-rgb),.92),rgba(var(--acc2-rgb),.82));
+}
+/* latar yang hidup: warna pekat dan lembut yang membuat kaca terlihat membias */
+html[data-ui="baru"] .orbs{background:
+  radial-gradient(62vmax 62vmax at -2% -6%,rgba(var(--o1),.9),transparent 66%),
+  radial-gradient(52vmax 52vmax at 106% 6%,rgba(var(--o2),.8),transparent 66%),
+  radial-gradient(58vmax 58vmax at 20% 108%,rgba(var(--o3),.85),transparent 66%),
+  radial-gradient(42vmax 42vmax at 100% 96%,rgba(var(--o4),.85),transparent 66%)}
+html[data-ui="baru"] .orbs::before,html[data-ui="baru"] .orbs::after{content:"";position:absolute;border-radius:50%;will-change:transform;pointer-events:none}
+html[data-ui="baru"] .orbs::before{width:46vmax;height:46vmax;left:8%;top:18%;background:radial-gradient(circle,rgba(var(--o2),.7),transparent 68%);animation:lgDriftA 28s ease-in-out infinite alternate}
+html[data-ui="baru"] .orbs::after{width:40vmax;height:40vmax;right:-4%;top:52%;background:radial-gradient(circle,rgba(var(--o4),.75),transparent 68%);animation:lgDriftB 34s ease-in-out infinite alternate}
+@keyframes lgDriftA{from{transform:translate3d(-6vmax,-4vmax,0) scale(1)}to{transform:translate3d(12vmax,10vmax,0) scale(1.18)}}
+@keyframes lgDriftB{from{transform:translate3d(8vmax,6vmax,0) scale(1.1)}to{transform:translate3d(-14vmax,-12vmax,0) scale(.92)}}
+html[data-ui="baru"] :is(.page,#prof){background:
+  radial-gradient(64vmax 64vmax at 0% 0%,rgba(var(--o1),.8),transparent 68%),
+  radial-gradient(54vmax 54vmax at 100% 8%,rgba(var(--o2),.7),transparent 68%),
+  radial-gradient(60vmax 60vmax at 36% 104%,rgba(var(--o3),.75),transparent 68%),
+  radial-gradient(40vmax 40vmax at 96% 90%,rgba(var(--o4),.7),transparent 68%),var(--bg1)}
+
+/* bahan kaca: tebal (header, panel, jendela) dengan pembiasan tepi */
+html[data-ui="baru"] :where(.bar,.menu,.pf-bar,.cmd-menu,.ch-in,dialog:not(.page):not(.vc):not(.imgbox):not(#prof)){
+  background:var(--lg-spec),var(--lg-body);
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:var(--lg-drop),var(--lg-rim);
+  -webkit-backdrop-filter:blur(22px) saturate(210%) brightness(1.05);
+  backdrop-filter:blur(22px) saturate(210%) brightness(1.05)}
+html[data-ui="baru"][data-rfx="1"] :where(.bar,.menu,.pf-bar,.cmd-menu,.ch-in,dialog:not(.page):not(.vc):not(.imgbox):not(#prof)){
+  -webkit-backdrop-filter:url(#lg-r) blur(14px) saturate(210%) brightness(1.05);
+  backdrop-filter:url(#lg-r) blur(14px) saturate(210%) brightness(1.05)}
+/* bahan kaca: sedang (kartu, baris, tombol kecil) */
+html[data-ui="baru"] :where(.gbtn,.search input,.seg,.chip,.card,.bx,.fr,.sdto,.pf-stats>div,.st-card,.mcard,.rv,.mu-item,.mf-step,.mf-row,.ms-step,.an-cur,.info,.role,.pub,.out,.pickbtn,.ai,.am-i,.am-msg,.wn-msg,.bn-why,.pf-adm,.dmr,.dr-login,.dr-card,.ch-btn,.ch-prev){
+  background:var(--lg-spec),var(--lg-body);
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:var(--lg-drop),var(--lg-rim);
+  -webkit-backdrop-filter:blur(12px) saturate(190%);
+  backdrop-filter:blur(12px) saturate(190%)}
+/* kaca cekung (kolom isian) */
+html[data-ui="baru"] :where(input[type=text],select,textarea,.sf-img){
+  background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.4));
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:inset 0 3px 8px rgba(var(--sh-rgb),.16),inset 0 -1px 1px rgba(255,255,255,.9),0 1px 0 rgba(255,255,255,.6);
+  -webkit-backdrop-filter:blur(8px) saturate(170%);backdrop-filter:blur(8px) saturate(170%)}
+/* kaca tipis (gelembung chat, blok isi) */
+html[data-ui="baru"] :where(.bub,.body,.pv-body,.mr-t){
+  background:var(--lg-spec),linear-gradient(158deg,rgba(255,255,255,.55),rgba(255,255,255,.22));
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:0 8px 20px -10px rgba(var(--sh-rgb),.3),var(--lg-rim)}
+html[data-ui="baru"] .card::before{background:linear-gradient(135deg,rgba(255,255,255,.35),rgba(255,255,255,0) 42%)}
+
+/* elemen ber-id dan kasus khusus */
+html[data-ui="baru"] #drawer{background:var(--lg-spec),linear-gradient(180deg,rgba(255,255,255,.58),rgba(255,255,255,.22));border:1px solid rgba(255,255,255,.55);border-left:0;box-shadow:26px 0 60px -10px rgba(var(--sh-rgb),.34),var(--lg-rim);-webkit-backdrop-filter:blur(26px) saturate(210%);backdrop-filter:blur(26px) saturate(210%)}
+html[data-ui="baru"][data-rfx="1"] #drawer{-webkit-backdrop-filter:url(#lg-r) blur(16px) saturate(210%);backdrop-filter:url(#lg-r) blur(16px) saturate(210%)}
+html[data-ui="baru"] .chatpage .ch-in{background:var(--lg-spec),var(--lg-body)}
+html[data-ui="baru"] .chatpage .pf-bar{background:var(--lg-spec),var(--lg-body);box-shadow:var(--lg-drop),var(--lg-rim)}
+html[data-ui="baru"] .pf-bar{border-bottom-color:rgba(255,255,255,.55)}
+html[data-ui="baru"] dialog::backdrop{background:rgba(48,80,160,.28);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+html[data-ui="baru"] .dr-card{background:var(--lg-spec),linear-gradient(135deg,rgba(var(--acc1-rgb),.26),rgba(var(--acc2-rgb),.1))}
+html[data-ui="baru"] .role.on,html[data-ui="baru"] .ai.on{background:var(--lg-spec),linear-gradient(160deg,rgba(255,255,255,.85),rgba(255,255,255,.5))}
+html[data-ui="baru"] .role.locked{opacity:.7}
+html[data-ui="baru"] .skel{background:linear-gradient(110deg,rgba(255,255,255,.35) 30%,rgba(255,255,255,.7) 50%,rgba(255,255,255,.35) 70%)}
+
+/* tombol: kaca berwarna */
+html[data-ui="baru"] .btn{border:1px solid rgba(255,255,255,.6);text-shadow:0 1px 2px rgba(var(--accd-rgb),.4);
+  box-shadow:0 14px 28px -8px rgba(var(--acc2-rgb),.6),inset 0 2px 2px -1px rgba(255,255,255,.95),inset 0 -3px 5px -1px rgba(var(--accd-rgb),.4),inset 0 0 16px rgba(255,255,255,.2);
+  -webkit-backdrop-filter:blur(10px) saturate(180%);backdrop-filter:blur(10px) saturate(180%)}
+html[data-ui="baru"] .btn.line{background:var(--lg-spec),linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.2));color:var(--blue);text-shadow:none;border-color:rgba(255,255,255,.7);box-shadow:var(--lg-drop),var(--lg-rim)}
+html[data-ui="baru"] .btn.danger{background:radial-gradient(130% 150% at var(--lx,16%) var(--ly,-10%),rgba(255,255,255,.6) 0,rgba(255,255,255,0) 52%),linear-gradient(160deg,rgba(248,113,113,.92),rgba(220,38,38,.82));box-shadow:0 14px 28px -8px rgba(220,38,38,.55),inset 0 2px 2px -1px rgba(255,255,255,.95),inset 0 -3px 5px -1px rgba(127,29,29,.4),inset 0 0 16px rgba(255,255,255,.2)}
+html[data-ui="baru"] .chip.on,html[data-ui="baru"] .seg button.on{background:var(--bluegrad);border-color:rgba(255,255,255,.6);box-shadow:0 10px 22px -8px rgba(var(--acc2-rgb),.6),inset 0 2px 2px -1px rgba(255,255,255,.95),inset 0 -3px 5px -1px rgba(var(--accd-rgb),.4);text-shadow:0 1px 2px rgba(var(--accd-rgb),.4)}
+html[data-ui="baru"] .msg.me .bub{background:var(--bluegrad);border-color:rgba(255,255,255,.55);text-shadow:0 1px 2px rgba(var(--accd-rgb),.35);box-shadow:0 12px 24px -10px rgba(var(--acc2-rgb),.6),inset 0 2px 2px -1px rgba(255,255,255,.9),inset 0 -3px 5px -1px rgba(var(--accd-rgb),.35)}
+
+/* gerak: menekan terasa kenyal seperti cairan */
+html[data-ui="baru"] :is(.btn,.chip,.gbtn,.card,.dr-item,.bx,.fr,.ai,.pickbtn,.role,.mcard,.seg button,.menubtn,.ch-btn,.cmd){transition:transform .4s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,background-color .3s,filter .3s}
+html[data-ui="baru"] :is(.btn,.chip,.gbtn,.dr-item,.bx,.fr,.ai,.pickbtn,.role,.seg button,.menubtn,.ch-btn):active{transform:scale(.955)}
+html[data-ui="baru"] .card:active{transform:scale(.985)}
+html[data-ui="baru"] .btn:hover,html[data-ui="baru"] .gbtn:hover{transform:translateY(-1px) scale(1.015)}
+@media (prefers-reduced-motion:reduce){
+  html[data-ui="baru"] .orbs::before,html[data-ui="baru"] .orbs::after{animation:none}
+  html[data-ui="baru"] *{transition-duration:.01ms!important}
+}
+
+/* ---------- Pilihan tampilan di Pengaturan ---------- */
+.ui-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ui-opt{display:grid;gap:4px;justify-items:center;text-align:center;padding:8px 6px 10px;border-radius:18px;border:2px solid transparent;background:rgba(255,255,255,.4)}
+.ui-opt.on{border-color:var(--b2);background:rgba(255,255,255,.75)}
+.ui-opt .ui-name{font-weight:700;font-size:14px}
+.ui-opt small{font-size:11.5px;line-height:1.25;color:var(--muted)}
+.ui-prev{position:relative;display:block;width:100%;height:64px;border-radius:12px;overflow:hidden}
+.ui-prev i{position:absolute;left:10%;right:10%;top:14px;height:20px;border-radius:8px}
+.ui-prev b{position:absolute;left:10%;width:42%;bottom:9px;height:14px;border-radius:7px}
+.up-klasik{background:#eef2f8}
+.up-klasik i{background:#fff;border:1px solid #dde3ec}
+.up-klasik b{background:var(--b2)}
+.up-normal{background:radial-gradient(60px 40px at 0 0,#93c5fd,transparent),radial-gradient(60px 40px at 100% 100%,#f9a8d4,transparent),#e8f0ff}
+.up-normal i{background:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.9);box-shadow:0 3px 8px rgba(37,70,160,.15)}
+.up-normal b{background:linear-gradient(180deg,var(--b1),var(--b2));box-shadow:0 3px 8px rgba(37,70,160,.3)}
+.up-baru{background:radial-gradient(56px 44px at 0 0,#60a5fa,transparent),radial-gradient(56px 44px at 100% 20%,#67e8f9,transparent),radial-gradient(70px 50px at 40% 110%,#c4b5fd,transparent),radial-gradient(40px 30px at 100% 100%,#f9a8d4,transparent),#dbeafe}
+.up-baru i{background:radial-gradient(90px 50px at 10% -20%,rgba(255,255,255,.9),rgba(255,255,255,0) 60%),linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.12));border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1.5px 1px rgba(255,255,255,1),inset 0 -1.5px 2px rgba(255,255,255,.6),0 6px 12px -4px rgba(37,70,160,.4)}
+.up-baru b{background:radial-gradient(40px 20px at 20% -20%,rgba(255,255,255,.8),rgba(255,255,255,0) 60%),linear-gradient(160deg,rgba(79,140,255,.9),rgba(29,78,216,.8));box-shadow:inset 0 1.5px 1px rgba(255,255,255,.9),0 6px 12px -4px rgba(29,78,216,.6)}
+
+/* Baru: elemen di dalam daftar yang bisa digeser tidak memakai blur (menghindari pita pucat), isiannya dibuat lebih pekat */
+html[data-ui="baru"] .chips .chip,html[data-ui="baru"] #cpList .ai{-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-ui="baru"] .chips .chip:not(.on),html[data-ui="baru"] #cpList .ai:not(.on){background:var(--lg-spec),linear-gradient(158deg,rgba(255,255,255,.74),rgba(255,255,255,.42))}
+
+/* Baru: bayangan elemen sedang dibuat lebih ketat supaya tidak terpotong di daftar yang bisa digeser */
+html[data-ui="baru"] :where(.gbtn,.search input,.seg,.chip,.card,.bx,.fr,.sdto,.pf-stats>div,.st-card,.mcard,.rv,.mu-item,.mf-step,.mf-row,.ms-step,.an-cur,.info,.role,.pub,.out,.pickbtn,.ai,.am-i,.am-msg,.wn-msg,.bn-why,.pf-adm,.dmr,.dr-login,.dr-card,.ch-btn,.ch-prev){
+  box-shadow:0 10px 22px -12px rgba(var(--sh-rgb),.34),0 2px 5px rgba(var(--sh-rgb),.08),var(--lg-rim)}
+html[data-ui="baru"] .chips .chip{box-shadow:0 5px 10px -6px rgba(var(--sh-rgb),.35),var(--lg-rim)}
+html[data-ui="baru"] .chips .chip.on{box-shadow:0 6px 12px -6px rgba(var(--acc2-rgb),.6),inset 0 2px 2px -1px rgba(255,255,255,.95),inset 0 -3px 5px -1px rgba(var(--accd-rgb),.4)}

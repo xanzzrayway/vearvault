@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-build="20261024132258">
+<html lang="id" data-build="20261024181701">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -9,10 +9,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/theme.js?v=20261024132258"></script>
-<link rel="stylesheet" href="css/style.css?v=20261024132258">
+<script src="js/theme.js?v=20261024181701"></script>
+<link rel="stylesheet" href="css/style.css?v=20261024181701">
+<script>try{var u=localStorage.getItem("vv_ui");document.documentElement.dataset.ui=(u==="klasik"||u==="baru")?u:"normal";document.documentElement.dataset.rfx=(window.CSS&&CSS.supports&&CSS.supports("backdrop-filter","url(#lg-r)"))?"1":"0"}catch(e){}</script>
 </head>
 <body>
+<svg class="lg-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden"><defs>
+  <filter id="lg-r" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feImage href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='x' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%23e60000'/%3E%3Cstop offset='.12' stop-color='%23800000'/%3E%3Cstop offset='.88' stop-color='%23800000'/%3E%3Cstop offset='1' stop-color='%23190000'/%3E%3C/linearGradient%3E%3ClinearGradient id='y' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2300e600'/%3E%3Cstop offset='.16' stop-color='%23008000'/%3E%3Cstop offset='.84' stop-color='%23008000'/%3E%3Cstop offset='1' stop-color='%23001900'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' fill='%23000'/%3E%3Crect width='100' height='100' fill='url(%23x)' style='mix-blend-mode:screen'/%3E%3Crect width='100' height='100' fill='url(%23y)' style='mix-blend-mode:screen'/%3E%3C/svg%3E" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map"/>
+    <feDisplacementMap in="SourceGraphic" in2="map" scale="34" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs></svg>
+
 <div class="orbs" aria-hidden="true"></div>
 
 <header>
@@ -389,6 +397,7 @@
 <dialog id="set" class="page">
   <div class="pf-bar"><button class="back" id="setX" type="button" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><span>Pengaturan</span></div>
   <div class="st-wrap">
+    <section class="st-card"><h3>Tampilan</h3><div class="ui-pick" id="uiPick"></div></section>
     <section class="st-card"><h3>Warna tombol</h3><div class="sw-row" id="swBtn"></div></section>
     <section class="st-card"><h3>Warna latar</h3><div class="sw-row" id="swBg"></div></section>
     <section class="st-card" id="stBot" hidden><h3>Bot AI</h3><button class="btn" id="stBotBtn" type="button">Atur bot</button></section>
@@ -453,33 +462,34 @@
 
 <div class="toast" id="toast"></div>
 
-<script defer src="js/update.js?v=20261024132258"></script>
-<script defer src="js/lock.js?v=20261024132258"></script>
-<script defer src="js/config.js?v=20261024132258"></script>
-<script defer src="js/core.js?v=20261024132258"></script>
-<script defer src="js/auth.js?v=20261024132258"></script>
-<script defer src="js/prompts.js?v=20261024132258"></script>
-<script defer src="js/account.js?v=20261024132258"></script>
-<script defer src="js/profile.js?v=20261024132258"></script>
-<script defer src="js/role.js?v=20261024132258"></script>
-<script defer src="js/picker.js?v=20261024132258"></script>
-<script defer src="js/viewer.js?v=20261024132258"></script>
-<script defer src="js/settings.js?v=20261024132258"></script>
-<script defer src="js/menu.js?v=20261024132258"></script>
-<script defer src="js/chat.js?v=20261024132258"></script>
-<script defer src="js/box.js?v=20261024132258"></script>
-<script defer src="js/find.js?v=20261024132258"></script>
-<script defer src="js/dm.js?v=20261024132258"></script>
-<script defer src="js/call.js?v=20261024132258"></script>
-<script defer src="js/store.js?v=20261024132258"></script>
-<script defer src="js/admin.js?v=20261024132258"></script>
-<script defer src="js/review.js?v=20261024132258"></script>
-<script defer src="js/panel.js?v=20261024132258"></script>
-<script defer src="js/multi.js?v=20261024132258"></script>
-<script defer src="js/missions.js?v=20261024132258"></script>
-<script defer src="js/missions-admin.js?v=20261024132258"></script>
-<script defer src="js/notice.js?v=20261024132258"></script>
-<script defer src="js/bot.js?v=20261024132258"></script>
-<script defer src="js/main.js?v=20261024132258"></script>
+<script defer src="js/update.js?v=20261024181701"></script>
+<script defer src="js/lock.js?v=20261024181701"></script>
+<script defer src="js/config.js?v=20261024181701"></script>
+<script defer src="js/core.js?v=20261024181701"></script>
+<script defer src="js/auth.js?v=20261024181701"></script>
+<script defer src="js/prompts.js?v=20261024181701"></script>
+<script defer src="js/account.js?v=20261024181701"></script>
+<script defer src="js/profile.js?v=20261024181701"></script>
+<script defer src="js/role.js?v=20261024181701"></script>
+<script defer src="js/picker.js?v=20261024181701"></script>
+<script defer src="js/viewer.js?v=20261024181701"></script>
+<script defer src="js/settings.js?v=20261024181701"></script>
+<script defer src="js/ui.js?v=20261024181701"></script>
+<script defer src="js/menu.js?v=20261024181701"></script>
+<script defer src="js/chat.js?v=20261024181701"></script>
+<script defer src="js/box.js?v=20261024181701"></script>
+<script defer src="js/find.js?v=20261024181701"></script>
+<script defer src="js/dm.js?v=20261024181701"></script>
+<script defer src="js/call.js?v=20261024181701"></script>
+<script defer src="js/store.js?v=20261024181701"></script>
+<script defer src="js/admin.js?v=20261024181701"></script>
+<script defer src="js/review.js?v=20261024181701"></script>
+<script defer src="js/panel.js?v=20261024181701"></script>
+<script defer src="js/multi.js?v=20261024181701"></script>
+<script defer src="js/missions.js?v=20261024181701"></script>
+<script defer src="js/missions-admin.js?v=20261024181701"></script>
+<script defer src="js/notice.js?v=20261024181701"></script>
+<script defer src="js/bot.js?v=20261024181701"></script>
+<script defer src="js/main.js?v=20261024181701"></script>
 </body>
 </html>

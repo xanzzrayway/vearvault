@@ -11,6 +11,7 @@ function paintSwatches(box, list, cur, def, key){
   `<label class="sw-c cu ${cur && !isPreset ? "on" : ""}" aria-label="Warna sendiri"><input type="color" value="${cur || def}" data-key="${key}"></label>`;
 }
 function paintSettings(){
+  if(typeof paintUiPick === "function") paintUiPick();
   const t = themeLoad();
   paintSwatches($("#swBtn"), BTN_COLORS, t.btn || null, BTN_DEF, "btn");
   paintSwatches($("#swBg"), BG_COLORS, t.bg || null, BG_DEF, "bg");

@@ -16,7 +16,7 @@ $("#drX").onclick = () => $("#drawer").close();
 $("#drawer").addEventListener("click", e => { if(e.target === $("#drawer")) $("#drawer").close(); });
 
 const GO = {
-  home: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+  home: () => (document.documentElement.classList.contains("fixbar") ? $("#app") : window).scrollTo({ top: 0, behavior: "smooth" }),
   chat: () => openChat(),
   pm: () => openPM(),
   box: () => openBox(),

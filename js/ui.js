@@ -21,6 +21,7 @@ function uiSet(m){
 }
 function paintUiPick(){
   const box = $("#uiPick"); if(!box) return;
+  if($("#fixBar")) $("#fixBar").checked = fixGet();
   const cur = uiGet();
   box.innerHTML = UI_MODES.map(([id, name, sub]) =>
     `<button class="ui-opt ${id === cur ? "on" : ""}" type="button" data-m="${id}" aria-pressed="${id === cur}">
@@ -28,6 +29,18 @@ function paintUiPick(){
        <span class="ui-name">${name}</span><small>${sub}</small>
      </button>`).join("");
 }
+/* Bar browser tetap terlihat (halaman bergulir di dalam #app) */
+const FIX_KEY = "vv_fixbar";
+const fixGet = () => { try{ return localStorage.getItem(FIX_KEY) !== "0"; }catch{ return true; } };
+function fixSet(on){
+  const h = document.documentElement, app = $("#app");
+  const y = h.classList.contains("fixbar") ? app.scrollTop : window.scrollY;
+  try{ localStorage.setItem(FIX_KEY, on ? "1" : "0"); }catch{}
+  h.classList.toggle("fixbar", on);
+  if(on){ app.scrollTop = y; } else if(h.classList.contains("lock")){ window.__lockY = y; } else { window.scrollTo({ top: y, behavior: "instant" }); }
+}
+$("#fixBar").addEventListener("change", e => { fixSet(e.target.checked); toast(e.target.checked ? "Bar browser tetap terlihat" : "Bar browser boleh menghilang saat scroll"); });
+
 $("#uiPick").addEventListener("click", e => { const b = e.target.closest(".ui-opt"); if(b && b.dataset.m !== uiGet()) uiSet(b.dataset.m); });
 
 /* Kilau kaca mengikuti jari/kursor (hanya mode Baru) */

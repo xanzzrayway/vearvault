@@ -12,7 +12,8 @@
     } else if(!anyOpen && locked){
       html.classList.remove("lock");
       document.body.style.top = "";
-      window.scrollTo({ top: savedY, behavior: "instant" });
+      const y = window.__lockY != null ? window.__lockY : savedY; window.__lockY = null;
+      window.scrollTo({ top: y, behavior: "instant" });
     }
   };
   const orig = HTMLDialogElement.prototype.showModal;

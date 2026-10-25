@@ -851,3 +851,11 @@ html[data-ui="baru"] :where(.gbtn,.search input,.seg,.chip,.card,.bx,.fr,.sdto,.
   box-shadow:0 10px 22px -12px rgba(var(--sh-rgb),.34),0 2px 5px rgba(var(--sh-rgb),.08),var(--lg-rim)}
 html[data-ui="baru"] .chips .chip{box-shadow:0 5px 10px -6px rgba(var(--sh-rgb),.35),var(--lg-rim)}
 html[data-ui="baru"] .chips .chip.on{box-shadow:0 6px 12px -6px rgba(var(--acc2-rgb),.6),inset 0 2px 2px -1px rgba(255,255,255,.95),inset 0 -3px 5px -1px rgba(var(--accd-rgb),.4)}
+
+
+/* Bar browser tetap terlihat: halaman bergulir di dalam #app, bukan di dokumen */
+html.fixbar,html.fixbar body{height:100%;overflow:hidden}
+html.fixbar #app{position:fixed;inset:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch}
+html.fixbar.lock body{position:static;overflow:hidden}
+html.fixbar.lock #app{overflow:hidden}
+.fix-row{margin-top:12px}

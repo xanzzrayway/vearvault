@@ -16,7 +16,7 @@ function paintProfile(){
   const own = isOwn(v);
   const img = v.avatar_url || (own ? googleAvatar() : null);
   $("#pfHero").innerHTML = `${avatarTag(img, v.display_name, "avatar xxl")}
-    <div class="pf-id"><h2>${esc(v.display_name)}</h2><span class="pill">${esc(roleName(v.role))}</span>${own ? `<small>${esc(user.email||"")}</small>` : ""}</div>`;
+    <div class="pf-id"><h2>${esc(v.display_name)}</h2><span class="pill">${esc(roleName(v.role))}</span>${own ? `<small>${esc(user.email||"")}</small>` : presBadge(v.id)}</div>`;
   const list = rows.filter(r => r.user_id===v.id && (own || (r.is_public && r.status==="approved")));
   const joined = v.created_at ? new Date(v.created_at).toLocaleDateString("id-ID", { month:"long", year:"numeric" }) : "-";
   $("#pfStats").innerHTML = `<div><b>${fmt(list.length)}</b><span>Prompt</span></div><div><b>${esc(joined)}</b><span>Bergabung</span></div>`;

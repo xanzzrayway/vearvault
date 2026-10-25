@@ -26,7 +26,7 @@ async function runFind(){
   data.forEach(p => PROF[p.id] = p);
   l.innerHTML = data.map(p => `<button class="fr" data-id="${esc(p.id)}" type="button">
     ${avatarTag(p.avatar_url, p.display_name, "avatar sm")}
-    <div class="fr-t"><b>${esc(p.display_name)}</b><span class="pill">${esc(roleName(p.role))}</span></div>
+    <div class="fr-t"><b>${esc(p.display_name)}</b><span class="pill">${esc(roleName(p.role))}</span>${presBadge(p.id)}</div>
     ${CHEV}
   </button>`).join("");
 }

@@ -31,7 +31,7 @@ async function ensureProfiles(ids){
   if(!configured) return;
   const miss = [...new Set(ids)].filter(id => id && !PROF[id]);
   for(let i = 0; i < miss.length; i += 50){
-    const { data } = await sb.from("profiles").select("id,display_name,avatar_url,role").in("id", miss.slice(i, i + 50));
+    const { data } = await sb.from("profiles").select("id,display_name,avatar_url,role,is_guest").in("id", miss.slice(i, i + 50));
     (data || []).forEach(p => PROF[p.id] = p);
   }
 }

@@ -1,4 +1,5 @@
 /* ---------- Auth ---------- */
+let guest = null;   // akun tamu (anonim): { id, profile }. Aplikasi tetap menganggap "belum login" (user = null), hanya Chat Global yang memakainya.
 function renderAuth(){
   const a = $("#auth");
   if(!user){
@@ -23,9 +24,13 @@ async function loadProfile(){
   const { data } = await sb.from("profiles").select("*").eq("id", user.id).maybeSingle();
   return data || null;
 }
-async function setUser(u){
+async function setUser(raw){
+  const anon = !!(raw && raw.is_anonymous);
+  const u = anon ? null : raw;
+  guest = anon ? { id: raw.id, profile: null } : null;
   user = u; profile = null;
   if(u) profile = await loadProfile();
+  if(anon) await loadGuest();
   if(!u && view==="mine"){ view="all"; syncSeg(); }
   renderAuth();
   if(typeof syncInbox === "function") syncInbox();

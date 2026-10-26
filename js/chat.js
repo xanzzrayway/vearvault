@@ -24,7 +24,8 @@ function addChat(m, live){
   chatIds.add(m.id);
   chatData.set(m.id, m);
   const isBot = !!m.is_bot;
-  const own = !isBot && user && m.user_id===user.id;
+  const meId = chatMe() && chatMe().id;
+  const own = !isBot && !!meId && m.user_id===meId;
   const p = isBot ? { display_name: BOT.name, avatar_url: BOT.avatar_url } : (PROF[m.user_id] || {});
   const name = p.display_name || "Anonim";
   const t = new Date(m.created_at);
@@ -39,7 +40,7 @@ function addChat(m, live){
   }
   const head = isBot
     ? `<span class="nm bot">${esc(name)}<span class="botbadge">BOT</span></span>${rp}`
-    : (!own && !grouped) ? `<button class="nm" data-user="${esc(m.user_id)}" type="button">${esc(name)}${p.role==="admin" ? '<span class="adbadge">Admin</span>' : ""}</button>` : "";
+    : (!own && !grouped) ? `<button class="nm" data-user="${esc(m.user_id)}" type="button">${esc(name)}${p.role==="admin" ? '<span class="adbadge">Admin</span>' : ""}${p.is_guest ? '<span class="gbadge">Tamu</span>' : ""}</button>` : "";
   const av = own ? "" : grouped ? '<span class="av gap"></span>'
     : isBot ? `<span class="av bot"><img src="${esc(p.avatar_url || "assets/logo-sm.png")}" alt=""></span>`
     : `<button class="av" data-user="${esc(m.user_id)}" type="button" aria-label="Lihat profil">${p.avatar_url ? `<img src="${esc(p.avatar_url)}" alt="" referrerpolicy="no-referrer">` : esc(initial(name))}</button>`;
@@ -106,24 +107,31 @@ function prepImage(file){
 /* ---------- Kotak pesan ---------- */
 function paintChatInput(){
   const box = $("#chIn");
-  if(!user){
+  const me = chatMe();
+  if(!me){
     box.innerHTML = '<button class="btn" id="chLogin" type="button">Masuk untuk chat</button>';
     $("#chLogin").onclick = login;
     return;
   }
-  box.innerHTML = `<div class="ch-prev" id="chPrev" hidden></div>
+  const full = !!user;   // akun Google: foto/video dan perintah. Tamu: teks saja.
+  const gname = guest && guest.profile ? guest.profile.display_name : "tamu";
+  box.innerHTML = `${full ? "" : `<div class="ch-guest"><span>Kamu masuk sebagai <b>${esc(gname)}</b> (tamu, hanya teks)</span><button class="ch-glogin" id="chGLogin" type="button">Masuk dengan Google</button></div>`}<div class="ch-prev" id="chPrev" hidden></div>
     <div class="ch-row">
-      <button class="ch-btn" id="chAttach" type="button" aria-label="Kirim foto atau video">${I_IMG}</button>
+      ${full ? `<button class="ch-btn" id="chAttach" type="button" aria-label="Kirim foto atau video">${I_IMG}</button>` : ""}
       <textarea id="chText" rows="1" maxlength="500" aria-label="Pesan"></textarea>
       <button class="btn send" id="chSend" type="button" aria-label="Kirim">${I_SEND}</button>
     </div>
-    <input type="file" id="chFile" accept="image/*,video/mp4,video/webm,video/quicktime" hidden>`;
+    ${full ? '<input type="file" id="chFile" accept="image/*,video/mp4,video/webm,video/quicktime" hidden>' : ""}`;
   const t = $("#chText");
   /* Enter = baris baru. Kotak melebar ke atas mengikuti isi. */
   t.addEventListener("input", () => { t.style.height = "auto"; t.style.height = Math.min(t.scrollHeight, 160) + "px"; });
   t.addEventListener("input", updCmd);
-  $("#chAttach").onclick = () => $("#chFile").click();
-  $("#chFile").onchange = e => { const f = e.target.files[0]; e.target.value = ""; pickFile(f); };
+  if(full){
+    $("#chAttach").onclick = () => $("#chFile").click();
+    $("#chFile").onchange = e => { const f = e.target.files[0]; e.target.value = ""; pickFile(f); };
+  } else {
+    $("#chGLogin").onclick = login;
+  }
   $("#chSend").onclick = sendChat;
   if(chCool > Date.now()) startCool(chCool - Date.now()); else updCool();
 }
@@ -132,7 +140,9 @@ async function sendChat(){
   const t = $("#chText"); if(!t) return;
   const text = t.value.trim();
   if(!text && !chSel) return;
-  if(!profile){ openOnb("first"); return; }
+  if(!chatMe()){ login(); return; }
+  if(user && !profile){ openOnb("first"); return; }
+  if(!user && /^\/(ai|foto|bot)(\s|$)/i.test(text)) return needGoogle("Perintah ini khusus akun Google");
   if(!chSel && runCommand(text)) return;
   const ai = /^\/ai(\s|$)/i.test(text);
   if(ai){
@@ -156,7 +166,7 @@ async function sendChat(){
       media = { url: sb.storage.from("chat-media").getPublicUrl(path).data.publicUrl, type: chSel.kind };
     }
     const { data, error } = await sb.from("chat_messages")
-      .insert({ user_id: user.id, content: text, media_url: media ? media.url : null, media_type: media ? media.type : null })
+      .insert({ user_id: chatMe().id, content: text, media_url: media ? media.url : null, media_type: media ? media.type : null })
       .select(CH_COLS).single();
     if(error) throw error;
     t.value = ""; t.style.height = "auto";
@@ -167,7 +177,8 @@ async function sendChat(){
     if(ai) askBot(data.id);
   } catch(err){
     if(path) sb.storage.from("chat-media").remove([path]);
-    if(err && err.code === "PGRST116"){ toast("Akun diblokir karena spam"); recheckBan(); return; }
+    if(err && err.code === "PGRST116"){ toast("Akun diblokir karena spam"); if(user) recheckBan(); return; }
+    if(!user && err && (err.code === "42501" || /row-level security/i.test(err.message || ""))){ toast("Akun tamu ini tidak bisa mengirim pesan"); return; }
     const msg = (err && err.message) || "";
     if(/terlalu cepat/.test(msg)) startCool(CH_COOL);
     toast(/terlalu cepat/.test(msg) ? "Terlalu cepat, tunggu sebentar" : /format|gambar/.test(msg) ? "Format file tidak didukung" : /ukuran/.test(msg) ? "Ukuran maksimal 20 MB" : "Gagal mengirim");
@@ -179,6 +190,7 @@ async function sendChat(){
 
 async function openChat(){
   if(!configured) return toast("Isi SUPABASE_URL dan SUPABASE_ANON_KEY dulu");
+  if(!user && !guest) await ensureGuest();
   $("#chList").innerHTML = ""; chatIds.clear(); chatData.clear(); chatLast = null; chatReady = false; chatQ = []; chStick = true;
   clearSel();
   paintChatInput();
@@ -202,8 +214,9 @@ async function openChat(){
   list.forEach(m => addChat(m, false));
   chatReady = true;
   chatQ.forEach(m => addChat(m, false)); chatQ = [];
-  if(user){
-    const mine = list.filter(m => m.user_id === user.id).pop();
+  const me = chatMe();
+  if(me){
+    const mine = list.filter(m => m.user_id === me.id).pop();
     if(mine){ const rem = CH_COOL - (Date.now() - new Date(mine.created_at)); if(rem > 0) startCool(rem); }
   }
   chScroll();
@@ -294,8 +307,8 @@ async function askBot(id){
 const I_AI = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>`;
 const I_COG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>`;
 const CMDS = [
-  { c:"/ai",   hint:"(pertanyaan)", desc:() => "Tanya " + BOT.name, icon:I_AI },
-  { c:"/foto", hint:"",             desc:() => "Kirim foto atau video", icon:I_IMG },
+  { c:"/ai",   hint:"(pertanyaan)", desc:() => "Tanya " + BOT.name, icon:I_AI, full:true },
+  { c:"/foto", hint:"",             desc:() => "Kirim foto atau video", icon:I_IMG, full:true },
   { c:"/bot",  hint:"",             desc:() => "Atur bot AI", icon:I_COG, admin:true }
 ];
 function hideCmd(){ const m = $("#cmdMenu"); if(m){ m.hidden = true; m.innerHTML = ""; } }
@@ -303,7 +316,7 @@ function updCmd(){
   const t = $("#chText"), m = $("#cmdMenu"); if(!t || !m) return;
   const v = t.value.toLowerCase();
   if(!v.startsWith("/") || /\s/.test(v)) return hideCmd();
-  const list = CMDS.filter(x => x.c.startsWith(v) && (!x.admin || isAdmin()));
+  const list = CMDS.filter(x => x.c.startsWith(v) && (!x.admin || isAdmin()) && (!x.full || user));
   if(!list.length) return hideCmd();
   m.innerHTML = list.map(x => `<button class="cmd" data-c="${x.c}" type="button"><span class="ic2">${x.icon}</span><span class="ct"><b>${x.c}<i>${x.hint}</i></b><small>${esc(x.desc())}</small></span></button>`).join("");
   m.hidden = false;

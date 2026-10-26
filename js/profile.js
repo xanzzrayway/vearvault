@@ -43,8 +43,11 @@ function openProfile(){
 }
 async function openUser(uid){
   if(user && uid===user.id){ openProfile(); return; }
-  const { data, error } = await sb.from("profiles").select("id,display_name,avatar_url,role,created_at,banned").eq("id", uid).maybeSingle();
+  if(guest && uid===guest.id) return toast("Kamu masuk sebagai tamu. Masuk dengan Google untuk punya profil");
+  if(PROF[uid] && PROF[uid].is_guest) return toast("Akun tamu tidak punya profil");
+  const { data, error } = await sb.from("profiles").select("id,display_name,avatar_url,role,created_at,banned,is_guest").eq("id", uid).maybeSingle();
   if(error || !data) return toast("Profil tidak ditemukan");
+  if(data.is_guest) return toast("Akun tamu tidak punya profil");
   showProfile(data);
 }
 

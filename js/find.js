@@ -11,7 +11,7 @@ function openFind(){
 async function runFind(){
   const my = ++fnSeq;
   const q = $("#fnQ").value.trim();
-  let req = sb.from("profiles").select("id,display_name,avatar_url,role,created_at");
+  let req = sb.from("profiles").select("id,display_name,avatar_url,role,created_at").eq("is_guest", false);
   req = q
     ? req.ilike("display_name", "%" + q.replace(/[\\%_]/g, m => "\\" + m) + "%").order("display_name")
     : req.order("created_at", { ascending:false });

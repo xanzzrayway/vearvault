@@ -32,6 +32,8 @@ const GO = {
   review: () => openReview(),
   panel: () => openPanel(),
   mission: () => openMissions(),
+  tools: () => { location.href = "/tools/"; },
+  key: () => openKey(),
   set: () => openSettings()
 };
 $("#drawer").querySelectorAll("[data-go]").forEach(b => b.onclick = () => {

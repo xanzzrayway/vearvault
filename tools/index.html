@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>VearTools</title>
+<link rel="icon" type="image/png" href="/tools/assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* Mode tampilan dan pengaturan layar sama dengan VearVault (disimpan di perangkat yang sama) */
+try{var u=localStorage.getItem("vv_ui");document.documentElement.dataset.ui=(u==="klasik"||u==="baru")?u:"normal";document.documentElement.classList.toggle("fixbar",localStorage.getItem("vv_fixbar")!=="0");document.documentElement.dataset.rfx=(window.CSS&&CSS.supports&&CSS.supports("backdrop-filter","url(#lg-r)"))?"1":"0"}catch(e){}
+/* Muat gaya dan skrip dengan nomor versi terbaru (dari /version.json) supaya tidak tersangkut cache lama */
+(async function(){
+  var v = Date.now();
+  try{ var r = await fetch("/version.json", { cache: "no-store" }); v = (await r.json()).v || v; }catch(e){}
+  function add(tag, attrs, parent){ return new Promise(function(res){ var el = document.createElement(tag); for(var k in attrs) el[k] = attrs[k]; el.onload = el.onerror = res; parent.appendChild(el); if(tag === "link") res(); }); }
+  await add("script", { src: "/js/theme.js?v=" + v }, document.head);
+  await add("link", { rel: "stylesheet", href: "/css/style.css?v=" + v }, document.head);
+  await add("script", { src: "/js/config.js?v=" + v }, document.head);
+  await add("script", { src: "/tools/tools.js?v=" + v }, document.body);
+})();
+</script>
+</head>
+<body>
+<div class="orbs" aria-hidden="true"></div>
+<div id="app">
+<header>
+  <div class="bar">
+    <a class="menubtn tl-back" href="/" aria-label="Kembali ke VearVault"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></a>
+    <div id="auth"></div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-top"><h1>VearTools</h1><img class="mark" src="/tools/assets/logo-sm.png" width="190" height="190" decoding="async" alt=""></div>
+  <p class="tl-sub">Kumpulan alat bantu dari VearVault.</p>
+</section>
+
+<main class="tl-main" id="tlMain"></main>
+</div>
+<div class="toast" id="toast"></div>
+</body>
+</html>

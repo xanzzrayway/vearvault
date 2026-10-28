@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-build="20261026101747">
+<html lang="id" data-build="20261028173439">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/theme.js?v=20261026101747"></script>
-<link rel="stylesheet" href="css/style.css?v=20261026101747">
+<script src="js/theme.js?v=20261028173439"></script>
+<link rel="stylesheet" href="css/style.css?v=20261028173439">
 <script>try{var u=localStorage.getItem("vv_ui");document.documentElement.dataset.ui=(u==="klasik"||u==="baru")?u:"normal";document.documentElement.classList.toggle("fixbar",localStorage.getItem("vv_fixbar")!=="0");document.documentElement.dataset.rfx=(window.CSS&&CSS.supports&&CSS.supports("backdrop-filter","url(#lg-r)"))?"1":"0"}catch(e){}</script>
 </head>
 <body>
@@ -187,6 +187,8 @@
     <button class="dr-item" data-go="box" type="button" style="--i:4"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 3h6l1-3h5"/></svg></span><span class="lb">Box</span><b class="cb" id="boxBadge" hidden>0</b><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <button class="dr-item" data-go="find" type="button" style="--i:5"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></span><span class="lb">Cari Akun</span><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <button class="dr-item" data-go="mission" id="drMission" type="button" style="--i:6"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4z"/><path d="M17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3"/></svg></span><span class="lb">Misi</span><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    <button class="dr-item" data-go="tools" id="drTools" type="button" style="--i:6"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 005.4 5.4l-9.9 9.9a2.1 2.1 0 01-3-3z"/><path d="M14.7 6.3a4 4 0 015.4-.9l-2.6 2.6.9 2.5 2.5.9 2.6-2.6a4 4 0 01-.9 5.4"/></svg></span><span class="lb">Tools</span><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    <button class="dr-item" data-go="key" id="drKey" type="button" style="--i:6"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2L20 3M16 7l3 3M13.5 9.5l2 2"/></svg></span><span class="lb">Aktivasi Key</span><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <button class="dr-item" data-go="review" id="drReview" type="button" style="--i:6" hidden><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span><span class="lb">Tinjau Prompt</span><b class="cb" id="revBadge" hidden>0</b><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <button class="dr-item" data-go="panel" id="drPanel" type="button" style="--i:7" hidden><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg></span><span class="lb">Panel</span><svg class="chv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
     <div class="dr-sep"></div>
@@ -347,6 +349,11 @@
   </div>
 </dialog>
 
+<dialog id="ak">
+  <div class="mh"><h2>Aktivasi Key</h2><button class="x" id="akX" type="button" aria-label="Tutup">&times;</button></div>
+  <div class="am-body ak-body" id="akBody"></div>
+</dialog>
+
 <dialog id="sd">
   <div class="mh"><h2>Kirim Prompt</h2><button class="x" id="sdX" type="button" aria-label="Tutup">&times;</button></div>
   <form id="sdForm">
@@ -466,36 +473,37 @@
 
 <div class="toast" id="toast"></div>
 
-<script defer src="js/update.js?v=20261026101747"></script>
-<script defer src="js/lock.js?v=20261026101747"></script>
-<script defer src="js/config.js?v=20261026101747"></script>
-<script defer src="js/core.js?v=20261026101747"></script>
-<script defer src="js/auth.js?v=20261026101747"></script>
-<script defer src="js/prompts.js?v=20261026101747"></script>
-<script defer src="js/account.js?v=20261026101747"></script>
-<script defer src="js/profile.js?v=20261026101747"></script>
-<script defer src="js/role.js?v=20261026101747"></script>
-<script defer src="js/picker.js?v=20261026101747"></script>
-<script defer src="js/viewer.js?v=20261026101747"></script>
-<script defer src="js/settings.js?v=20261026101747"></script>
-<script defer src="js/ui.js?v=20261026101747"></script>
-<script defer src="js/menu.js?v=20261026101747"></script>
-<script defer src="js/chat.js?v=20261026101747"></script>
-<script defer src="js/guest.js?v=20261026101747"></script>
-<script defer src="js/box.js?v=20261026101747"></script>
-<script defer src="js/find.js?v=20261026101747"></script>
-<script defer src="js/dm.js?v=20261026101747"></script>
-<script defer src="js/call.js?v=20261026101747"></script>
-<script defer src="js/presence.js?v=20261026101747"></script>
-<script defer src="js/store.js?v=20261026101747"></script>
-<script defer src="js/admin.js?v=20261026101747"></script>
-<script defer src="js/review.js?v=20261026101747"></script>
-<script defer src="js/panel.js?v=20261026101747"></script>
-<script defer src="js/multi.js?v=20261026101747"></script>
-<script defer src="js/missions.js?v=20261026101747"></script>
-<script defer src="js/missions-admin.js?v=20261026101747"></script>
-<script defer src="js/notice.js?v=20261026101747"></script>
-<script defer src="js/bot.js?v=20261026101747"></script>
-<script defer src="js/main.js?v=20261026101747"></script>
+<script defer src="js/update.js?v=20261028173439"></script>
+<script defer src="js/lock.js?v=20261028173439"></script>
+<script defer src="js/config.js?v=20261028173439"></script>
+<script defer src="js/core.js?v=20261028173439"></script>
+<script defer src="js/auth.js?v=20261028173439"></script>
+<script defer src="js/prompts.js?v=20261028173439"></script>
+<script defer src="js/account.js?v=20261028173439"></script>
+<script defer src="js/profile.js?v=20261028173439"></script>
+<script defer src="js/role.js?v=20261028173439"></script>
+<script defer src="js/picker.js?v=20261028173439"></script>
+<script defer src="js/viewer.js?v=20261028173439"></script>
+<script defer src="js/settings.js?v=20261028173439"></script>
+<script defer src="js/ui.js?v=20261028173439"></script>
+<script defer src="js/menu.js?v=20261028173439"></script>
+<script defer src="js/chat.js?v=20261028173439"></script>
+<script defer src="js/guest.js?v=20261028173439"></script>
+<script defer src="js/key.js?v=20261028173439"></script>
+<script defer src="js/box.js?v=20261028173439"></script>
+<script defer src="js/find.js?v=20261028173439"></script>
+<script defer src="js/dm.js?v=20261028173439"></script>
+<script defer src="js/call.js?v=20261028173439"></script>
+<script defer src="js/presence.js?v=20261028173439"></script>
+<script defer src="js/store.js?v=20261028173439"></script>
+<script defer src="js/admin.js?v=20261028173439"></script>
+<script defer src="js/review.js?v=20261028173439"></script>
+<script defer src="js/panel.js?v=20261028173439"></script>
+<script defer src="js/multi.js?v=20261028173439"></script>
+<script defer src="js/missions.js?v=20261028173439"></script>
+<script defer src="js/missions-admin.js?v=20261028173439"></script>
+<script defer src="js/notice.js?v=20261028173439"></script>
+<script defer src="js/bot.js?v=20261028173439"></script>
+<script defer src="js/main.js?v=20261028173439"></script>
 </body>
 </html>

@@ -885,3 +885,28 @@ html.fixbar.lock #app{overflow:hidden}
 .ch-guest{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 4px 8px;font-size:12.5px;color:var(--muted)}
 .ch-guest b{color:var(--text)}
 .ch-glogin{flex:none;padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:700;color:var(--blue);background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9)}
+
+/* VearTools (/tools) */
+.tl-sub{max-width:1120px;margin:10px auto 0;padding:0 20px;font-size:17px;color:var(--muted)}
+.hero .tl-sub{padding:0;margin-top:12px}
+.tl-main{max-width:720px;margin:0 auto;padding:22px 20px calc(48px + env(safe-area-inset-bottom,0px));display:grid;gap:14px}
+.tl-card{display:grid;gap:14px}
+.tl-card h3{font-size:20px}
+.tl-card form{padding:0;display:grid;gap:12px}
+.tl-card input[type=text]{text-align:center;font-size:22px;font-weight:700;letter-spacing:.14em}
+.tl-link{color:var(--blue);font-weight:700;text-decoration:none}
+.tl-back{display:grid;place-items:center;text-decoration:none;color:inherit}
+.tl-empty{display:grid;justify-items:center;gap:6px;padding:18px 0 8px;text-align:center;color:var(--muted)}
+.tl-empty img{opacity:.55;margin-bottom:6px}
+.tl-empty b{color:var(--text);font-size:18px}
+.tl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.tl-tool{display:grid;gap:4px;padding:16px;border-radius:18px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);text-decoration:none;color:inherit}
+.tl-tool span{color:var(--muted);font-size:14px}
+
+
+/* Aktivasi Key di VearVault */
+.ak-body{display:grid;gap:12px}
+.ak-key{text-align:center;font-size:34px;font-weight:800;letter-spacing:.12em;padding:16px 12px;border-radius:18px;background:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.9);user-select:all}
+.ak-st{text-align:center;font-size:13.5px;color:var(--muted)}
+.ak-st.on{color:#15803d;font-weight:700}
+.ak-body a.btn{display:flex;align-items:center;justify-content:center;text-decoration:none}
